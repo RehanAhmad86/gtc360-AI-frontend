@@ -96,23 +96,6 @@ export default function Navbar({
         {/* Action Controls */}
         {!isAuthPage && (
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            {/* Granted AI Style Free Plan Badge (Screenshot 1) */}
-            <div style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px',
-              background: 'rgba(16, 185, 129, 0.15)',
-              border: '1px solid rgba(16, 185, 129, 0.35)',
-              color: '#34D399',
-              borderRadius: '100px',
-              padding: '4px 10px',
-              fontSize: '11.5px',
-              fontWeight: '600',
-              whiteSpace: 'nowrap',
-            }}>
-              <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10B981' }} />
-              <span>Free plan</span>
-            </div>
 
             {/* Granted AI Daily Searches Quota Tracker */}
             <button
