@@ -66,8 +66,6 @@ export default function DashboardPage({
   const activeAgencies = currentPreferences?.targetAgencies || [];
   const topScore = matches.length > 0 && hasActiveCriteria ? (matches[0].score || 0) : 0;
 
-  const displayName = user?.name || (user?.email ? user.email.split('@')[0] : 'Rehan Ahmad');
-
   const filteredMatches = useMemo(() => {
     return matches.filter((g) => {
       if (sourceFilter !== 'all' && g.source !== sourceFilter) return false;
@@ -212,26 +210,6 @@ export default function DashboardPage({
               </div>
             </div>
           )}
-
-          {/* Granted AI Welcome Greeting Header (Screenshot 1) */}
-          <div style={{ marginBottom: '22px' }}>
-            <h1
-              style={{
-                fontFamily: 'var(--display)',
-                fontSize: '32px',
-                fontWeight: '700',
-                color: 'var(--navy)',
-                letterSpacing: '-0.02em',
-                lineHeight: '1.2',
-                marginBottom: '4px',
-              }}
-            >
-              Welcome back, {displayName}
-            </h1>
-            <p style={{ fontSize: '15px', color: 'var(--muted)', margin: 0 }}>
-              Ready to find and write your next grant.
-            </p>
-          </div>
 
           {/* Granted AI Banner 2: Unlock the full Granted experience (Screenshot 1) */}
           {!hideUpgradeBanner && (
