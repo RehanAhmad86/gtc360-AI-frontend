@@ -1,7 +1,8 @@
-﻿import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Sliders, User, LogOut, Lock } from 'lucide-react';
+import { Sliders, User, LogOut, Lock, History, Zap, Sparkles } from 'lucide-react';
 import { authAPI } from '../../services/api';
+import { getSearchQuota } from '../../services/searchQuota';
 
 export default function Navbar({
   user,
@@ -14,6 +15,14 @@ export default function Navbar({
 }) {
   const navigate = useNavigate();
   const location = useLocation();
+
+  const [quota, setQuota] = useState(getSearchQuota());
+
+  useEffect(() => {
+    const handleQuotaChange = () => setQuota(getSearchQuota());
+    window.addEventListener('gtc360_quota_change', handleQuotaChange);
+    return () => window.removeEventListener('gtc360_quota_change', handleQuotaChange);
+  }, []);
 
   const hasPreferences = Boolean(
     hasSavedPreferences ?? (
@@ -87,6 +96,72 @@ export default function Navbar({
         {/* Action Controls */}
         {!isAuthPage && (
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            {/* Granted AI Style Free Plan Badge (Screenshot 1) */}
+            <div style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              background: 'rgba(16, 185, 129, 0.15)',
+              border: '1px solid rgba(16, 185, 129, 0.35)',
+              color: '#34D399',
+              borderRadius: '100px',
+              padding: '4px 10px',
+              fontSize: '11.5px',
+              fontWeight: '600',
+              whiteSpace: 'nowrap',
+            }}>
+              <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10B981' }} />
+              <span>Free plan</span>
+            </div>
+
+            {/* Granted AI Daily Searches Quota Tracker */}
+            <button
+              type="button"
+              onClick={() => navigate('/search-history')}
+              title={`Daily AI Searches: ${quota.used} of ${quota.max} used today`}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '5px',
+                background: quota.remaining === 0 ? 'rgba(239, 68, 68, 0.2)' : 'rgba(255, 255, 255, 0.08)',
+                border: quota.remaining === 0 ? '1px solid rgba(239, 68, 68, 0.4)' : '1px solid rgba(255, 255, 255, 0.15)',
+                color: quota.remaining === 0 ? '#FCA5A5' : '#FFFFFF',
+                borderRadius: '6px',
+                padding: '7px 11px',
+                fontSize: '12.5px',
+                fontWeight: '500',
+                cursor: 'pointer',
+                transition: 'all 0.15s ease',
+              }}
+            >
+              <Zap size={13} style={{ color: quota.remaining === 0 ? '#EF4444' : '#FCD34D' }} />
+              <span>{quota.used}/{quota.max} Searches</span>
+            </button>
+
+            {/* Granted AI Search History Link */}
+            <button
+              type="button"
+              onClick={() => navigate('/search-history')}
+              title="View your past grant search history"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '5px',
+                background: 'rgba(255, 255, 255, 0.08)',
+                border: '1px solid rgba(255, 255, 255, 0.15)',
+                color: '#FFFFFF',
+                borderRadius: '6px',
+                padding: '7px 11px',
+                fontSize: '12.5px',
+                fontWeight: '500',
+                cursor: 'pointer',
+                transition: 'all 0.15s ease',
+              }}
+            >
+              <History size={14} style={{ color: 'var(--brass-light)' }} />
+              <span>History</span>
+            </button>
+
             {/* Preferences Button */}
             <button
               onClick={() => {
@@ -100,8 +175,8 @@ export default function Navbar({
               style={{
                 display: 'inline-flex', alignItems: 'center', gap: '6px',
                 background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)',
-                color: '#FFFFFF', borderRadius: '6px', padding: '7px 14px',
-                fontSize: '13px', fontWeight: '500', cursor: 'pointer', transition: 'background 0.15s ease',
+                color: '#FFFFFF', borderRadius: '6px', padding: '7px 12px',
+                fontSize: '12.5px', fontWeight: '500', cursor: 'pointer', transition: 'background 0.15s ease',
               }}
             >
               {!user ? (
@@ -120,15 +195,19 @@ export default function Navbar({
 
             {/* User Auth Section */}
             {user ? (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginLeft: '6px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginLeft: '4px' }}>
                 <div style={{
                   display: 'flex', alignItems: 'center', gap: '8px',
                   background: 'rgba(255,255,255,0.12)', padding: '6px 12px', borderRadius: '6px',
                 }}>
                   <User size={15} style={{ color: 'var(--brass-light)' }} />
                   <div style={{ textAlign: 'left', lineHeight: 1.2 }}>
-                    <div style={{ fontSize: '12.5px', fontWeight: '600' }}>{user.email.split('@')[0]}</div>
-                    <div style={{ fontSize: '10.5px', color: 'rgba(255,255,255,0.6)' }}>{user.organizationType || 'User'}</div>
+                    <div style={{ fontSize: '12.5px', fontWeight: '600' }}>
+                      {user.name || user.email.split('@')[0]}
+                    </div>
+                    <div style={{ fontSize: '10.5px', color: 'rgba(255,255,255,0.6)' }}>
+                      {user.organizationType || 'Free plan'}
+                    </div>
                   </div>
                 </div>
                 <button
@@ -145,7 +224,7 @@ export default function Navbar({
                 onClick={() => navigate('/login')}
                 style={{
                   background: 'var(--brass)', color: '#FFFFFF', border: '0',
-                  borderRadius: '6px', padding: '8px 18px', fontSize: '13.5px',
+                  borderRadius: '6px', padding: '8px 18px', fontSize: '13px',
                   fontWeight: '600', boxShadow: '0 2px 8px rgba(149,128,100,0.3)', cursor: 'pointer',
                 }}
               >Sign In</button>

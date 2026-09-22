@@ -1,9 +1,10 @@
-﻿import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
+import SearchHistoryPage from './pages/SearchHistoryPage';
 import PreferencesPage from './pages/PreferencesPage';
 import DashboardPage from './pages/DashboardPage';
 import { authAPI, matchingAPI, systemAPI } from './services/api';
@@ -159,6 +160,14 @@ export default function App() {
             <PreferencesPage
               user={user}
               onPreferencesSaved={handlePreferencesSaved}
+            />
+          }
+        />
+        <Route
+          path="/search-history"
+          element={
+            <SearchHistoryPage
+              onApplySearch={(q) => setSearchQuery(q)}
             />
           }
         />

@@ -1,5 +1,6 @@
-import React from 'react';
-import { Target, Sparkles, Building, Search, X, SlidersHorizontal, Info } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Target, Sparkles, Building, Search, X, SlidersHorizontal, Info, History, Zap, Lock } from 'lucide-react';
+import { getSearchQuota, canPerformSearch, recordSearch } from '../../services/searchQuota';
 
 export default function StatsOverview({
   totalMatches,
@@ -12,7 +13,55 @@ export default function StatsOverview({
   sourceFilter,
   onSourceFilterChange,
   hasActiveCriteria = false,
+  onOpenSearchHistory,
+  onLimitReached,
+  onOpenUpgrade,
 }) {
+  const [quota, setQuota] = useState(getSearchQuota());
+  const [inputValue, setInputValue] = useState(searchQuery || '');
+
+  // Keep inputValue in sync if searchQuery changes from outside (e.g. History click or reset)
+  useEffect(() => {
+    setInputValue(searchQuery || '');
+  }, [searchQuery]);
+
+  useEffect(() => {
+    const handleQuotaChange = () => setQuota(getSearchQuota());
+    window.addEventListener('gtc360_quota_change', handleQuotaChange);
+    return () => window.removeEventListener('gtc360_quota_change', handleQuotaChange);
+  }, []);
+
+  const handleExecuteSearch = (newQuery) => {
+    const trimmed = (newQuery || '').trim();
+    if (trimmed === searchQuery) return;
+
+    if (!trimmed) {
+      onSearchChange('');
+      return;
+    }
+
+    // Check Granted AI daily limit (3 searches per day)
+    if (!canPerformSearch()) {
+      if (onLimitReached) {
+        onLimitReached();
+      }
+      return;
+    }
+
+    // Record search credit & history
+    recordSearch(trimmed, totalMatches);
+    onSearchChange(trimmed);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleExecuteSearch(inputValue);
+    }
+  };
+
+  const percentUsed = Math.min(100, Math.round((quota.used / quota.max) * 100));
+
   return (
     <div style={{ marginBottom: '28px' }}>
       {/* Informative Activation Banner if criteria not yet configured */}
@@ -33,8 +82,8 @@ export default function StatsOverview({
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <Info size={18} style={{ color: 'var(--brass-text)', flexShrink: 0 }} />
-            <p style={{ fontSize: '13px', color: 'var(--brass-text)', lineHeight: 1.4 }}>
-              <strong>Personalize Your Matching:</strong> You are currently exploring all live funding opportunities. Click <strong>Preferences</strong> to set your focus areas (e.g. Clean Energy, Public Health, STEM) and activate personalized AI vector scores.
+            <p style={{ fontSize: '13px', color: 'var(--brass-text)', lineHeight: 1.4, margin: 0 }}>
+              <strong>Personalize Your Matching:</strong> You are exploring the live funding catalog. Click <strong>Preferences</strong> to configure focus disciplines and activate personalized vector affinity rankings.
             </p>
           </div>
           <button
@@ -103,7 +152,7 @@ export default function StatsOverview({
               {totalMatches.toLocaleString()}
             </span>
             <span style={{ fontSize: '12px', color: 'var(--muted)' }}>
-              {hasActiveCriteria ? 'ranked by AI' : 'total in database'}
+              {hasActiveCriteria ? 'ranked by AI' : 'total in catalog'}
             </span>
           </div>
         </div>
@@ -211,9 +260,9 @@ export default function StatsOverview({
           </div>
         </div>
 
-        {/* Card 4: Agency Boost */}
+        {/* Card 4: Granted AI Style Searches Today Quota Widget */}
         <div
-          onClick={onOpenPreferences}
+          onClick={quota.remaining === 0 ? onLimitReached : onOpenUpgrade}
           style={{
             background: '#FFFFFF',
             border: '1px solid var(--line)',
@@ -235,22 +284,59 @@ export default function StatsOverview({
                 letterSpacing: '0.05em',
               }}
             >
-              Target Agencies
+              Searches Today
             </span>
-            <span style={{ fontSize: '11px', color: 'var(--brass-text)', fontWeight: '600' }}>
-              {agencies.length > 0 ? 'Edit' : 'Set'}
+            <span
+              style={{
+                fontSize: '11px',
+                fontWeight: '700',
+                color: quota.remaining === 0 ? 'var(--urgent)' : 'var(--brass-text)',
+              }}
+            >
+              {quota.remaining === 0 ? 'Limit Reached' : `${quota.remaining} Left`}
             </span>
           </div>
-          <div style={{ marginTop: '4px', fontSize: '14px', fontWeight: '600', color: 'var(--navy)' }}>
-            {agencies.length > 0 ? `${agencies.length} agencies targeted` : 'All Federal & State'}
+
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginTop: '4px' }}>
+            <span
+              style={{
+                fontFamily: 'var(--display)',
+                fontSize: '28px',
+                fontWeight: '700',
+                color: quota.remaining === 0 ? 'var(--urgent)' : 'var(--navy)',
+              }}
+            >
+              {quota.used} / {quota.max}
+            </span>
+            <span style={{ fontSize: '12px', color: 'var(--muted)' }}>
+              Free plan quota
+            </span>
           </div>
-          <div style={{ fontSize: '11.5px', color: 'var(--muted)', marginTop: '2px' }}>
-            {agencies.length > 0 ? agencies.join(', ') : '+12% boost on preferred sponsors'}
+
+          {/* Progress bar */}
+          <div
+            style={{
+              width: '100%',
+              height: '4px',
+              background: 'var(--line)',
+              borderRadius: '2px',
+              marginTop: '6px',
+              overflow: 'hidden',
+            }}
+          >
+            <div
+              style={{
+                width: `${percentUsed}%`,
+                height: '100%',
+                background: quota.remaining === 0 ? 'var(--urgent)' : 'var(--navy)',
+                transition: 'width 0.2s ease',
+              }}
+            />
           </div>
         </div>
       </div>
 
-      {/* Filter and Instant Search Bar */}
+      {/* Filter and Instant Search Bar with Granted AI Search Limit Check */}
       <div
         style={{
           background: '#FFFFFF',
@@ -278,12 +364,13 @@ export default function StatsOverview({
           />
           <input
             type="text"
-            value={searchQuery}
-            onChange={(e) => onSearchChange(e.target.value)}
-            placeholder="Search by keyword, agency, opportunity number, or subject..."
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="Search by keyword, agency, opportunity number, or press Enter..."
             style={{
               width: '100%',
-              padding: '9px 32px 9px 36px',
+              padding: '9px 70px 9px 36px',
               borderRadius: '6px',
               border: '1px solid var(--line)',
               background: 'var(--mist)',
@@ -292,24 +379,73 @@ export default function StatsOverview({
               outline: 'none',
             }}
           />
-          {searchQuery && (
+
+          <div style={{ position: 'absolute', right: '8px', top: '50%', transform: 'translateY(-50%)', display: 'flex', alignItems: 'center', gap: '4px' }}>
+            {inputValue && (
+              <button
+                type="button"
+                onClick={() => {
+                  setInputValue('');
+                  onSearchChange('');
+                }}
+                style={{
+                  background: 'transparent',
+                  border: 0,
+                  color: 'var(--muted)',
+                  cursor: 'pointer',
+                  padding: '4px',
+                  display: 'grid',
+                  placeItems: 'center',
+                }}
+              >
+                <X size={15} />
+              </button>
+            )}
             <button
-              onClick={() => onSearchChange('')}
+              type="button"
+              onClick={() => handleExecuteSearch(inputValue)}
+              title="Execute AI Search"
               style={{
-                position: 'absolute',
-                right: '10px',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                background: 'transparent',
-                border: 0,
-                color: 'var(--muted)',
+                background: 'var(--navy)',
+                color: '#FFFFFF',
+                border: 'none',
+                borderRadius: '4px',
+                padding: '4px 10px',
+                fontSize: '11.5px',
+                fontWeight: '600',
                 cursor: 'pointer',
               }}
             >
-              <X size={15} />
+              Search
             </button>
-          )}
+          </div>
         </div>
+
+        {/* Granted AI Style Search History Button */}
+        <button
+          type="button"
+          onClick={onOpenSearchHistory}
+          title="View past grant searches"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '6px',
+            background: 'var(--mist)',
+            border: '1px solid var(--line)',
+            borderRadius: '6px',
+            padding: '8px 14px',
+            fontSize: '12.5px',
+            fontWeight: '600',
+            color: 'var(--navy)',
+            cursor: 'pointer',
+            transition: 'all 0.15s ease',
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.borderColor = 'var(--brass)')}
+          onMouseLeave={(e) => (e.currentTarget.style.borderColor = 'var(--line)')}
+        >
+          <History size={14} style={{ color: 'var(--brass)' }} />
+          <span>Search History</span>
+        </button>
 
         {/* Source Filter Dropdown */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
