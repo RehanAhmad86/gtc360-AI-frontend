@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import {
   Check, Plus, Sliders, Building, DollarSign, Tag, Search,
@@ -203,7 +203,7 @@ export default function PreferencesPage({ user, onPreferencesSaved }) {
           {tabs.map((tab) => (
             <button
               key={tab.key}
-              className={pref-tab }
+              className={`pref-tab ${activeTab === tab.key ? 'pref-tab-active' : ''}`}
               onClick={() => { setActiveTab(tab.key); setFilterQuery(''); }}
             >
               <tab.icon size={15} />
@@ -238,7 +238,7 @@ export default function PreferencesPage({ user, onPreferencesSaved }) {
                     key={cat.id}
                     type="button"
                     onClick={() => toggleCategory(cat)}
-                    className={pref-chip }
+                    className={`pref-chip ${isSelected ? 'pref-chip-active' : ''}`}
                   >
                     <span>{cat.name}</span>
                     {isSelected ? <Check size={14} /> : <Plus size={14} />}
@@ -257,7 +257,7 @@ export default function PreferencesPage({ user, onPreferencesSaved }) {
                     key={ag.id}
                     type="button"
                     onClick={() => toggleAgency(ag)}
-                    className={pref-chip }
+                    className={`pref-chip ${isSelected ? 'pref-chip-active' : ''}`}
                   >
                     <div style={{ textAlign: 'left' }}>
                       <div style={{ fontSize: '12.5px', fontWeight: '600' }}>{ag.name}</div>
@@ -285,7 +285,7 @@ export default function PreferencesPage({ user, onPreferencesSaved }) {
                         key={org.id}
                         type="button"
                         onClick={() => setSelectedOrgType(isSelected ? '' : org.id)}
-                        className={pref-chip }
+                        className={`pref-chip ${isSelected ? 'pref-chip-active' : ''}`}
                       >
                         <span>{org.name}</span>
                         {isSelected && <Check size={14} />}
@@ -309,7 +309,7 @@ export default function PreferencesPage({ user, onPreferencesSaved }) {
                       key={`min-${amt}`}
                       type="button"
                       onClick={() => setMinAward(amt)}
-                      className={pref-preset-btn }
+                      className={`pref-preset-btn ${minAward === amt ? 'pref-preset-active' : ''}`}
                     >
                       {amt === 0 ? '$0 Floor' : `$${(amt / 1000).toFixed(0)}k`}
                     </button>
@@ -332,7 +332,7 @@ export default function PreferencesPage({ user, onPreferencesSaved }) {
                       key={`max-${amt}`}
                       type="button"
                       onClick={() => setMaxAward(amt)}
-                      className={pref-preset-btn }
+                      className={`pref-preset-btn ${maxAward === amt ? 'pref-preset-active' : ''}`}
                     >
                       {amt === 0 ? 'No Ceiling' : `$${(amt / 1000).toFixed(0)}k`}
                     </button>
