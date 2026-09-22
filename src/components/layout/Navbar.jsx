@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Sliders, User, LogOut, Lock, History, Zap, Sparkles } from 'lucide-react';
+import { Sliders, User, LogOut, Lock, History } from 'lucide-react';
 import { authAPI } from '../../services/api';
-import { getSearchQuota } from '../../services/searchQuota';
 
 export default function Navbar({
   user,
@@ -15,14 +14,6 @@ export default function Navbar({
 }) {
   const navigate = useNavigate();
   const location = useLocation();
-
-  const [quota, setQuota] = useState(getSearchQuota());
-
-  useEffect(() => {
-    const handleQuotaChange = () => setQuota(getSearchQuota());
-    window.addEventListener('gtc360_quota_change', handleQuotaChange);
-    return () => window.removeEventListener('gtc360_quota_change', handleQuotaChange);
-  }, []);
 
   const hasPreferences = Boolean(
     hasSavedPreferences ?? (
@@ -96,31 +87,6 @@ export default function Navbar({
         {/* Action Controls */}
         {!isAuthPage && (
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-
-            {/* Granted AI Daily Searches Quota Tracker */}
-            <button
-              type="button"
-              onClick={() => navigate('/search-history')}
-              title={`Daily AI Searches: ${quota.used} of ${quota.max} used today`}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '5px',
-                background: quota.remaining === 0 ? 'rgba(239, 68, 68, 0.2)' : 'rgba(255, 255, 255, 0.08)',
-                border: quota.remaining === 0 ? '1px solid rgba(239, 68, 68, 0.4)' : '1px solid rgba(255, 255, 255, 0.15)',
-                color: quota.remaining === 0 ? '#FCA5A5' : '#FFFFFF',
-                borderRadius: '6px',
-                padding: '7px 11px',
-                fontSize: '12.5px',
-                fontWeight: '500',
-                cursor: 'pointer',
-                transition: 'all 0.15s ease',
-              }}
-            >
-              <Zap size={13} style={{ color: quota.remaining === 0 ? '#EF4444' : '#FCD34D' }} />
-              <span>{quota.used}/{quota.max} Searches</span>
-            </button>
-
             {/* Granted AI Search History Link */}
             <button
               type="button"
