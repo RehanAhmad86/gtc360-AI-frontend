@@ -42,50 +42,69 @@ export default function Navbar({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        height: '70px',
+        height: '74px',
       }}>
-        {/* Brand Logo & Tagline */}
+        {/* Left Side: Logo with White Background + Text on Navy */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
           <a
             href="/"
             onClick={(e) => { e.preventDefault(); navigate('/'); }}
-            style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', flexShrink: 0 }}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              textDecoration: 'none',
+              flexShrink: 0,
+              background: '#FFFFFF',
+              padding: '6px 14px',
+              borderRadius: '8px',
+              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)',
+            }}
             title="GrantSignal 360°"
           >
             <img
               src="/GrantSignal_logo_Alt.png"
               alt="GrantSignal 360°"
               style={{
-                height: '40px', width: 'auto', borderRadius: '6px',
-                objectFit: 'contain', display: 'block', background: '#FFFFFF',
-                padding: '2px 8px',
-                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.18)', transition: 'transform 0.15s ease',
+                height: '46px',
+                width: 'auto',
+                objectFit: 'contain',
+                display: 'block',
+                transition: 'transform 0.15s ease',
               }}
               className="navbar-brand-logo"
             />
           </a>
 
-          <div style={{ width: '1px', height: '28px', background: 'rgba(255, 255, 255, 0.18)', flexShrink: 0 }} className="brand-divider" />
+          <div style={{ width: '1px', height: '30px', background: 'rgba(255, 255, 255, 0.18)', flexShrink: 0 }} className="brand-divider" />
 
           <div className="brand-text-block">
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{
-                fontFamily: 'var(--display)', fontWeight: '700', fontSize: '18px',
-                letterSpacing: '-0.02em', whiteSpace: 'nowrap',
-              }}>GrantSignal 360°</span>
               <span className="brand-badge" style={{
-                fontSize: '10.5px', background: 'rgba(255,255,255,0.12)',
-                color: 'var(--brass-light)', padding: '2px 7px', borderRadius: '100px',
-                fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.04em', whiteSpace: 'nowrap',
-              }}>Funding Intelligence</span>
+                fontSize: '11px',
+                background: 'rgba(255, 255, 255, 0.12)',
+                color: 'var(--brass-light)',
+                padding: '2.5px 8px',
+                borderRadius: '100px',
+                fontWeight: '600',
+                textTransform: 'uppercase',
+                letterSpacing: '0.04em',
+                whiteSpace: 'nowrap',
+              }}>
+                Funding Intelligence
+              </span>
             </div>
             <p className="brand-tagline" style={{
-              fontSize: '11.5px', color: 'rgba(255,255,255,0.65)', whiteSpace: 'nowrap', margin: 0,
-            }}>Executive Opportunity Matching & Alignment</p>
+              fontSize: '11.5px',
+              color: 'rgba(255, 255, 255, 0.65)',
+              whiteSpace: 'nowrap',
+              margin: '3px 0 0 0',
+            }}>
+              Executive Opportunity Matching & Alignment
+            </p>
           </div>
         </div>
 
-        {/* Action Controls */}
+        {/* Right Side: Action Controls */}
         {!isAuthPage && (
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             {/* Saved Searches Link */}

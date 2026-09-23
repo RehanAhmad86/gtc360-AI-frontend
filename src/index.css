@@ -154,7 +154,7 @@ button {
   }
 }
 
-@media (max-width: 460px) {
+@media (max-width: 480px) {
   .brand-divider,
   .brand-text-block {
     display: none !important;
