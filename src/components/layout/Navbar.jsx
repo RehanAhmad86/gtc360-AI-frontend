@@ -38,75 +38,94 @@ export default function Navbar({
       zIndex: 100,
       backdropFilter: 'blur(10px)',
     }}>
-      <div className="container" style={{
+      <div style={{
         display: 'flex',
-        alignItems: 'center',
+        alignItems: 'stretch',
         justifyContent: 'space-between',
         height: '74px',
+        width: '100%',
       }}>
-        {/* Left Side: Logo with White Background + Text on Navy */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-          <a
-            href="/"
-            onClick={(e) => { e.preventDefault(); navigate('/'); }}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              textDecoration: 'none',
-              flexShrink: 0,
-              background: '#FFFFFF',
-              padding: '6px 14px',
-              borderRadius: '8px',
-              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)',
-            }}
-            title="GrantSignal 360°"
-          >
-            <img
-              src="/GrantSignal_logo_Alt.png"
-              alt="GrantSignal 360°"
-              style={{
-                height: '46px',
-                width: 'auto',
-                objectFit: 'contain',
-                display: 'block',
-                transition: 'transform 0.15s ease',
-              }}
-              className="navbar-brand-logo"
-            />
-          </a>
+        {/* Left Side: White Logo Block + Navy Text Block */}
+        <div style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
+          {/* Full-Height Pure White Background strictly for the LOGO ONLY */}
+          <div style={{
+            background: '#FFFFFF',
+            height: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            paddingLeft: 'max(24px, calc((100vw - 1280px) / 2 + 24px))',
+            paddingRight: '22px',
+            borderRight: '1px solid #E2E8F0',
+            boxShadow: '4px 0 16px rgba(0, 0, 0, 0.06)',
+            flexShrink: 0,
+          }}>
+            <a
+              href="/"
+              onClick={(e) => { e.preventDefault(); navigate('/'); }}
+              style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}
+              title="GrantSignal 360°"
+            >
+              <img
+                src="/GrantSignal_logo_Alt.png"
+                alt="GrantSignal 360°"
+                style={{
+                  height: '52px',
+                  width: 'auto',
+                  objectFit: 'contain',
+                  display: 'block',
+                  transition: 'transform 0.15s ease',
+                }}
+                className="navbar-brand-logo"
+              />
+            </a>
+          </div>
 
-          <div style={{ width: '1px', height: '30px', background: 'rgba(255, 255, 255, 0.18)', flexShrink: 0 }} className="brand-divider" />
-
-          <div className="brand-text-block">
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span className="brand-badge" style={{
-                fontSize: '11px',
-                background: 'rgba(255, 255, 255, 0.12)',
-                color: 'var(--brass-light)',
-                padding: '2.5px 8px',
-                borderRadius: '100px',
-                fontWeight: '600',
-                textTransform: 'uppercase',
-                letterSpacing: '0.04em',
+          {/* Text block: On the NAVY background */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            paddingLeft: '20px',
+            flexShrink: 0,
+          }}>
+            <div className="brand-text-block">
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span className="brand-badge" style={{
+                  fontSize: '11px',
+                  background: 'rgba(255, 255, 255, 0.12)',
+                  color: 'var(--brass-light)',
+                  padding: '2.5px 8px',
+                  borderRadius: '100px',
+                  fontWeight: '600',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.04em',
+                  whiteSpace: 'nowrap',
+                }}>
+                  Funding Intelligence
+                </span>
+              </div>
+              <p className="brand-tagline" style={{
+                fontSize: '11.5px',
+                color: 'rgba(255, 255, 255, 0.65)',
                 whiteSpace: 'nowrap',
+                margin: '3px 0 0 0',
               }}>
-                Funding Intelligence
-              </span>
+                Executive Opportunity Matching & Alignment
+              </p>
             </div>
-            <p className="brand-tagline" style={{
-              fontSize: '11.5px',
-              color: 'rgba(255, 255, 255, 0.65)',
-              whiteSpace: 'nowrap',
-              margin: '3px 0 0 0',
-            }}>
-              Executive Opportunity Matching & Alignment
-            </p>
           </div>
         </div>
 
-        {/* Right Side: Action Controls */}
+        {/* Right Side: Navy Background Action Controls */}
         {!isAuthPage && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'flex-end',
+            gap: '10px',
+            paddingRight: 'max(24px, calc((100vw - 1280px) / 2 + 24px))',
+            paddingLeft: '20px',
+            flexGrow: 1,
+          }}>
             {/* Saved Searches Link */}
             <button
               type="button"
