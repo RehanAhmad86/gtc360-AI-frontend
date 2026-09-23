@@ -56,7 +56,7 @@ export default function Navbar({
               src="/GrantSignal_logo_Alt_White.png"
               alt="GrantSignal 360°"
               style={{
-                height: '42px',
+                height: '52px',
                 width: 'auto',
                 display: 'block',
                 objectFit: 'contain',
