@@ -77,7 +77,7 @@ export default function UpgradeModal({ isOpen, onClose }) {
             }}
           >
             <Sparkles size={13} />
-            <span>Granted Pro Experience</span>
+            <span>GrantSignal 360° Pro</span>
           </div>
 
           <h2
@@ -89,10 +89,10 @@ export default function UpgradeModal({ isOpen, onClose }) {
               marginBottom: '6px',
             }}
           >
-            Unlock Unlimited Executive Intelligence
+            Unlock the Full GrantSignal 360° Experience
           </h2>
           <p style={{ fontSize: '13.5px', color: 'rgba(255, 255, 255, 0.75)', lineHeight: 1.5, margin: 0 }}>
-            Full access to unmetered AI semantic queries, instant alerts, comparison dossiers, and export formats.
+            Full access to unmetered funding intelligence, prioritized opportunities, comparison dossiers, and export formats.
           </p>
         </div>
 
@@ -102,8 +102,8 @@ export default function UpgradeModal({ isOpen, onClose }) {
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
               <div style={{ color: 'var(--brass)', flexShrink: 0, marginTop: '2px' }}><Zap size={16} /></div>
               <div>
-                <div style={{ fontSize: '13px', fontWeight: '700', color: 'var(--navy)' }}>Unlimited AI Searches</div>
-                <div style={{ fontSize: '11.5px', color: 'var(--muted)' }}>No 3/day quota limit</div>
+                <div style={{ fontSize: '13px', fontWeight: '700', color: 'var(--navy)' }}>Unlimited Searches</div>
+                <div style={{ fontSize: '11.5px', color: 'var(--muted)' }}>Unmetered opportunity matching</div>
               </div>
             </div>
 
@@ -111,7 +111,7 @@ export default function UpgradeModal({ isOpen, onClose }) {
               <div style={{ color: 'var(--brass)', flexShrink: 0, marginTop: '2px' }}><FileText size={16} /></div>
               <div>
                 <div style={{ fontSize: '13px', fontWeight: '700', color: 'var(--navy)' }}>Export DOCX & CSV</div>
-                <div style={{ fontSize: '11.5px', color: 'var(--muted)' }}>Executive grant reports</div>
+                <div style={{ fontSize: '11.5px', color: 'var(--muted)' }}>Funding intelligence reports</div>
               </div>
             </div>
 
@@ -119,7 +119,7 @@ export default function UpgradeModal({ isOpen, onClose }) {
               <div style={{ color: 'var(--brass)', flexShrink: 0, marginTop: '2px' }}><Shield size={16} /></div>
               <div>
                 <div style={{ fontSize: '13px', fontWeight: '700', color: 'var(--navy)' }}>Comparison Board</div>
-                <div style={{ fontSize: '11.5px', color: 'var(--muted)' }}>Compare up to 10 grants</div>
+                <div style={{ fontSize: '11.5px', color: 'var(--muted)' }}>Compare up to 10 opportunities</div>
               </div>
             </div>
 
@@ -127,7 +127,7 @@ export default function UpgradeModal({ isOpen, onClose }) {
               <div style={{ color: 'var(--brass)', flexShrink: 0, marginTop: '2px' }}><Bell size={16} /></div>
               <div>
                 <div style={{ fontSize: '13px', fontWeight: '700', color: 'var(--navy)' }}>Instant Match Alerts</div>
-                <div style={{ fontSize: '11.5px', color: 'var(--muted)' }}>Real-time deadline notices</div>
+                <div style={{ fontSize: '11.5px', color: 'var(--muted)' }}>Real-time priority funding notices</div>
               </div>
             </div>
           </div>
@@ -190,7 +190,7 @@ export default function UpgradeModal({ isOpen, onClose }) {
               }}
             >
               <Sparkles size={15} style={{ color: '#FCD34D' }} />
-              <span>Start 14-Day Free Trial</span>
+              <span>Upgrade for Unlimited Access</span>
             </button>
           </div>
         </div>

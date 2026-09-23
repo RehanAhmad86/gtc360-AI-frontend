@@ -246,29 +246,29 @@ export default function PreferencesPage({ user, onPreferencesSaved }) {
   const navTabs = [
     {
       key: 'categories',
-      label: 'Focus Areas',
-      sub: 'Disciplines & topic vectors',
+      label: 'Areas of Interest',
+      sub: 'Funding priorities & focus disciplines',
       icon: Tag,
       count: selectedCategories.length,
     },
     {
       key: 'agencies',
-      label: 'Target Agencies',
-      sub: 'Federal & California state',
+      label: 'Preferred Funders',
+      sub: 'Federal departments & State of California',
       icon: Building,
       count: selectedAgencies.length,
     },
     {
       key: 'awards',
-      label: 'Award Parameters',
-      sub: 'Dollar bounds & eligibility',
+      label: 'Funding Range',
+      sub: 'Minimum and maximum award thresholds',
       icon: DollarSign,
       count: budgetConfigured ? (minAward > 0 ? 1 : 0) + (maxAward > 0 ? 1 : 0) : 0,
     },
     {
       key: 'keywords',
-      label: 'Semantic Keywords',
-      sub: 'Custom text vectors & topics',
+      label: 'Keywords (Optional)',
+      sub: 'Specific programs, projects & populations',
       icon: Sliders,
       count: customKeyword.trim() ? 1 : 0,
     },
@@ -285,13 +285,13 @@ export default function PreferencesPage({ user, onPreferencesSaved }) {
             className="pref-back-btn"
           >
             <ArrowLeft size={15} />
-            <span>Back to Grants Dashboard</span>
+            <span>Back to Dashboard</span>
           </button>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <div className="pref-status-pill">
               <div className="pref-status-dot" />
-              <span>SentenceTransformer AI Active</span>
+              <span>Funding Profile Active</span>
             </div>
             {fromSignup && (
               <div className="pref-status-pill" style={{ background: '#FEF3C7', color: '#92400E', borderColor: '#FDE68A' }}>
@@ -308,14 +308,13 @@ export default function PreferencesPage({ user, onPreferencesSaved }) {
             <div>
               <div className="pref-hero-eyebrow">
                 <Sparkles size={13} />
-                <span>Executive Configuration · Semantic Vector Engine</span>
+                <span>Funding Intelligence · GrantSignal 360°</span>
               </div>
               <h1 className="pref-hero-title">
-                {fromSignup ? 'Configure Your Organization Preferences' : 'AI Matching Preferences & Semantic Criteria'}
+                Build Your Funding Profile
               </h1>
               <p className="pref-hero-desc">
-                Fine-tune vector weights, agency affinities, and funding award windows. Our sub-10ms SentenceTransformer
-                engine evaluates these parameters against thousands of federal and state grant records to surface top opportunities.
+                Tell GrantSignal 360° about your organization and funding priorities. We’ll use this information to identify opportunities that align with what you are trying to fund.
               </p>
             </div>
 
@@ -341,10 +340,10 @@ export default function PreferencesPage({ user, onPreferencesSaved }) {
                     <span>Saved!</span>
                   </>
                 ) : loading ? (
-                  <span>Applying...</span>
+                  <span>Finding Matches...</span>
                 ) : (
                   <>
-                    <span>Apply & Rerank Matches</span>
+                    <span>Find Matching Opportunities</span>
                     <ArrowRight size={15} />
                   </>
                 )}
@@ -359,9 +358,9 @@ export default function PreferencesPage({ user, onPreferencesSaved }) {
                 <Tag size={18} />
               </div>
               <div>
-                <div className="pref-metric-label">Focus Areas</div>
+                <div className="pref-metric-label">Areas of Interest</div>
                 <div className="pref-metric-value">
-                  {selectedCategories.length > 0 ? `${selectedCategories.length} Selected` : 'Any Focus Area'}
+                  {selectedCategories.length > 0 ? `${selectedCategories.length} Selected` : 'All Areas of Interest'}
                 </div>
               </div>
             </div>
@@ -371,9 +370,9 @@ export default function PreferencesPage({ user, onPreferencesSaved }) {
                 <Building size={18} />
               </div>
               <div>
-                <div className="pref-metric-label">Target Agencies</div>
+                <div className="pref-metric-label">Preferred Funders</div>
                 <div className="pref-metric-value">
-                  {selectedAgencies.length > 0 ? `${selectedAgencies.length} Selected` : 'All Agencies'}
+                  {selectedAgencies.length > 0 ? `${selectedAgencies.length} Selected` : 'All Funders'}
                 </div>
               </div>
             </div>
@@ -383,7 +382,7 @@ export default function PreferencesPage({ user, onPreferencesSaved }) {
                 <DollarSign size={18} />
               </div>
               <div>
-                <div className="pref-metric-label">Target Award Window</div>
+                <div className="pref-metric-label">Funding Range</div>
                 <div className="pref-metric-value">
                   {minAward > 0 || maxAward > 0
                     ? `${minAward > 0 ? `$${(minAward / 1000).toFixed(0)}k` : '$0'} – ${maxAward > 0 ? `$${(maxAward / 1000).toFixed(0)}k` : 'Open'}`
@@ -412,7 +411,7 @@ export default function PreferencesPage({ user, onPreferencesSaved }) {
           <aside className="pref-sidebar">
             <div className="pref-nav-card">
               <div className="pref-nav-card-header">
-                Criteria Categories
+                Funding Profile Sections
               </div>
               <nav className="pref-nav-list">
                 {navTabs.map((tab) => {
@@ -453,21 +452,21 @@ export default function PreferencesPage({ user, onPreferencesSaved }) {
                 <span>Active Profile Summary</span>
               </div>
               <div className="pref-summary-row">
-                <span className="pref-summary-label">Focus Areas:</span>
+                <span className="pref-summary-label">Areas of Interest:</span>
                 <span className="pref-summary-val">{selectedCategories.length}</span>
               </div>
               <div className="pref-summary-row">
-                <span className="pref-summary-label">Agencies:</span>
+                <span className="pref-summary-label">Preferred Funders:</span>
                 <span className="pref-summary-val">{selectedAgencies.length}</span>
               </div>
               <div className="pref-summary-row">
-                <span className="pref-summary-label">Award Floor:</span>
+                <span className="pref-summary-label">Min Award:</span>
                 <span className="pref-summary-val">
                   {minAward > 0 ? `$${Number(minAward).toLocaleString()}` : '$0 (None)'}
                 </span>
               </div>
               <div className="pref-summary-row">
-                <span className="pref-summary-label">Award Ceiling:</span>
+                <span className="pref-summary-label">Max Award:</span>
                 <span className="pref-summary-val">
                   {maxAward > 0 ? `$${Number(maxAward).toLocaleString()}` : 'No limit'}
                 </span>
@@ -501,7 +500,7 @@ export default function PreferencesPage({ user, onPreferencesSaved }) {
                   }}
                 >
                   <Check size={14} />
-                  <span>{loading ? 'Saving...' : 'Apply Criteria'}</span>
+                  <span>{loading ? 'Finding Matches...' : 'Find Matching Opportunities'}</span>
                 </button>
               </div>
             </div>
@@ -515,7 +514,7 @@ export default function PreferencesPage({ user, onPreferencesSaved }) {
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#B45309', fontSize: '13px' }}>
                   <AlertCircle size={18} style={{ flexShrink: 0 }} />
                   <div>
-                    <strong>Guest Session:</strong> Criteria selected here apply to your current browser session. Sign in to save preferences permanently.
+                    <strong>Guest Session:</strong> Selections made here apply to your current session. Sign in to save your Funding Profile permanently.
                   </div>
                 </div>
                 <button
@@ -528,15 +527,14 @@ export default function PreferencesPage({ user, onPreferencesSaved }) {
               </div>
             )}
 
-            {/* TAB 1: Focus Areas & Disciplines */}
+            {/* TAB 1: Areas of Interest */}
             {activeTab === 'categories' && (
               <section className="pref-section-card animate-fade">
                 <div className="pref-card-header">
                   <div>
-                    <h2 className="pref-card-title">Focus Areas & Academic Disciplines</h2>
+                    <h2 className="pref-card-title">Areas of Interest</h2>
                     <p className="pref-card-desc">
-                      Select disciplines aligned with your institutional mission. Grants categorized in these focus areas
-                      receive boosted semantic relevance multipliers in the AI matching matrix.
+                      Select the areas where your organization is currently seeking funding. Examples include Workforce Development, Infrastructure, Economic Development, Public Safety, Higher Education, Research, Housing, Transportation, and more.
                     </p>
                   </div>
                   <div style={{ fontSize: '12.5px', color: 'var(--brass-text)', fontWeight: '700' }}>
@@ -550,7 +548,7 @@ export default function PreferencesPage({ user, onPreferencesSaved }) {
                     <Search size={15} className="search-icon" />
                     <input
                       type="text"
-                      placeholder="Filter 23 focus areas (e.g. Energy, Agriculture, Health)..."
+                      placeholder="Filter 23 areas of interest (e.g. Workforce Development, Infrastructure, Health)..."
                       value={filterQuery}
                       onChange={(e) => setFilterQuery(e.target.value)}
                     />
@@ -608,15 +606,14 @@ export default function PreferencesPage({ user, onPreferencesSaved }) {
               </section>
             )}
 
-            {/* TAB 2: Target Agencies & Jurisdictions */}
+            {/* TAB 2: Preferred Funders */}
             {activeTab === 'agencies' && (
               <section className="pref-section-card animate-fade">
                 <div className="pref-card-header">
                   <div>
-                    <h2 className="pref-card-title">Target Funding Agencies & Jurisdictions</h2>
+                    <h2 className="pref-card-title">Preferred Funders</h2>
                     <p className="pref-card-desc">
-                      Prioritize funding opportunities released by specific federal departments and State of California agencies.
-                      Selected agencies will be weighted heavily during vector cosine reranking.
+                      Prioritize opportunities released by specific federal departments and State of California agencies that align with your funding strategy.
                     </p>
                   </div>
                   <div style={{ fontSize: '12.5px', color: 'var(--brass-text)', fontWeight: '700' }}>
@@ -630,7 +627,7 @@ export default function PreferencesPage({ user, onPreferencesSaved }) {
                     <Search size={15} className="search-icon" />
                     <input
                       type="text"
-                      placeholder="Search agencies by name or code (e.g. USDA, NSF, HHS, CA-STATE)..."
+                      placeholder="Search preferred funders by name or code (e.g. USDA, NSF, HHS, CA-STATE)..."
                       value={filterQuery}
                       onChange={(e) => setFilterQuery(e.target.value)}
                     />
@@ -718,14 +715,14 @@ export default function PreferencesPage({ user, onPreferencesSaved }) {
               </section>
             )}
 
-            {/* TAB 3: Award Parameters & Budget Limits */}
+            {/* TAB 3: Funding Range */}
             {activeTab === 'awards' && (
               <section className="pref-section-card animate-fade">
                 <div className="pref-card-header">
                   <div>
-                    <h2 className="pref-card-title">Award Parameters & Institutional Profile</h2>
+                    <h2 className="pref-card-title">Funding Range</h2>
                     <p className="pref-card-desc">
-                      Configure target funding ceilings and organization structures to eliminate grants with incompatible budget constraints or eligibility disqualifiers.
+                      Set your preferred funding range to help us prioritize opportunities that match the scale of your projects.
                     </p>
                   </div>
                 </div>
@@ -736,7 +733,7 @@ export default function PreferencesPage({ user, onPreferencesSaved }) {
                     Institutional Legal Structure & Eligibility Profile
                   </label>
                   <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '14px' }}>
-                    Select your entity type. Grants that explicitly restrict eligibility away from this profile will be penalized in ranking.
+                    Select your entity type. Opportunities that align with this profile will be prioritized in your funding matches.
                   </p>
                   <div className="pref-org-cards-grid">
                     {ORG_TYPES.map((org) => {
@@ -770,7 +767,7 @@ export default function PreferencesPage({ user, onPreferencesSaved }) {
                 {/* Target Award Window Bracket Callout */}
                 <div className="pref-award-bracket-box">
                   <div>
-                    <div className="pref-bracket-title">Effective Target Award Window</div>
+                    <div className="pref-bracket-title">Effective Funding Range</div>
                     <div className="pref-bracket-range">
                       {minAward > 0 ? `$${Number(minAward).toLocaleString()}` : '$0 Floor'}
                       <span style={{ margin: '0 10px', color: 'var(--brass)' }}>→</span>
@@ -787,7 +784,7 @@ export default function PreferencesPage({ user, onPreferencesSaved }) {
                   {/* Min Award Column */}
                   <div className="pref-award-col">
                     <div className="pref-award-field-header">
-                      <label className="pref-award-col-label">Minimum Award Floor ($ USD)</label>
+                      <label className="pref-award-col-label">Minimum Award Amount ($ USD)</label>
                       <span className="pref-award-col-val">
                         {minAward > 0 ? `$${Number(minAward).toLocaleString()}` : '$0 Floor'}
                       </span>
@@ -818,7 +815,7 @@ export default function PreferencesPage({ user, onPreferencesSaved }) {
                   {/* Max Award Column */}
                   <div className="pref-award-col">
                     <div className="pref-award-field-header">
-                      <label className="pref-award-col-label">Maximum Award Ceiling ($ USD)</label>
+                      <label className="pref-award-col-label">Maximum Award Amount ($ USD)</label>
                       <span className="pref-award-col-val">
                         {maxAward > 0 ? `$${Number(maxAward).toLocaleString()}` : 'No Ceiling'}
                       </span>
@@ -849,38 +846,37 @@ export default function PreferencesPage({ user, onPreferencesSaved }) {
               </section>
             )}
 
-            {/* TAB 4: Semantic Keywords & Custom Vectors */}
+            {/* TAB 4: Keywords (Optional) */}
             {activeTab === 'keywords' && (
               <section className="pref-section-card animate-fade">
                 <div className="pref-card-header">
                   <div>
-                    <h2 className="pref-card-title">Custom Semantic Keywords & Research Topics</h2>
+                    <h2 className="pref-card-title">Keywords (Optional)</h2>
                     <p className="pref-card-desc">
-                      Add specific terminology, project titles, or specialized methodologies. These terms are directly converted into
-                      384-dimensional dense embeddings to compute cosine similarity scores against opportunity descriptions.
+                      Add specific programs, projects, populations, technologies, or funding needs you want GrantSignal 360° to consider.
                     </p>
                   </div>
                 </div>
 
                 <div style={{ marginBottom: '24px' }}>
                   <label className="pref-award-col-label" style={{ display: 'block', marginBottom: '8px' }}>
-                    Custom Freeform Keywords (Comma-Separated)
+                    Custom Keywords & Focus Terms
                   </label>
                   <input
                     type="text"
-                    placeholder="e.g. artificial intelligence, renewable microgrids, STEM youth mentorship, tribal public health..."
+                    placeholder="e.g., workforce development, advanced manufacturing, childcare, water infrastructure"
                     value={customKeyword}
                     onChange={(e) => setCustomKeyword(e.target.value)}
                     className="pref-keywords-input"
                   />
                   <div style={{ fontSize: '12px', color: 'var(--muted)' }}>
-                    Separate multiple keywords with commas. The AI engine weights each term against opportunity abstract text.
+                    Separate multiple keywords with commas.
                   </div>
                 </div>
 
                 <div>
                   <label className="pref-award-col-label" style={{ display: 'block', marginBottom: '8px' }}>
-                    Click to Add Trending Federal Priority Topics
+                    Suggested Priority Topics
                   </label>
                   <div className="pref-keywords-pills">
                     {POPULAR_KEYWORDS.map((kw) => {
@@ -916,13 +912,13 @@ export default function PreferencesPage({ user, onPreferencesSaved }) {
               <CheckCircle2 size={16} style={{ color: 'var(--brass)' }} />
               <span>
                 {totalSelected > 0
-                  ? `${totalSelected} Criteria Configured (${selectedCategories.length} Categories, ${selectedAgencies.length} Agencies)`
-                  : 'Default Baseline Configuration Active'}
+                  ? `${totalSelected} Profile Criteria Configured (${selectedCategories.length} Areas of Interest, ${selectedAgencies.length} Preferred Funders)`
+                  : 'Default Baseline Funding Profile Active'}
               </span>
             </div>
             {budgetConfigured && (
               <span style={{ fontSize: '12.5px', color: 'var(--muted)' }}>
-                · Budget: {minAward > 0 ? `$${(minAward / 1000).toFixed(0)}k` : '$0'} to {maxAward > 0 ? `$${(maxAward / 1000).toFixed(0)}k` : 'Any'}
+                · Funding Range: {minAward > 0 ? `$${(minAward / 1000).toFixed(0)}k` : '$0'} to {maxAward > 0 ? `$${(maxAward / 1000).toFixed(0)}k` : 'Any'}
               </span>
             )}
           </div>
@@ -955,10 +951,10 @@ export default function PreferencesPage({ user, onPreferencesSaved }) {
                   <span>Saved!</span>
                 </>
               ) : loading ? (
-                <span>Applying Changes...</span>
+                <span>Finding Matches...</span>
               ) : (
                 <>
-                  <span>{fromSignup ? 'Save & Continue to Dashboard' : 'Apply & Rerank Matches'}</span>
+                  <span>Find Matching Opportunities</span>
                   <ArrowRight size={15} />
                 </>
               )}

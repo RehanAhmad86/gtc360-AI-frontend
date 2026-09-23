@@ -50,14 +50,15 @@ export default function Navbar({
             href="/"
             onClick={(e) => { e.preventDefault(); navigate('/'); }}
             style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', flexShrink: 0 }}
-            title="GTC Advisors - 360 AI"
+            title="GrantSignal 360°"
           >
             <img
-              src="/blue-outline-hz-1-1536x649.png"
-              alt="GTC Advisors"
+              src="/GrantSignal_logo_Alt.png"
+              alt="GrantSignal 360°"
               style={{
-                height: '38px', width: 'auto', borderRadius: '5px',
+                height: '40px', width: 'auto', borderRadius: '6px',
                 objectFit: 'contain', display: 'block', background: '#FFFFFF',
+                padding: '2px 8px',
                 boxShadow: '0 2px 8px rgba(0, 0, 0, 0.18)', transition: 'transform 0.15s ease',
               }}
               className="navbar-brand-logo"
@@ -71,27 +72,27 @@ export default function Navbar({
               <span style={{
                 fontFamily: 'var(--display)', fontWeight: '700', fontSize: '18px',
                 letterSpacing: '-0.02em', whiteSpace: 'nowrap',
-              }}>360° AI</span>
+              }}>GrantSignal 360°</span>
               <span className="brand-badge" style={{
                 fontSize: '10.5px', background: 'rgba(255,255,255,0.12)',
                 color: 'var(--brass-light)', padding: '2px 7px', borderRadius: '100px',
                 fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.04em', whiteSpace: 'nowrap',
-              }}>Semantic Engine</span>
+              }}>Funding Intelligence</span>
             </div>
             <p className="brand-tagline" style={{
               fontSize: '11.5px', color: 'rgba(255,255,255,0.65)', whiteSpace: 'nowrap', margin: 0,
-            }}>Executive Funding Intelligence & Vector Matching</p>
+            }}>Executive Opportunity Matching & Alignment</p>
           </div>
         </div>
 
         {/* Action Controls */}
         {!isAuthPage && (
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            {/* Granted AI Search History Link */}
+            {/* Saved Searches Link */}
             <button
               type="button"
               onClick={() => navigate('/search-history')}
-              title="View your past grant search history"
+              title="View your saved searches"
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -108,10 +109,10 @@ export default function Navbar({
               }}
             >
               <History size={14} style={{ color: 'var(--brass-light)' }} />
-              <span>History</span>
+              <span>Saved Searches</span>
             </button>
 
-            {/* Preferences Button */}
+            {/* Funding Profile Button */}
             <button
               onClick={() => {
                 if (!user) {
@@ -120,7 +121,7 @@ export default function Navbar({
                   navigate('/preferences');
                 }
               }}
-              title={!user ? 'Sign in to configure preferences' : 'Configure AI matching preferences'}
+              title={!user ? 'Sign in to build your funding profile' : 'Build Your Funding Profile'}
               style={{
                 display: 'inline-flex', alignItems: 'center', gap: '6px',
                 background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)',
@@ -133,7 +134,7 @@ export default function Navbar({
               ) : (
                 <Sliders size={14} style={{ color: 'var(--brass-light)' }} />
               )}
-              <span>Preferences</span>
+              <span>Funding Profile</span>
               {user && hasPreferences && user?.preferences?.targetCategories?.length > 0 && (
                 <span style={{
                   background: 'var(--brass)', color: '#fff', fontSize: '11px',

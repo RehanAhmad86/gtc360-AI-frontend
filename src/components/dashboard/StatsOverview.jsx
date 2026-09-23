@@ -83,7 +83,7 @@ export default function StatsOverview({
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <Info size={18} style={{ color: 'var(--brass-text)', flexShrink: 0 }} />
             <p style={{ fontSize: '13px', color: 'var(--brass-text)', lineHeight: 1.4, margin: 0 }}>
-              <strong>Personalize Your Matching:</strong> You are exploring the live funding catalog. Click <strong>Preferences</strong> to configure focus disciplines and activate personalized vector affinity rankings.
+              <strong>Personalize Your Funding Matches:</strong> You are exploring the live funding catalog. Click <strong>Build Your Funding Profile</strong> to configure your areas of interest and activate prioritized opportunity matching.
             </p>
           </div>
           <button
@@ -105,7 +105,7 @@ export default function StatsOverview({
             }}
           >
             <SlidersHorizontal size={13} style={{ color: 'var(--brass-light)' }} />
-            <span>Set Preferences</span>
+            <span>Build Funding Profile</span>
           </button>
         </div>
       )}
@@ -119,7 +119,7 @@ export default function StatsOverview({
           marginBottom: '20px',
         }}
       >
-        {/* Card 1: Total Opportunities */}
+        {/* Card 1: Your Funding Matches */}
         <div
           style={{
             background: '#FFFFFF',
@@ -138,7 +138,7 @@ export default function StatsOverview({
               letterSpacing: '0.05em',
             }}
           >
-            {hasActiveCriteria ? 'Personalized Matches' : 'Live Opportunities'}
+            {hasActiveCriteria ? 'Your Funding Matches' : 'Live Opportunities'}
           </span>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginTop: '4px' }}>
             <span
@@ -152,12 +152,12 @@ export default function StatsOverview({
               {totalMatches.toLocaleString()}
             </span>
             <span style={{ fontSize: '12px', color: 'var(--muted)' }}>
-              {hasActiveCriteria ? 'ranked by AI' : 'total in catalog'}
+              {hasActiveCriteria ? 'prioritized by profile' : 'total in catalog'}
             </span>
           </div>
         </div>
 
-        {/* Card 2: Highest Fit Score */}
+        {/* Card 2: Match Score */}
         <div
           style={{
             background: '#FFFFFF',
@@ -176,7 +176,7 @@ export default function StatsOverview({
               letterSpacing: '0.05em',
             }}
           >
-            {hasActiveCriteria ? 'Top AI Match Score' : 'AI Scoring Engine'}
+            {hasActiveCriteria ? 'Match Score' : 'Opportunity Alignment'}
           </span>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginTop: '4px' }}>
             {hasActiveCriteria ? (
@@ -191,7 +191,7 @@ export default function StatsOverview({
                 >
                   {topScore ? `${topScore}%` : '—'}
                 </span>
-                <span style={{ fontSize: '12px', color: 'var(--muted)' }}>cosine alignment</span>
+                <span style={{ fontSize: '12px', color: 'var(--muted)' }}>aligned with your priorities</span>
               </>
             ) : (
               <>
@@ -203,15 +203,15 @@ export default function StatsOverview({
                     color: 'var(--brass-text)',
                   }}
                 >
-                  Sub-10ms
+                  High Precision
                 </span>
-                <span style={{ fontSize: '12px', color: 'var(--muted)' }}>vector latency</span>
+                <span style={{ fontSize: '12px', color: 'var(--muted)' }}>prioritized by profile</span>
               </>
             )}
           </div>
         </div>
 
-        {/* Card 3: Active Focus Categories */}
+        {/* Card 3: Areas of Interest */}
         <div
           onClick={onOpenPreferences}
           style={{
@@ -235,7 +235,7 @@ export default function StatsOverview({
                 letterSpacing: '0.05em',
               }}
             >
-              Focus Domains
+              Areas of Interest
             </span>
             <span style={{ fontSize: '11px', color: 'var(--brass-text)', fontWeight: '600' }}>
               {categories.length > 0 ? 'Edit' : 'Configure'}
@@ -256,11 +256,11 @@ export default function StatsOverview({
           >
             {categories.length > 0
               ? categories.slice(0, 2).join(', ') + (categories.length > 2 ? '...' : '')
-              : 'Click to set preferences'}
+              : 'Click to set funding priorities'}
           </div>
         </div>
 
-        {/* Card 4: Granted AI Style Searches Today Quota Widget */}
+        {/* Card 4: Free Plan Quota Widget */}
         <div
           onClick={quota.remaining === 0 ? onLimitReached : onOpenUpgrade}
           style={{
@@ -273,6 +273,7 @@ export default function StatsOverview({
             transition: 'border-color 0.15s ease',
           }}
           className="metric-card-hover"
+          title="Upgrade for Unlimited Access"
         >
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <span
@@ -284,7 +285,7 @@ export default function StatsOverview({
                 letterSpacing: '0.05em',
               }}
             >
-              Searches Today
+              Free Plan
             </span>
             <span
               style={{
@@ -306,10 +307,10 @@ export default function StatsOverview({
                 color: quota.remaining === 0 ? 'var(--urgent)' : 'var(--navy)',
               }}
             >
-              {quota.used} / {quota.max}
+              {quota.remaining} of {quota.max}
             </span>
             <span style={{ fontSize: '12px', color: 'var(--muted)' }}>
-              Free plan quota
+              searches remaining
             </span>
           </div>
 
@@ -336,7 +337,7 @@ export default function StatsOverview({
         </div>
       </div>
 
-      {/* Filter and Instant Search Bar with Granted AI Search Limit Check */}
+      {/* Filter and Instant Search Bar with Search Limit Check */}
       <div
         style={{
           background: '#FFFFFF',
@@ -367,7 +368,7 @@ export default function StatsOverview({
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Search by keyword, agency, opportunity number, or press Enter..."
+            placeholder="Search by program, agency, project, or keyword..."
             style={{
               width: '100%',
               padding: '9px 70px 9px 36px',
@@ -404,7 +405,7 @@ export default function StatsOverview({
             <button
               type="button"
               onClick={() => handleExecuteSearch(inputValue)}
-              title="Execute AI Search"
+              title="Find Matching Opportunities"
               style={{
                 background: 'var(--navy)',
                 color: '#FFFFFF',
@@ -421,11 +422,11 @@ export default function StatsOverview({
           </div>
         </div>
 
-        {/* Granted AI Style Search History Button */}
+        {/* Saved Searches Button */}
         <button
           type="button"
           onClick={onOpenSearchHistory}
-          title="View past grant searches"
+          title="View saved searches"
           style={{
             display: 'inline-flex',
             alignItems: 'center',
@@ -444,12 +445,12 @@ export default function StatsOverview({
           onMouseLeave={(e) => (e.currentTarget.style.borderColor = 'var(--line)')}
         >
           <History size={14} style={{ color: 'var(--brass)' }} />
-          <span>Search History</span>
+          <span>Saved Searches</span>
         </button>
 
-        {/* Source Filter Dropdown */}
+        {/* Funders Filter Dropdown */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span style={{ fontSize: '12.5px', color: 'var(--muted)', fontWeight: '500' }}>Jurisdiction:</span>
+          <span style={{ fontSize: '12.5px', color: 'var(--muted)', fontWeight: '500' }}>Funders:</span>
           <select
             value={sourceFilter}
             onChange={(e) => onSourceFilterChange(e.target.value)}
@@ -465,9 +466,9 @@ export default function StatsOverview({
               fontWeight: '500',
             }}
           >
-            <option value="all">All Jurisdictions (Federal + CA)</option>
-            <option value="federal">Federal Grants (Grants.gov)</option>
-            <option value="california">State of California</option>
+            <option value="all">All Funders (Federal + State)</option>
+            <option value="federal">Federal Funders (Grants.gov)</option>
+            <option value="california">California State Funders</option>
           </select>
         </div>
       </div>

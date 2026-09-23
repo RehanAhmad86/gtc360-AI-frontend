@@ -127,7 +127,7 @@ export default function DashboardPage({
     <>
       <main style={{ flex: 1, padding: '28px 0 60px', background: '#F8FAFC' }}>
         <div className="container">
-          {/* Granted AI Banner 1: Complete your profile recommendation (Screenshot 1) */}
+          {/* Banner 1: Build Your Funding Profile */}
           {!hasActiveCriteria && !hideProfileBanner && (
             <div
               className="animate-fade"
@@ -161,10 +161,10 @@ export default function DashboardPage({
                 </div>
                 <div>
                   <div style={{ fontSize: '13.5px', fontWeight: '700', letterSpacing: '-0.01em' }}>
-                    Complete your profile to unlock personalized grant recommendations
+                    Build Your Funding Profile
                   </div>
                   <div style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.75)' }}>
-                    Your grant recommendations and AI writing will be tailored to your organization.
+                    Tell GrantSignal 360° about your organization and funding priorities. We’ll use this information to identify opportunities that align with what you are trying to fund.
                   </div>
                 </div>
               </div>
@@ -188,7 +188,7 @@ export default function DashboardPage({
                     gap: '6px',
                   }}
                 >
-                  <span>Set Up Profile</span>
+                  <span>Build Funding Profile</span>
                   <ArrowRight size={13} />
                 </button>
                 <button
@@ -211,7 +211,7 @@ export default function DashboardPage({
             </div>
           )}
 
-          {/* Granted AI Banner 2: Unlock the full Granted experience (Screenshot 1) */}
+          {/* Banner 2: Unlock the full GrantSignal 360° experience */}
           {!hideUpgradeBanner && (
             <div
               className="animate-fade"
@@ -245,10 +245,10 @@ export default function DashboardPage({
                 </div>
                 <div>
                   <div style={{ fontSize: '14px', fontWeight: '700', color: '#FFFFFF' }}>
-                    Unlock the full Granted experience
+                    Unlock the full GrantSignal 360° experience
                   </div>
                   <div style={{ fontSize: '12.5px', color: '#A8A29E' }}>
-                    Export DOCX/CSV, more drafts, Granted Review Board, and unlimited AI searches.
+                    Export opportunities, comprehensive funding intelligence reports, and unlimited funding searches.
                   </div>
                 </div>
               </div>
@@ -269,7 +269,7 @@ export default function DashboardPage({
                     whiteSpace: 'nowrap',
                   }}
                 >
-                  See Plans
+                  Upgrade for Unlimited Access
                 </button>
                 <button
                   type="button"
@@ -291,7 +291,7 @@ export default function DashboardPage({
             </div>
           )}
 
-          {/* Granted AI Banner 3: What are you trying to fund? (Screenshot 1) */}
+          {/* Banner 3: What are you trying to fund? */}
           {!hideFundBanner && (
             <div
               className="animate-fade"
@@ -328,7 +328,7 @@ export default function DashboardPage({
                     What are you trying to fund?
                   </div>
                   <div style={{ fontSize: '12.5px', color: '#A7F3D0' }}>
-                    Tell us once and we'll find grants that fit your work — including ones you'd never think to search for.
+                    Tell GrantSignal 360° once and we'll identify funding opportunities that fit your work — including programs you'd never think to look for.
                   </div>
                 </div>
               </div>
@@ -349,7 +349,7 @@ export default function DashboardPage({
                     whiteSpace: 'nowrap',
                   }}
                 >
-                  Describe your work →
+                  Set Funding Priorities →
                 </button>
                 <button
                   type="button"
@@ -453,6 +453,34 @@ export default function DashboardPage({
                 onPageSizeChange={setPageSize}
               />
             </div>
+          ) : !hasActiveCriteria ? (
+            <div
+              style={{
+                textAlign: 'center',
+                padding: '60px 20px',
+                background: '#FFFFFF',
+                borderRadius: '12px',
+                border: '1px solid var(--line)',
+                marginTop: '20px',
+              }}
+            >
+              <Compass size={40} style={{ color: 'var(--brass)', margin: '0 auto 14px' }} />
+              <h3 style={{ fontSize: '18px', fontWeight: '700', color: 'var(--navy)', marginBottom: '8px' }}>
+                No funding matches yet.
+              </h3>
+              <p style={{ fontSize: '14px', color: 'var(--muted)', maxWidth: '440px', margin: '0 auto 18px' }}>
+                Complete your Funding Profile to start discovering opportunities aligned with your organization.
+              </p>
+              <button
+                type="button"
+                onClick={() => navigate('/preferences')}
+                className="pref-btn-primary"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', margin: '0 auto' }}
+              >
+                <span>Build Funding Profile</span>
+                <ArrowRight size={14} />
+              </button>
+            </div>
           ) : (
             <div
               style={{
@@ -466,21 +494,32 @@ export default function DashboardPage({
             >
               <AlertCircle size={40} style={{ color: 'var(--brass)', margin: '0 auto 14px' }} />
               <h3 style={{ fontSize: '18px', fontWeight: '700', color: 'var(--navy)', marginBottom: '8px' }}>
-                No matching grant opportunities found
+                No strong matches found.
               </h3>
               <p style={{ fontSize: '14px', color: 'var(--muted)', maxWidth: '440px', margin: '0 auto 18px' }}>
-                Try adjusting your search query, selecting different focus domains, or widening budget filters.
+                Try broadening your funding range, areas of interest, or preferred funders.
               </p>
-              <button
-                type="button"
-                onClick={() => {
-                  setSearchQuery('');
-                  setSourceFilter('all');
-                }}
-                className="pref-btn-secondary"
-              >
-                Reset Search Filters
-              </button>
+              <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSearchQuery('');
+                    setSourceFilter('all');
+                  }}
+                  className="pref-btn-secondary"
+                >
+                  Reset Search Filters
+                </button>
+                <button
+                  type="button"
+                  onClick={() => navigate('/preferences')}
+                  className="pref-btn-primary"
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+                >
+                  <span>Edit Funding Profile</span>
+                  <ArrowRight size={14} />
+                </button>
+              </div>
             </div>
           )}
         </div>

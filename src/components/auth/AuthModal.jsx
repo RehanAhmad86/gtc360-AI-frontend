@@ -142,14 +142,16 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login', onSu
           <div>
             <h3 style={{
               fontFamily: 'var(--display)',
-              fontSize: '18px',
-              fontWeight: '600',
+              fontSize: '17px',
+              fontWeight: '700',
               color: 'var(--navy)',
+              lineHeight: '1.3',
+              marginBottom: '4px',
             }}>
-              {mode === 'login' ? 'Sign In to GTC360 AI' : 'Create Organization Profile'}
+              Find the funding opportunities that fit your organization.
             </h3>
-            <p style={{ fontSize: '12.5px', color: 'var(--muted)' }}>
-              {mode === 'login' ? 'Access your saved criteria and vector matches' : 'Configure tailored semantic funding feeds'}
+            <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: '1.4' }}>
+              GrantSignal 360° uses your organization’s priorities, eligibility, and funding goals to identify and prioritize relevant grant opportunities.
             </p>
           </div>
           <button
@@ -325,7 +327,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login', onSu
               boxShadow: '0 4px 12px rgba(20,45,76,0.2)',
             }}
           >
-            {loading ? 'Processing...' : mode === 'login' ? 'Sign In' : 'Create Account'}
+            {loading ? 'Processing...' : mode === 'login' ? 'Sign In' : 'Get Started'}
           </button>
         </form>
       </div>

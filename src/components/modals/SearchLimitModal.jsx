@@ -78,7 +78,7 @@ export default function SearchLimitModal({ isOpen, onClose, onUpgrade }) {
                   margin: 0,
                 }}
               >
-                Daily AI Search Limit Reached
+                Daily Search Limit Reached
               </h3>
             </div>
           </div>
@@ -102,8 +102,8 @@ export default function SearchLimitModal({ isOpen, onClose, onUpgrade }) {
         {/* Modal Body */}
         <div style={{ padding: '0 28px 24px' }}>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: '1.55', marginBottom: '18px' }}>
-            You have used all <strong>3 of your free AI grant searches</strong> for today.
-            Our semantic engine evaluates thousands of grant opportunities to surface top matches.
+            You have used all <strong>3 of your free searches</strong> for today.
+            GrantSignal 360° uses your organization's priorities, eligibility, and funding goals to identify and prioritize relevant grant opportunities.
           </p>
 
           <div
@@ -125,15 +125,15 @@ export default function SearchLimitModal({ isOpen, onClose, onUpgrade }) {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '12.5px', color: '#334155' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <Check size={14} style={{ color: 'var(--success)' }} />
-                <span><strong>Pro Plan:</strong> Unlimited AI searches & vector evaluations</span>
+                <span><strong>GrantSignal 360° Pro:</strong> Unlimited funding searches and opportunity matching</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <Check size={14} style={{ color: 'var(--success)' }} />
-                <span><strong>Export:</strong> CSV & DOCX reports with eligibility matrices</span>
+                <span><strong>Export:</strong> CSV & DOCX funding intelligence reports</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <Check size={14} style={{ color: 'var(--success)' }} />
-                <span><strong>Review Board:</strong> Compare up to 10 active opportunities</span>
+                <span><strong>Side-by-Side Comparison:</strong> Compare and evaluate active opportunities</span>
               </div>
             </div>
           </div>
@@ -177,7 +177,7 @@ export default function SearchLimitModal({ isOpen, onClose, onUpgrade }) {
               }}
             >
               <Zap size={14} style={{ color: '#FCD34D' }} />
-              <span>Unlock Unlimited ($29/mo)</span>
+              <span>Upgrade for Unlimited Access</span>
             </button>
           </div>
         </div>

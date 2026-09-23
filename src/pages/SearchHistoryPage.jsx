@@ -48,7 +48,7 @@ export default function SearchHistoryPage({ onApplySearch }) {
             <span>Back to Dashboard</span>
           </button>
 
-          {/* Granted AI Quota Pill */}
+          {/* Quota Pill */}
           <div
             style={{
               display: 'inline-flex',
@@ -65,12 +65,11 @@ export default function SearchHistoryPage({ onApplySearch }) {
             }}
           >
             <Zap size={14} style={{ color: 'var(--brass)' }} />
-            <span>Daily AI Searches: <strong>{quota.used} / {quota.max}</strong></span>
-            <span style={{ color: 'var(--muted)', fontSize: '11.5px' }}>({quota.remaining} remaining today)</span>
+            <span>Free Plan · <strong>{quota.remaining} of {quota.max} searches remaining</strong></span>
           </div>
         </div>
 
-        {/* Search History Card (Granted AI style) */}
+        {/* Saved Searches Card */}
         <div
           style={{
             background: '#FFFFFF',
@@ -104,11 +103,11 @@ export default function SearchHistoryPage({ onApplySearch }) {
                     margin: 0,
                   }}
                 >
-                  Search History
+                  Saved Searches
                 </h1>
               </div>
               <p style={{ fontSize: '14px', color: 'var(--muted)', margin: 0 }}>
-                Your past grant searches with cached results. Click any search to rerun it on the live catalog.
+                Save your search criteria to quickly revisit funding opportunities that matter to your organization.
               </p>
             </div>
 
@@ -116,7 +115,7 @@ export default function SearchHistoryPage({ onApplySearch }) {
               <button
                 type="button"
                 onClick={() => {
-                  if (window.confirm('Clear all search history?')) {
+                  if (window.confirm('Clear all saved searches?')) {
                     clearSearchHistory();
                   }
                 }}
@@ -124,21 +123,21 @@ export default function SearchHistoryPage({ onApplySearch }) {
                 style={{ color: 'var(--urgent)', borderColor: '#FCA5A5' }}
               >
                 <Trash2 size={14} />
-                <span>Clear All History</span>
+                <span>Clear All Saved Searches</span>
               </button>
             )}
           </div>
 
-          {/* List of Searches (Matches Screenshot 2) */}
+          {/* List of Searches */}
           <div style={{ padding: '24px 32px' }}>
             {history.length === 0 ? (
               <div style={{ textAlign: 'center', padding: '60px 20px', color: 'var(--muted)' }}>
                 <Clock size={40} style={{ color: 'var(--line)', margin: '0 auto 16px' }} />
                 <h3 style={{ fontSize: '16px', fontWeight: '700', color: 'var(--navy)', marginBottom: '6px' }}>
-                  No search history found
+                  No saved searches yet.
                 </h3>
                 <p style={{ fontSize: '13.5px', maxWidth: '380px', margin: '0 auto 20px' }}>
-                  When you search for grants on the dashboard, your queries and result counts are saved here for quick rerun.
+                  Save your search criteria to quickly revisit funding opportunities that matter to your organization.
                 </p>
                 <button
                   type="button"
@@ -146,7 +145,7 @@ export default function SearchHistoryPage({ onApplySearch }) {
                   className="pref-btn-primary"
                 >
                   <Search size={14} />
-                  <span>Explore Live Grants</span>
+                  <span>Find Matching Opportunities</span>
                 </button>
               </div>
             ) : (

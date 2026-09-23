@@ -76,11 +76,11 @@ export default function SearchHistoryModal({ isOpen, onClose, onSelectQuery }) {
                   margin: 0,
                 }}
               >
-                Search History
+                Saved Searches
               </h2>
             </div>
             <p style={{ fontSize: '13px', color: 'var(--muted)', margin: 0 }}>
-              Your past grant searches with cached result counts. Click any query to rerun it.
+              Save your search criteria to quickly revisit funding opportunities that matter to your organization.
             </p>
           </div>
 
@@ -112,10 +112,10 @@ export default function SearchHistoryModal({ isOpen, onClose, onSelectQuery }) {
             >
               <Clock size={36} style={{ color: 'var(--line)', margin: '0 auto 12px' }} />
               <div style={{ fontSize: '15px', fontWeight: '600', color: 'var(--navy)', marginBottom: '4px' }}>
-                No recent searches yet
+                No saved searches yet.
               </div>
               <p style={{ fontSize: '13px', maxWidth: '340px', margin: '0 auto' }}>
-                Searches executed on the dashboard will appear here with instant rerun shortcuts.
+                Save your search criteria to quickly revisit funding opportunities that matter to your organization.
               </p>
             </div>
           ) : (
@@ -230,7 +230,7 @@ export default function SearchHistoryModal({ isOpen, onClose, onSelectQuery }) {
                 cursor: 'pointer',
               }}
             >
-              Clear All History
+              Clear All Saved Searches
             </button>
           </div>
         )}

@@ -127,7 +127,7 @@ export default function ComparisonDrawer({
                 </h3>
                 <p style={{ fontSize: '13px', color: 'var(--brass-light)' }}>
                   {hasActiveCriteria
-                    ? `Evaluating ${comparedGrants.length} grants across fit score, issuing body, and deadlines`
+                    ? `Evaluating ${comparedGrants.length} grants across match score, issuing body, and deadlines`
                     : `Evaluating ${comparedGrants.length} grants across issuing agency, jurisdiction, and deadlines`}
                 </p>
               </div>

@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Lock, Mail, Building2, AlertCircle, ArrowRight } from 'lucide-react';
 import { authAPI, userAPI } from '../services/api';
@@ -85,10 +85,19 @@ export default function SignupPage({ onAuthSuccess }) {
       <div className="auth-card animate-slide-up">
         <div className="auth-header">
           <div className="auth-logo-section">
-            <img src="/blue-outline-hz-1-1536x649.png" alt="GTC Advisors" className="auth-logo" />
+            <img
+              src="/GrantSignal_logo_Alt.png"
+              alt="GrantSignal 360°"
+              className="auth-logo"
+              style={{ background: '#FFFFFF', padding: '3px 10px' }}
+            />
           </div>
-          <h1 className="auth-title">Create Organization Profile</h1>
-          <p className="auth-subtitle">Configure tailored semantic funding feeds for your institution</p>
+          <h1 className="auth-title" style={{ fontSize: '20px', lineHeight: '1.3' }}>
+            Find the funding opportunities that fit your organization.
+          </h1>
+          <p className="auth-subtitle">
+            GrantSignal 360° uses your organization’s priorities, eligibility, and funding goals to identify and prioritize relevant grant opportunities.
+          </p>
         </div>
 
         <form onSubmit={handleSubmit} className="auth-form">
@@ -128,7 +137,7 @@ export default function SignupPage({ onAuthSuccess }) {
           </div>
 
           <button type="submit" disabled={loading} className="auth-submit-btn">
-            {loading ? <span>Creating Account...</span> : <><span>Create Account</span><ArrowRight size={16} /></>}
+            {loading ? <span>Creating Account...</span> : <><span>Get Started</span><ArrowRight size={16} /></>}
           </button>
         </form>
 

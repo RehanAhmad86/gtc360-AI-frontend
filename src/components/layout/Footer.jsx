@@ -31,7 +31,7 @@ export default function Footer() {
             lineHeight: '1.25',
             marginBottom: '14px',
           }}>
-            The signal is the start. We help you win the award.
+            The signal is the start. Identify, evaluate, and pursue funding aligned with your priorities.
           </h2>
           <p style={{
             fontSize: '15px',
@@ -39,7 +39,7 @@ export default function Footer() {
             lineHeight: '1.6',
             marginBottom: '28px',
           }}>
-            GTC 360° Advisors builds your grant strategy, recruits partner organizations, writes the proposal, manages the budget, and submits on time.
+            GrantSignal 360° builds your grant strategy, recruits partner organizations, writes the proposal, manages the budget, and submits on time.
           </p>
           <div>
             <a
@@ -78,25 +78,26 @@ export default function Footer() {
         <div className="container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <img
-              src="/blue-outline-hz-1-1536x649.png"
-              alt="GTC Advisors"
+              src="/GrantSignal_logo_Alt.png"
+              alt="GrantSignal 360°"
               style={{
-                height: '24px',
+                height: '26px',
                 width: 'auto',
-                borderRadius: '3px',
+                borderRadius: '4px',
                 background: '#FFFFFF',
+                padding: '1px 6px',
                 display: 'block',
-                opacity: 0.9,
+                opacity: 0.95,
               }}
             />
-            <span>&copy; {new Date().getFullYear()} GTC 360° Advisors LLC. All rights reserved.</span>
+            <span>&copy; {new Date().getFullYear()} GrantSignal 360° · GTC 360° Advisors LLC. All rights reserved.</span>
           </div>
           <div style={{ display: 'flex', gap: '16px' }}>
             <a href="https://gtc360.com" target="_blank" rel="noopener noreferrer" style={{ color: 'rgba(255,255,255,0.7)' }}>
               Main Portal
             </a>
             <span>·</span>
-            <span>Federal &amp; State Vector Intelligence</span>
+            <span>GrantSignal 360° Funding Intelligence</span>
           </div>
         </div>
       </div>
