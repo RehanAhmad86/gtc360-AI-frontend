@@ -406,7 +406,7 @@ export default function DashboardPage({
                 }}
               >
                 <RefreshCw size={15} className="animate-spin" />
-                <span>Evaluating semantic vector similarities across federal & state grant records...</span>
+                <span>Evaluating and prioritizing opportunities aligned with your organizational priorities...</span>
               </div>
               <div
                 style={{

@@ -244,7 +244,7 @@ export default function PreferencesModal({ isOpen, onClose, currentPreferences, 
                   margin: 0,
                 }}
               >
-                Target Matching Criteria
+                Build Your Funding Profile
               </h3>
               {totalSelectedCount > 0 && (
                 <span
@@ -262,7 +262,7 @@ export default function PreferencesModal({ isOpen, onClose, currentPreferences, 
               )}
             </div>
             <p style={{ fontSize: '13px', color: 'var(--muted)', margin: 0 }}>
-              Tailor semantic vector weights, agency affinities, and funding award limits
+              Tell GrantSignal 360° about your organization and funding priorities to identify matching opportunities.
             </p>
           </div>
 
@@ -359,7 +359,7 @@ export default function PreferencesModal({ isOpen, onClose, currentPreferences, 
             }}
           >
             <Tag size={13} />
-            <span>Focus Areas ({selectedCategories.length})</span>
+            <span>Areas of Interest ({selectedCategories.length})</span>
           </button>
 
           <button
@@ -383,7 +383,7 @@ export default function PreferencesModal({ isOpen, onClose, currentPreferences, 
             }}
           >
             <Building size={13} />
-            <span>Agencies &amp; Depts ({selectedAgencies.length})</span>
+            <span>Preferred Funders ({selectedAgencies.length})</span>
           </button>
 
           <button
@@ -407,7 +407,7 @@ export default function PreferencesModal({ isOpen, onClose, currentPreferences, 
             }}
           >
             <DollarSign size={13} />
-            <span>Award Limits &amp; Org Type</span>
+            <span>Funding Range &amp; Org Type</span>
           </button>
         </div>
 
@@ -821,7 +821,7 @@ export default function PreferencesModal({ isOpen, onClose, currentPreferences, 
                 opacity: loading ? 0.7 : 1,
               }}
             >
-              {loading ? 'Reranking Cache...' : 'Apply & Rerank Matches'}
+              {loading ? 'Finding Matches...' : 'Find Matching Opportunities'}
             </button>
           </div>
         </div>
