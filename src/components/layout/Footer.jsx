@@ -78,16 +78,13 @@ export default function Footer() {
         <div className="container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <img
-              src="/GrantSignal_logo_Alt.png"
+              src="/GrantSignal_logo_Alt_White.png"
               alt="GrantSignal 360°"
               style={{
-                height: '26px',
+                height: '24px',
                 width: 'auto',
-                borderRadius: '4px',
-                background: '#FFFFFF',
-                padding: '1px 6px',
                 display: 'block',
-                opacity: 0.95,
+                opacity: 0.9,
               }}
             />
             <span>&copy; {new Date().getFullYear()} GrantSignal 360° · GTC 360° Advisors LLC. All rights reserved.</span>
