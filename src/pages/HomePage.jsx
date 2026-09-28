@@ -306,25 +306,35 @@ export default function HomePage({ matches = [], onApplySearch }) {
           color: '#FFFFFF',
           padding: '72px 24px 84px',
           position: 'relative',
-          overflow: 'hidden',
+          zIndex: 40,
+          overflow: 'visible',
           borderBottom: '1px solid rgba(219, 225, 233, 0.12)',
         }}
       >
-        {/* Subtle geometric background accents */}
+        {/* Subtle geometric background accents (isolated with overflow: hidden so no horizontal scrollbars occur) */}
         <div
           style={{
             position: 'absolute',
-            top: '-80px',
-            right: '-80px',
-            width: '320px',
-            height: '320px',
-            borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(149, 128, 100, 0.12) 0%, rgba(0,0,0,0) 70%)',
+            inset: 0,
+            overflow: 'hidden',
             pointerEvents: 'none',
+            zIndex: 0,
           }}
-        />
+        >
+          <div
+            style={{
+              position: 'absolute',
+              top: '-80px',
+              right: '-80px',
+              width: '320px',
+              height: '320px',
+              borderRadius: '50%',
+              background: 'radial-gradient(circle, rgba(149, 128, 100, 0.12) 0%, rgba(0,0,0,0) 70%)',
+            }}
+          />
+        </div>
 
-        <div className="container" style={{ maxWidth: '1240px' }}>
+        <div className="container" style={{ maxWidth: '1240px', position: 'relative', zIndex: 10 }}>
           <div
             style={{
               display: 'grid',
@@ -432,9 +442,22 @@ export default function HomePage({ matches = [], onApplySearch }) {
               </form>
 
               {/* Dropdown Filters below Search Box (Directly from database schema: Category, Eligibility, Agency, Status) */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '14px', flexWrap: 'wrap' }}>
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  marginTop: '14px',
+                  flexWrap: 'wrap',
+                  position: 'relative',
+                  zIndex: 50,
+                }}
+              >
                 {/* 1. Category Filter Pill */}
-                <div className="gtc-filter-pill-container" style={{ position: 'relative' }}>
+                <div
+                  className="gtc-filter-pill-container"
+                  style={{ position: 'relative', zIndex: isCategoryOpen ? 150 : 1 }}
+                >
                   <button
                     type="button"
                     onClick={() => {
@@ -477,18 +500,19 @@ export default function HomePage({ matches = [], onApplySearch }) {
 
                   {isCategoryOpen && (
                     <div
+                      className="gtc-dropdown-menu"
                       style={{
                         position: 'absolute',
-                        top: '110%',
+                        top: 'calc(100% + 6px)',
                         left: 0,
-                        zIndex: 60,
-                        background: 'var(--navy)',
-                        border: '1px solid rgba(255, 255, 255, 0.2)',
-                        borderRadius: '8px',
-                        boxShadow: '0 12px 32px rgba(0,0,0,0.5)',
+                        zIndex: 1000,
+                        background: '#0B1A2E',
+                        border: '1px solid rgba(255, 255, 255, 0.22)',
+                        borderRadius: '10px',
+                        boxShadow: '0 16px 40px rgba(0,0,0,0.6), 0 2px 8px rgba(0,0,0,0.4)',
                         padding: '6px',
-                        minWidth: '220px',
-                        maxHeight: '260px',
+                        minWidth: '240px',
+                        maxHeight: '280px',
                         overflowY: 'auto',
                       }}
                     >
@@ -519,7 +543,10 @@ export default function HomePage({ matches = [], onApplySearch }) {
                 </div>
 
                 {/* 2. Eligibility / Org Type Filter Pill */}
-                <div className="gtc-filter-pill-container" style={{ position: 'relative' }}>
+                <div
+                  className="gtc-filter-pill-container"
+                  style={{ position: 'relative', zIndex: isEligibilityOpen ? 150 : 1 }}
+                >
                   <button
                     type="button"
                     onClick={() => {
@@ -562,18 +589,19 @@ export default function HomePage({ matches = [], onApplySearch }) {
 
                   {isEligibilityOpen && (
                     <div
+                      className="gtc-dropdown-menu"
                       style={{
                         position: 'absolute',
-                        top: '110%',
+                        top: 'calc(100% + 6px)',
                         left: 0,
-                        zIndex: 60,
-                        background: 'var(--navy)',
-                        border: '1px solid rgba(255, 255, 255, 0.2)',
-                        borderRadius: '8px',
-                        boxShadow: '0 12px 32px rgba(0,0,0,0.5)',
+                        zIndex: 1000,
+                        background: '#0B1A2E',
+                        border: '1px solid rgba(255, 255, 255, 0.22)',
+                        borderRadius: '10px',
+                        boxShadow: '0 16px 40px rgba(0,0,0,0.6), 0 2px 8px rgba(0,0,0,0.4)',
                         padding: '6px',
-                        minWidth: '240px',
-                        maxHeight: '260px',
+                        minWidth: '250px',
+                        maxHeight: '280px',
                         overflowY: 'auto',
                       }}
                     >
@@ -604,7 +632,10 @@ export default function HomePage({ matches = [], onApplySearch }) {
                 </div>
 
                 {/* 3. Agency / Jurisdiction Filter Pill */}
-                <div className="gtc-filter-pill-container" style={{ position: 'relative' }}>
+                <div
+                  className="gtc-filter-pill-container"
+                  style={{ position: 'relative', zIndex: isAgencyOpen ? 150 : 1 }}
+                >
                   <button
                     type="button"
                     onClick={() => {
@@ -647,18 +678,19 @@ export default function HomePage({ matches = [], onApplySearch }) {
 
                   {isAgencyOpen && (
                     <div
+                      className="gtc-dropdown-menu"
                       style={{
                         position: 'absolute',
-                        top: '110%',
+                        top: 'calc(100% + 6px)',
                         left: 0,
-                        zIndex: 60,
-                        background: 'var(--navy)',
-                        border: '1px solid rgba(255, 255, 255, 0.2)',
-                        borderRadius: '8px',
-                        boxShadow: '0 12px 32px rgba(0,0,0,0.5)',
+                        zIndex: 1000,
+                        background: '#0B1A2E',
+                        border: '1px solid rgba(255, 255, 255, 0.22)',
+                        borderRadius: '10px',
+                        boxShadow: '0 16px 40px rgba(0,0,0,0.6), 0 2px 8px rgba(0,0,0,0.4)',
                         padding: '6px',
                         minWidth: '260px',
-                        maxHeight: '260px',
+                        maxHeight: '280px',
                         overflowY: 'auto',
                       }}
                     >
@@ -689,7 +721,10 @@ export default function HomePage({ matches = [], onApplySearch }) {
                 </div>
 
                 {/* 4. Status Filter Pill (Posted, Forecasted, Rolling) */}
-                <div className="gtc-filter-pill-container" style={{ position: 'relative' }}>
+                <div
+                  className="gtc-filter-pill-container"
+                  style={{ position: 'relative', zIndex: isStatusOpen ? 150 : 1 }}
+                >
                   <button
                     type="button"
                     onClick={() => {
@@ -732,17 +767,20 @@ export default function HomePage({ matches = [], onApplySearch }) {
 
                   {isStatusOpen && (
                     <div
+                      className="gtc-dropdown-menu"
                       style={{
                         position: 'absolute',
-                        top: '110%',
+                        top: 'calc(100% + 6px)',
                         left: 0,
-                        zIndex: 60,
-                        background: 'var(--navy)',
-                        border: '1px solid rgba(255, 255, 255, 0.2)',
-                        borderRadius: '8px',
+                        zIndex: 1000,
+                        background: '#0B1A2E',
+                        border: '1px solid rgba(255, 255, 255, 0.22)',
+                        borderRadius: '10px',
                         boxShadow: '0 12px 32px rgba(0,0,0,0.5)',
                         padding: '6px',
-                        minWidth: '180px',
+                        minWidth: '190px',
+                        maxHeight: '280px',
+                        overflowY: 'auto',
                       }}
                     >
                       {statusesList.map((st) => (
@@ -784,15 +822,15 @@ export default function HomePage({ matches = [], onApplySearch }) {
               >
                 <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '12.5px', color: 'rgba(255, 255, 255, 0.68)' }}>
                   <CheckCircle2 size={13} style={{ color: 'var(--brass-light)', flexShrink: 0 }} />
-                  <span>3,500+ Active Public Solicitations</span>
+                  <span>3,500+ Public Grants</span>
                 </div>
                 <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '12.5px', color: 'rgba(255, 255, 255, 0.68)' }}>
                   <CheckCircle2 size={13} style={{ color: 'var(--brass-light)', flexShrink: 0 }} />
-                  <span>Direct Agency Synchronization</span>
+                  <span>Agency Synchronization</span>
                 </div>
                 <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '12.5px', color: 'rgba(255, 255, 255, 0.68)' }}>
                   <CheckCircle2 size={13} style={{ color: 'var(--brass-light)', flexShrink: 0 }} />
-                  <span>Verified CFDA &amp; Eligibility Codes</span>
+                  <span>Verified &amp; Eligibility</span>
                 </div>
               </div>
             </div>
@@ -1090,8 +1128,8 @@ export default function HomePage({ matches = [], onApplySearch }) {
       <section
         style={{
           background: '#FFFFFF',
-          borderBottom: '1px solid var(--line)',
-          padding: '36px 20px',
+          borderBottom: 'none', position: 'relative', zIndex: 1,
+          padding: '36px 20px 16px',
         }}
       >
         <div className="container" style={{ textAlign: 'center' }}>
@@ -1143,7 +1181,196 @@ export default function HomePage({ matches = [], onApplySearch }) {
         </div>
       </section>
 
-      {/* 3. INTERACTIVE TABBED FEATURE SHOWCASE */}
+      {/* 3. CLOSING SOON DEADLINES SECTION */}
+      <section
+        style={{
+          background: '#FFFFFF',
+          borderTop: 'none',
+          borderBottom: '1px solid var(--line)',
+          padding: '32px 20px 80px', position: 'relative', zIndex: 1,
+        }}
+      >
+        <div className="container">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '16px', marginBottom: '40px' }}>
+            <div>
+              <span
+                style={{
+                  color: 'var(--brass-text)',
+                  fontSize: '12.5px',
+                  fontWeight: '700',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.1em',
+                  display: 'block',
+                  marginBottom: '8px',
+                }}
+              >
+                Trending Deadlines
+              </span>
+              <h2
+                style={{
+                  fontFamily: 'var(--font-serif)',
+                  fontSize: 'clamp(26px, 3.5vw, 36px)',
+                  color: 'var(--navy)',
+                  lineHeight: '1.2',
+                }}
+              >
+                Closing soon — don't miss these deadlines
+              </h2>
+            </div>
+
+            <button
+              onClick={() => navigate('/grants')}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                background: 'transparent',
+                border: '1px solid var(--line)',
+                color: 'var(--navy)',
+                padding: '10px 18px',
+                borderRadius: '8px',
+                fontWeight: '600',
+                fontSize: '13.5px',
+                cursor: 'pointer',
+              }}
+            >
+              <span>Explore All Grants</span>
+              <ArrowRight size={15} />
+            </button>
+          </div>
+
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(310px, 1fr))',
+              gap: '24px',
+            }}
+          >
+            {closingSoonGrants.map((grant) => (
+              <div
+                key={grant.grant_id || grant._id}
+                style={{
+                  background: '#FFFFFF',
+                  border: '1px solid var(--line)',
+                  borderRadius: '12px',
+                  padding: '24px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  boxShadow: '0 4px 14px rgba(20, 45, 76, 0.05)',
+                }}
+                className="grant-card-hover"
+              >
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
+                    <span
+                      style={{
+                        fontSize: '11px',
+                        fontWeight: '700',
+                        textTransform: 'uppercase',
+                        padding: '3px 8px',
+                        borderRadius: '4px',
+                        letterSpacing: '0.04em',
+                        background: grant.opp_status === 'posted' ? 'var(--success-wash)' : 'var(--brass-wash)',
+                        color: grant.opp_status === 'posted' ? 'var(--success)' : 'var(--brass-text)',
+                      }}
+                    >
+                      {grant.opp_status || 'Active'}
+                    </span>
+
+                    <span
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '5px',
+                        fontSize: '12px',
+                        color: 'var(--muted)',
+                        fontWeight: '500',
+                      }}
+                    >
+                      <Clock size={13} style={{ color: 'var(--brass-text)' }} />
+                      Close: {grant.close_date || 'Open'}
+                    </span>
+                  </div>
+
+                  <h3
+                    style={{
+                      fontFamily: 'var(--font-serif)',
+                      fontSize: '19px',
+                      color: 'var(--navy)',
+                      marginBottom: '10px',
+                      lineHeight: '1.35',
+                    }}
+                  >
+                    {grant.title}
+                  </h3>
+
+                  <p
+                    style={{
+                      fontSize: '12.5px',
+                      color: 'var(--brass-text)',
+                      fontWeight: '600',
+                      marginBottom: '12px',
+                    }}
+                  >
+                    {grant.agency || 'Federal Agency'} {grant.agency_code ? `(${grant.agency_code})` : ''}
+                  </p>
+
+                  <p
+                    style={{
+                      fontSize: '13px',
+                      color: 'var(--muted)',
+                      lineHeight: '1.55',
+                      marginBottom: '20px',
+                      display: '-webkit-box',
+                      WebkitLineClamp: 3,
+                      WebkitBoxOrient: 'vertical',
+                      overflow: 'hidden',
+                    }}
+                  >
+                    {grant.description}
+                  </p>
+                </div>
+
+                <div
+                  style={{
+                    borderTop: '1px solid var(--line)',
+                    paddingTop: '16px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                  }}
+                >
+                  <span style={{ fontSize: '11.5px', color: 'var(--muted)', fontWeight: '500' }}>
+                    Opp #: {grant.opp_number || grant.grant_id}
+                  </span>
+
+                  <button
+                    type="button"
+                    onClick={() => navigate(`/grants?search=${encodeURIComponent(grant.opp_number || grant.title)}`)}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '4px',
+                      background: 'transparent',
+                      border: 'none',
+                      color: 'var(--brass-text)',
+                      fontWeight: '600',
+                      fontSize: '13px',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    <span>View Opportunity</span>
+                    <ArrowRight size={14} />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 4. INTERACTIVE TABBED FEATURE SHOWCASE */}
       <section
         id="platform-showcase"
         style={{
@@ -1727,7 +1954,246 @@ export default function HomePage({ matches = [], onApplySearch }) {
         </div>
       </section>
 
-      {/* 4. PLATFORM AT A GLANCE (10 FEATURE CARDS GRID) */}
+      {/* 5. AUDIENCE FOCUS SECTION */}
+      <section style={{ padding: '80px 20px', background: '#FAFBFC' }}>
+        <div className="container">
+          <div style={{ textAlign: 'center', maxWidth: '720px', margin: '0 auto 52px' }}>
+            <span
+              style={{
+                color: 'var(--brass-text)',
+                fontSize: '12.5px',
+                fontWeight: '700',
+                textTransform: 'uppercase',
+                letterSpacing: '0.1em',
+                display: 'block',
+                marginBottom: '10px',
+              }}
+            >
+              Who It's For
+            </span>
+            <h2
+              style={{
+                fontFamily: 'var(--font-serif)',
+                fontSize: 'clamp(28px, 4vw, 42px)',
+                color: 'var(--navy)',
+                lineHeight: '1.2',
+                marginBottom: '16px',
+              }}
+            >
+              Built for organizations driven by mission
+            </h2>
+            <p style={{ fontSize: '16px', color: 'var(--muted)', lineHeight: '1.6' }}>
+              Whether you are an institutional researcher, a fast-growing 501(c)(3), or an innovative SBIR business, GrantSignal 360° isolates opportunities matched to your unique profile.
+            </p>
+          </div>
+
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+              gap: '24px',
+            }}
+          >
+            {audienceCategories.map((item) => {
+              const Icon = item.icon;
+              return (
+                <div
+                  key={item.title}
+                  onClick={() => handleFilterSearch(item.query)}
+                  style={{
+                    background: '#FFFFFF',
+                    border: '1px solid var(--line)',
+                    borderRadius: '12px',
+                    padding: '28px',
+                    boxShadow: '0 4px 14px rgba(20, 45, 76, 0.04)',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                  }}
+                  className="grant-card-hover"
+                >
+                  <div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
+                      <div
+                        style={{
+                          width: '44px',
+                          height: '44px',
+                          borderRadius: '10px',
+                          background: 'var(--mist)',
+                          color: 'var(--navy)',
+                          display: 'grid',
+                          placeItems: 'center',
+                        }}
+                      >
+                        <Icon size={22} />
+                      </div>
+
+                      <span
+                        style={{
+                          fontSize: '11px',
+                          fontWeight: '600',
+                          color: 'var(--brass-text)',
+                          background: 'var(--brass-wash)',
+                          padding: '3px 8px',
+                          borderRadius: '4px',
+                        }}
+                      >
+                        {item.tag}
+                      </span>
+                    </div>
+
+                    <h3
+                      style={{
+                        fontFamily: 'var(--font-serif)',
+                        fontSize: '20px',
+                        color: 'var(--navy)',
+                        marginBottom: '10px',
+                        lineHeight: '1.3',
+                      }}
+                    >
+                      {item.title}
+                    </h3>
+
+                    <p style={{ fontSize: '13.5px', color: 'var(--muted)', lineHeight: '1.6' }}>
+                      {item.description}
+                    </p>
+                  </div>
+
+                  <div
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      color: 'var(--brass-text)',
+                      fontWeight: '600',
+                      fontSize: '13px',
+                      marginTop: '20px',
+                    }}
+                  >
+                    <span>Browse matching grants</span>
+                    <ArrowRight size={14} />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* 6. PLATFORM FEATURE DIFFERENTIATORS */}
+      <section
+        style={{
+          background: '#FFFFFF',
+          borderTop: '1px solid var(--line)',
+          borderBottom: '1px solid var(--line)',
+          padding: '80px 20px',
+        }}
+      >
+        <div className="container">
+          <div style={{ textAlign: 'center', maxWidth: '720px', margin: '0 auto 52px' }}>
+            <span
+              style={{
+                color: 'var(--brass-text)',
+                fontSize: '12.5px',
+                fontWeight: '700',
+                textTransform: 'uppercase',
+                letterSpacing: '0.1em',
+                display: 'block',
+                marginBottom: '10px',
+              }}
+            >
+              The GrantSignal Advantage
+            </span>
+            <h2
+              style={{
+                fontFamily: 'var(--font-serif)',
+                fontSize: 'clamp(28px, 4vw, 40px)',
+                color: 'var(--navy)',
+                lineHeight: '1.2',
+                marginBottom: '16px',
+              }}
+            >
+              Built different. Intelligence without the noise.
+            </h2>
+            <p style={{ fontSize: '16px', color: 'var(--muted)', lineHeight: '1.6' }}>
+              Unlike generic grant lists or static spreadsheets, GrantSignal 360° connects official agency data with targeted organizational criteria.
+            </p>
+          </div>
+
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+              gap: '28px',
+            }}
+          >
+            {[
+              {
+                title: 'Direct Federal API Synchronization',
+                desc: 'Real-time synchronization with official federal opportunity records, synopses, and forecasted solicitations with verified CFDA numbers.',
+                icon: Shield,
+              },
+              {
+                title: 'Multi-Opportunity Comparison Drawer',
+                desc: 'Benchmark up to 6 grant opportunities side-by-side. Compare funding ceilings, agency contacts, and eligibility factors in one comprehensive view.',
+                icon: Layers,
+              },
+              {
+                title: 'Customized Funding Profiles',
+                desc: 'Tailor your target agencies, focus categories, and priority keywords to continuously filter out irrelevant solicitations.',
+                icon: Sliders,
+              },
+            ].map((col) => {
+              const Icon = col.icon;
+              return (
+                <div
+                  key={col.title}
+                  style={{
+                    background: 'var(--mist)',
+                    border: '1px solid var(--line)',
+                    borderRadius: '12px',
+                    padding: '32px 26px',
+                  }}
+                >
+                  <div
+                    style={{
+                      width: '46px',
+                      height: '46px',
+                      borderRadius: '10px',
+                      background: 'var(--navy)',
+                      color: 'var(--brass-light)',
+                      display: 'grid',
+                      placeItems: 'center',
+                      marginBottom: '20px',
+                    }}
+                  >
+                    <Icon size={22} />
+                  </div>
+
+                  <h3
+                    style={{
+                      fontFamily: 'var(--font-serif)',
+                      fontSize: '21px',
+                      color: 'var(--navy)',
+                      marginBottom: '12px',
+                      lineHeight: '1.3',
+                    }}
+                  >
+                    {col.title}
+                  </h3>
+
+                  <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: '1.6' }}>
+                    {col.desc}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* 7. PLATFORM AT A GLANCE (10 FEATURE CARDS GRID) */}
       <section
         style={{
           background: '#07101C',
@@ -1907,7 +2373,7 @@ export default function HomePage({ matches = [], onApplySearch }) {
         </div>
       </section>
 
-      {/* 5. EXPLORE THE DATABASE (6 CROSS-LINKED DIRECTORY CARDS - EXACT GRANTED AI ARCHITECTURE) */}
+      {/* 8. EXPLORE THE DATABASE (6 CROSS-LINKED DIRECTORY CARDS) */}
       <section
         style={{
           background: '#060D17',
@@ -2055,520 +2521,6 @@ export default function HomePage({ matches = [], onApplySearch }) {
         </div>
       </section>
 
-      {/* 6. CLOSING SOON DEADLINES SECTION */}
-      <section
-        style={{
-          background: '#FFFFFF',
-          borderTop: '1px solid var(--line)',
-          borderBottom: '1px solid var(--line)',
-          padding: '80px 20px',
-        }}
-      >
-        <div className="container">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '16px', marginBottom: '40px' }}>
-            <div>
-              <span
-                style={{
-                  color: 'var(--brass-text)',
-                  fontSize: '12.5px',
-                  fontWeight: '700',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.1em',
-                  display: 'block',
-                  marginBottom: '8px',
-                }}
-              >
-                Trending Deadlines
-              </span>
-              <h2
-                style={{
-                  fontFamily: 'var(--font-serif)',
-                  fontSize: 'clamp(26px, 3.5vw, 36px)',
-                  color: 'var(--navy)',
-                  lineHeight: '1.2',
-                }}
-              >
-                Closing soon — don't miss these deadlines
-              </h2>
-            </div>
-
-            <button
-              onClick={() => navigate('/grants')}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '6px',
-                background: 'transparent',
-                border: '1px solid var(--line)',
-                color: 'var(--navy)',
-                padding: '10px 18px',
-                borderRadius: '8px',
-                fontWeight: '600',
-                fontSize: '13.5px',
-                cursor: 'pointer',
-              }}
-            >
-              <span>Explore All Grants</span>
-              <ArrowRight size={15} />
-            </button>
           </div>
-
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(310px, 1fr))',
-              gap: '24px',
-            }}
-          >
-            {closingSoonGrants.map((grant) => (
-              <div
-                key={grant.grant_id || grant._id}
-                style={{
-                  background: '#FFFFFF',
-                  border: '1px solid var(--line)',
-                  borderRadius: '12px',
-                  padding: '24px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'space-between',
-                  boxShadow: '0 4px 14px rgba(20, 45, 76, 0.05)',
-                }}
-                className="grant-card-hover"
-              >
-                <div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
-                    <span
-                      style={{
-                        fontSize: '11px',
-                        fontWeight: '700',
-                        textTransform: 'uppercase',
-                        padding: '3px 8px',
-                        borderRadius: '4px',
-                        letterSpacing: '0.04em',
-                        background: grant.opp_status === 'posted' ? 'var(--success-wash)' : 'var(--brass-wash)',
-                        color: grant.opp_status === 'posted' ? 'var(--success)' : 'var(--brass-text)',
-                      }}
-                    >
-                      {grant.opp_status || 'Active'}
-                    </span>
-
-                    <span
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '5px',
-                        fontSize: '12px',
-                        color: 'var(--muted)',
-                        fontWeight: '500',
-                      }}
-                    >
-                      <Clock size={13} style={{ color: 'var(--brass-text)' }} />
-                      Close: {grant.close_date || 'Open'}
-                    </span>
-                  </div>
-
-                  <h3
-                    style={{
-                      fontFamily: 'var(--font-serif)',
-                      fontSize: '19px',
-                      color: 'var(--navy)',
-                      marginBottom: '10px',
-                      lineHeight: '1.35',
-                    }}
-                  >
-                    {grant.title}
-                  </h3>
-
-                  <p
-                    style={{
-                      fontSize: '12.5px',
-                      color: 'var(--brass-text)',
-                      fontWeight: '600',
-                      marginBottom: '12px',
-                    }}
-                  >
-                    {grant.agency || 'Federal Agency'} {grant.agency_code ? `(${grant.agency_code})` : ''}
-                  </p>
-
-                  <p
-                    style={{
-                      fontSize: '13px',
-                      color: 'var(--muted)',
-                      lineHeight: '1.55',
-                      marginBottom: '20px',
-                      display: '-webkit-box',
-                      WebkitLineClamp: 3,
-                      WebkitBoxOrient: 'vertical',
-                      overflow: 'hidden',
-                    }}
-                  >
-                    {grant.description}
-                  </p>
-                </div>
-
-                <div
-                  style={{
-                    borderTop: '1px solid var(--line)',
-                    paddingTop: '16px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                  }}
-                >
-                  <span style={{ fontSize: '11.5px', color: 'var(--muted)', fontWeight: '500' }}>
-                    Opp #: {grant.opp_number || grant.grant_id}
-                  </span>
-
-                  <button
-                    type="button"
-                    onClick={() => navigate(`/grants?search=${encodeURIComponent(grant.opp_number || grant.title)}`)}
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '4px',
-                      background: 'transparent',
-                      border: 'none',
-                      color: 'var(--brass-text)',
-                      fontWeight: '600',
-                      fontSize: '13px',
-                      cursor: 'pointer',
-                    }}
-                  >
-                    <span>View Opportunity</span>
-                    <ArrowRight size={14} />
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 7. AUDIENCE FOCUS SECTION */}
-      <section style={{ padding: '80px 20px', background: '#FAFBFC' }}>
-        <div className="container">
-          <div style={{ textAlign: 'center', maxWidth: '720px', margin: '0 auto 52px' }}>
-            <span
-              style={{
-                color: 'var(--brass-text)',
-                fontSize: '12.5px',
-                fontWeight: '700',
-                textTransform: 'uppercase',
-                letterSpacing: '0.1em',
-                display: 'block',
-                marginBottom: '10px',
-              }}
-            >
-              Who It's For
-            </span>
-            <h2
-              style={{
-                fontFamily: 'var(--font-serif)',
-                fontSize: 'clamp(28px, 4vw, 42px)',
-                color: 'var(--navy)',
-                lineHeight: '1.2',
-                marginBottom: '16px',
-              }}
-            >
-              Built for organizations driven by mission
-            </h2>
-            <p style={{ fontSize: '16px', color: 'var(--muted)', lineHeight: '1.6' }}>
-              Whether you are an institutional researcher, a fast-growing 501(c)(3), or an innovative SBIR business, GrantSignal 360° isolates opportunities matched to your unique profile.
-            </p>
-          </div>
-
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-              gap: '24px',
-            }}
-          >
-            {audienceCategories.map((item) => {
-              const Icon = item.icon;
-              return (
-                <div
-                  key={item.title}
-                  onClick={() => handleFilterSearch(item.query)}
-                  style={{
-                    background: '#FFFFFF',
-                    border: '1px solid var(--line)',
-                    borderRadius: '12px',
-                    padding: '28px',
-                    boxShadow: '0 4px 14px rgba(20, 45, 76, 0.04)',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between',
-                  }}
-                  className="grant-card-hover"
-                >
-                  <div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
-                      <div
-                        style={{
-                          width: '44px',
-                          height: '44px',
-                          borderRadius: '10px',
-                          background: 'var(--mist)',
-                          color: 'var(--navy)',
-                          display: 'grid',
-                          placeItems: 'center',
-                        }}
-                      >
-                        <Icon size={22} />
-                      </div>
-
-                      <span
-                        style={{
-                          fontSize: '11px',
-                          fontWeight: '600',
-                          color: 'var(--brass-text)',
-                          background: 'var(--brass-wash)',
-                          padding: '3px 8px',
-                          borderRadius: '4px',
-                        }}
-                      >
-                        {item.tag}
-                      </span>
-                    </div>
-
-                    <h3
-                      style={{
-                        fontFamily: 'var(--font-serif)',
-                        fontSize: '20px',
-                        color: 'var(--navy)',
-                        marginBottom: '10px',
-                        lineHeight: '1.3',
-                      }}
-                    >
-                      {item.title}
-                    </h3>
-
-                    <p style={{ fontSize: '13.5px', color: 'var(--muted)', lineHeight: '1.6' }}>
-                      {item.description}
-                    </p>
-                  </div>
-
-                  <div
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '6px',
-                      color: 'var(--brass-text)',
-                      fontWeight: '600',
-                      fontSize: '13px',
-                      marginTop: '20px',
-                    }}
-                  >
-                    <span>Browse matching grants</span>
-                    <ArrowRight size={14} />
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* 8. PLATFORM FEATURE DIFFERENTIATORS */}
-      <section
-        style={{
-          background: '#FFFFFF',
-          borderTop: '1px solid var(--line)',
-          borderBottom: '1px solid var(--line)',
-          padding: '80px 20px',
-        }}
-      >
-        <div className="container">
-          <div style={{ textAlign: 'center', maxWidth: '720px', margin: '0 auto 52px' }}>
-            <span
-              style={{
-                color: 'var(--brass-text)',
-                fontSize: '12.5px',
-                fontWeight: '700',
-                textTransform: 'uppercase',
-                letterSpacing: '0.1em',
-                display: 'block',
-                marginBottom: '10px',
-              }}
-            >
-              The GrantSignal Advantage
-            </span>
-            <h2
-              style={{
-                fontFamily: 'var(--font-serif)',
-                fontSize: 'clamp(28px, 4vw, 40px)',
-                color: 'var(--navy)',
-                lineHeight: '1.2',
-                marginBottom: '16px',
-              }}
-            >
-              Built different. Intelligence without the noise.
-            </h2>
-            <p style={{ fontSize: '16px', color: 'var(--muted)', lineHeight: '1.6' }}>
-              Unlike generic grant lists or static spreadsheets, GrantSignal 360° connects official agency data with targeted organizational criteria.
-            </p>
-          </div>
-
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-              gap: '28px',
-            }}
-          >
-            {[
-              {
-                title: 'Direct Federal API Synchronization',
-                desc: 'Real-time synchronization with official federal opportunity records, synopses, and forecasted solicitations with verified CFDA numbers.',
-                icon: Shield,
-              },
-              {
-                title: 'Multi-Opportunity Comparison Drawer',
-                desc: 'Benchmark up to 6 grant opportunities side-by-side. Compare funding ceilings, agency contacts, and eligibility factors in one comprehensive view.',
-                icon: Layers,
-              },
-              {
-                title: 'Customized Funding Profiles',
-                desc: 'Tailor your target agencies, focus categories, and priority keywords to continuously filter out irrelevant solicitations.',
-                icon: Sliders,
-              },
-            ].map((col) => {
-              const Icon = col.icon;
-              return (
-                <div
-                  key={col.title}
-                  style={{
-                    background: 'var(--mist)',
-                    border: '1px solid var(--line)',
-                    borderRadius: '12px',
-                    padding: '32px 26px',
-                  }}
-                >
-                  <div
-                    style={{
-                      width: '46px',
-                      height: '46px',
-                      borderRadius: '10px',
-                      background: 'var(--navy)',
-                      color: 'var(--brass-light)',
-                      display: 'grid',
-                      placeItems: 'center',
-                      marginBottom: '20px',
-                    }}
-                  >
-                    <Icon size={22} />
-                  </div>
-
-                  <h3
-                    style={{
-                      fontFamily: 'var(--font-serif)',
-                      fontSize: '21px',
-                      color: 'var(--navy)',
-                      marginBottom: '12px',
-                      lineHeight: '1.3',
-                    }}
-                  >
-                    {col.title}
-                  </h3>
-
-                  <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: '1.6' }}>
-                    {col.desc}
-                  </p>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* 9. EXECUTIVE CALL TO ACTION */}
-      <section
-        style={{
-          background: 'linear-gradient(180deg, var(--navy) 0%, var(--navy-deep) 100%)',
-          color: '#FFFFFF',
-          padding: '84px 20px',
-          textAlign: 'center',
-        }}
-      >
-        <div className="container" style={{ maxWidth: '780px' }}>
-          <h2
-            style={{
-              fontFamily: 'var(--font-serif)',
-              fontSize: 'clamp(30px, 4.5vw, 46px)',
-              lineHeight: '1.2',
-              marginBottom: '18px',
-              color: '#FFFFFF',
-            }}
-          >
-            Start discovering funding opportunities matched to your mission.
-          </h2>
-
-          <p
-            style={{
-              fontSize: '17px',
-              color: 'rgba(255, 255, 255, 0.8)',
-              lineHeight: '1.6',
-              marginBottom: '36px',
-            }}
-          >
-            Access our active federal grant dataset, evaluate requirements, and streamline your path from opportunity identification to proposal readiness.
-          </p>
-
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '14px',
-              flexWrap: 'wrap',
-            }}
-          >
-            <button
-              onClick={() => navigate('/grants')}
-              style={{
-                background: 'var(--brass)',
-                color: '#FFFFFF',
-                border: 'none',
-                borderRadius: '8px',
-                padding: '14px 32px',
-                fontSize: '15px',
-                fontWeight: '600',
-                cursor: 'pointer',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                boxShadow: '0 4px 14px rgba(0, 0, 0, 0.2)',
-                transition: 'background 0.15s ease',
-              }}
-              onMouseOver={(e) => (e.currentTarget.style.background = 'var(--brass-fill)')}
-              onMouseOut={(e) => (e.currentTarget.style.background = 'var(--brass)')}
-            >
-              <span>Explore All Grants</span>
-              <ArrowRight size={17} />
-            </button>
-
-            <button
-              onClick={() => navigate('/preferences')}
-              style={{
-                background: 'rgba(255, 255, 255, 0.1)',
-                color: '#FFFFFF',
-                border: '1px solid rgba(255, 255, 255, 0.25)',
-                borderRadius: '8px',
-                padding: '14px 28px',
-                fontSize: '15px',
-                fontWeight: '600',
-                cursor: 'pointer',
-              }}
-              onMouseOver={(e) => (e.currentTarget.style.background = 'rgba(255, 255, 255, 0.18)')}
-              onMouseOut={(e) => (e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)')}
-            >
-              Set Up Funding Profile
-            </button>
-          </div>
-        </div>
-      </section>
-    </div>
   );
 }

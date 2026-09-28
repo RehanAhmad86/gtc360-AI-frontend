@@ -3,7 +3,7 @@ import { ArrowUpRight } from 'lucide-react';
 
 export default function Footer() {
   return (
-    <footer style={{ marginTop: '60px' }}>
+    <footer style={{ marginTop: 0 }}>
       {/* Executive Call to Action Banner */}
       <section style={{
         background: 'var(--navy)',
