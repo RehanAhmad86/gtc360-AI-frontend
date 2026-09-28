@@ -34,7 +34,7 @@ export const CATEGORIES_LOOKUP = [
 ];
 
 export const AGENCIES_LOOKUP = [
-  { id: 'ca-state', code: 'CA-STATE', name: 'State of California / All CA Departments', jurisdiction: 'State' },
+  { id: 'ca-state', code: 'CA-STATE', name: 'State Departments & Programs', jurisdiction: 'State' },
   { id: 'denali', code: 'DENALI', name: 'Denali Commission', jurisdiction: 'Federal' },
   { id: 'usda', code: 'USDA', name: 'Department of Agriculture - USDA', jurisdiction: 'Federal' },
   { id: 'doc', code: 'DOC', name: 'Department of Commerce - DOC / NOAA / NIST / EDA', jurisdiction: 'Federal' },
@@ -254,7 +254,7 @@ export default function PreferencesPage({ user, onPreferencesSaved }) {
     {
       key: 'agencies',
       label: 'Preferred Funders',
-      sub: 'Federal departments & State of California',
+      sub: 'Federal & State Departments',
       icon: Building,
       count: selectedAgencies.length,
     },
@@ -613,7 +613,7 @@ export default function PreferencesPage({ user, onPreferencesSaved }) {
                   <div>
                     <h2 className="pref-card-title">Preferred Funders</h2>
                     <p className="pref-card-desc">
-                      Prioritize opportunities released by specific federal departments and State of California agencies that align with your funding strategy.
+                      Prioritize opportunities released by specific federal departments and State agencies that align with your funding strategy.
                     </p>
                   </div>
                   <div style={{ fontSize: '12.5px', color: 'var(--brass-text)', fontWeight: '700' }}>
@@ -662,7 +662,7 @@ export default function PreferencesPage({ user, onPreferencesSaved }) {
                       onClick={() => setAgencyJurisdiction('State')}
                       className={`pref-filter-pill ${agencyJurisdiction === 'State' ? 'active' : ''}`}
                     >
-                      California State (1)
+                      State Programs (1)
                     </button>
                   </div>
 

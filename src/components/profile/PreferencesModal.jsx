@@ -41,7 +41,7 @@ export const CATEGORIES_LOOKUP = [
 ];
 
 export const AGENCIES_LOOKUP = [
-  { id: 'ca-state', code: 'CA-STATE', name: 'State of California / All CA Departments', jurisdiction: 'State' },
+  { id: 'ca-state', code: 'CA-STATE', name: 'State Departments & Programs', jurisdiction: 'State' },
   { id: 'denali', code: 'DENALI', name: 'Denali Commission', jurisdiction: 'Federal' },
   { id: 'usda', code: 'USDA', name: 'Department of Agriculture - USDA', jurisdiction: 'Federal' },
   { id: 'doc', code: 'DOC', name: 'Department of Commerce - DOC / NOAA / NIST / EDA', jurisdiction: 'Federal' },

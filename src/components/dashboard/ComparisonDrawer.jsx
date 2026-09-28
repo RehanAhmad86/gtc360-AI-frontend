@@ -1,6 +1,6 @@
 import React from 'react';
 import { X, Layers, ExternalLink, Sparkles, Building, Calendar, Trash2, Shield } from 'lucide-react';
-import { getGrantDestinationUrl } from './GrantMatchCard';
+import { getGrantDestinationUrl } from '../../utils/grantFilters';
 
 export default function ComparisonDrawer({
   comparedGrants,
@@ -159,7 +159,6 @@ export default function ComparisonDrawer({
               }}>
                 {comparedGrants.map((grant) => {
                   const score = grant.score;
-                  const isCalifornia = grant.source === 'california';
                   return (
                     <div
                       key={grant.grant_id}
@@ -209,12 +208,12 @@ export default function ComparisonDrawer({
                             padding: '3px 8.5px',
                             borderRadius: '5px',
                             whiteSpace: 'nowrap',
-                            background: isCalifornia ? '#EFF6FF' : '#F8FAFC',
-                            color: isCalifornia ? '#1D4ED8' : '#1E293B',
-                            border: isCalifornia ? '1px solid #BFDBFE' : '1px solid #E2E8F0',
+                            background: '#F1F5F9',
+                            color: 'var(--navy)',
+                            border: '1px solid #CBD5E1',
                           }}>
                             <Shield size={11} style={{ strokeWidth: 2.5 }} />
-                            <span>{isCalifornia ? 'California State' : 'Federal Grant'}</span>
+                            <span>{grant.agency_code || 'Public Agency'}</span>
                           </div>
                         )}
 
@@ -283,10 +282,10 @@ export default function ComparisonDrawer({
                         fontSize: '13px',
                       }}>
                         <span style={{ color: 'var(--muted)', display: 'block', fontSize: '11px', textTransform: 'uppercase', fontWeight: '700' }}>
-                          Jurisdiction
+                          Status
                         </span>
-                        <span style={{ fontWeight: '600' }}>
-                          {grant.source === 'california' ? 'State of California' : 'Federal (Grants.gov)'}
+                        <span style={{ fontWeight: '600', textTransform: 'capitalize' }}>
+                          {grant.opp_status || 'Posted / Active'}
                         </span>
                       </div>
 

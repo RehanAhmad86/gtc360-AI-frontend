@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Sliders, User, LogOut, Lock, History } from 'lucide-react';
+import { Sliders, User, LogOut, Lock, History, Compass, Layers } from 'lucide-react';
 import { authAPI } from '../../services/api';
 
 export default function Navbar({
@@ -42,7 +42,7 @@ export default function Navbar({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        height: '70px',
+        height: '86px',
       }}>
         {/* Brand Logo & Tagline */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
@@ -56,7 +56,7 @@ export default function Navbar({
               src="/GrantSignal_logo_Alt_White.png"
               alt="GrantSignal 360°"
               style={{
-                height: '52px',
+                height: '71px',
                 width: 'auto',
                 display: 'block',
                 objectFit: 'contain',
@@ -66,7 +66,7 @@ export default function Navbar({
             />
           </a>
 
-          <div style={{ width: '1px', height: '28px', background: 'rgba(255, 255, 255, 0.18)', flexShrink: 0 }} className="brand-divider" />
+          <div style={{ width: '1px', height: '38px', background: 'rgba(255, 255, 255, 0.18)', flexShrink: 0 }} className="brand-divider" />
 
           <div className="brand-text-block">
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -98,6 +98,55 @@ export default function Navbar({
         {/* Action Controls */}
         {!isAuthPage && (
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            {/* Grants Explorer Link */}
+            <button
+              type="button"
+              onClick={() => navigate('/grants')}
+              title="Explore all grants"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                background: location.pathname === '/grants' ? 'rgba(255, 255, 255, 0.18)' : 'rgba(255, 255, 255, 0.08)',
+                border: location.pathname === '/grants' ? '1px solid var(--brass-light)' : '1px solid rgba(255, 255, 255, 0.15)',
+                color: '#FFFFFF',
+                borderRadius: '6px',
+                padding: '7px 12px',
+                fontSize: '12.5px',
+                fontWeight: '500',
+                cursor: 'pointer',
+                transition: 'all 0.15s ease',
+              }}
+            >
+              <Compass size={14} style={{ color: 'var(--brass-light)' }} />
+              <span>Grants</span>
+            </button>
+
+            {/* Compare Bar Button */}
+            {compareCount > 0 && (
+              <button
+                type="button"
+                onClick={onOpenCompare}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  background: 'var(--brass)',
+                  color: '#FFFFFF',
+                  border: 'none',
+                  borderRadius: '6px',
+                  padding: '7px 12px',
+                  fontSize: '12.5px',
+                  fontWeight: '600',
+                  cursor: 'pointer',
+                  boxShadow: '0 2px 8px rgba(149,128,100,0.3)',
+                }}
+              >
+                <Layers size={14} />
+                <span>Compare ({compareCount})</span>
+              </button>
+            )}
+
             {/* Saved Searches Link */}
             <button
               type="button"

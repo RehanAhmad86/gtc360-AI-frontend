@@ -89,7 +89,6 @@ export default function SignupPage({ onAuthSuccess }) {
               src="/GrantSignal_logo_Alt.png"
               alt="GrantSignal 360°"
               className="auth-logo"
-              style={{ background: '#FFFFFF', padding: '3px 10px' }}
             />
           </div>
           <h1 className="auth-title" style={{ fontSize: '20px', lineHeight: '1.3' }}>

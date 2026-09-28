@@ -7,6 +7,7 @@ import SignupPage from './pages/SignupPage';
 import SearchHistoryPage from './pages/SearchHistoryPage';
 import PreferencesPage from './pages/PreferencesPage';
 import DashboardPage from './pages/DashboardPage';
+import HomePage from './pages/HomePage';
 import { authAPI, matchingAPI, systemAPI } from './services/api';
 
 export default function App() {
@@ -130,6 +131,39 @@ export default function App() {
       <Routes>
         <Route
           path="/"
+          element={
+            <HomePage
+              matches={matches}
+              onApplySearch={(q) => setSearchQuery(q)}
+            />
+          }
+        />
+        <Route
+          path="/grants"
+          element={
+            <DashboardPage
+              user={user}
+              matches={matches}
+              loading={loading}
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              sourceFilter={sourceFilter}
+              setSourceFilter={setSourceFilter}
+              activePreferences={activePreferences}
+              comparedGrants={comparedGrants}
+              setComparedGrants={setComparedGrants}
+              isCompareOpen={isCompareOpen}
+              setIsCompareOpen={setIsCompareOpen}
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+              pageSize={pageSize}
+              setPageSize={setPageSize}
+              hasSavedPreferences={hasSavedPreferences}
+            />
+          }
+        />
+        <Route
+          path="/dashboard"
           element={
             <DashboardPage
               user={user}

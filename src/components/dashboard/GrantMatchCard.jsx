@@ -1,502 +1,507 @@
-import React from 'react';
-import { ExternalLink, Check, Plus, Sparkles, Building2, Calendar, Shield } from 'lucide-react';
-
-/**
- * Generate clean URL slug from opportunity title
- */
-function slugify(text) {
-  if (!text) return 'grant-opportunity';
-  return text
-    .toString()
-    .toLowerCase()
-    .trim()
-    .replace(/[^\w\s-]/g, '')
-    .replace(/[\s_-]+/g, '-')
-    .replace(/^-+|-+$/g, '');
-}
-
-/**
- * Format destination URL according to GTC360 routing structure:
- * - Federal: https://gtc360.com/grants/{title-slug}/{id}/
- * - California: https://gtc360.com/grants/california/{title-slug}/{id}/
- */
-export function getGrantDestinationUrl(grant) {
-  const isCalifornia = grant.source === 'california';
-  const slug = slugify(grant.title);
-  let id = (grant.grant_id || grant.opp_number || '').toString().trim();
-
-  if (isCalifornia) {
-    id = id.replace(/^CA-/, '').trim();
-    return `https://gtc360.com/grants/california/${slug}/${id}/`;
-  }
-
-  return `https://gtc360.com/grants/${slug}/${id}/`;
-}
-
-/**
- * Format date string into executive format (e.g., "Nov 16, 2026") or "Rolling"
- */
-function formatDueDate(dateStr) {
-  if (!dateStr) return 'Rolling';
-  const clean = dateStr.trim();
-  const lower = clean.toLowerCase();
-  if (
-    lower.includes('ongoing') ||
-    lower.includes('rolling') ||
-    lower.includes('unspecified') ||
-    lower.includes('n/a')
-  ) {
-    return 'Rolling';
-  }
-
-  // Handle MM/DD/YYYY format from Grants.gov
-  const parts = clean.split('/');
-  if (parts.length === 3) {
-    const month = parseInt(parts[0], 10);
-    const day = parseInt(parts[1], 10);
-    const year = parseInt(parts[2], 10);
-    const d = new Date(year, month - 1, day);
-    if (!isNaN(d.getTime())) {
-      return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-    }
-  }
-
-  // Handle ISO or standard date formats
-  const parsed = Date.parse(clean);
-  if (!isNaN(parsed)) {
-    return new Date(parsed).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-  }
-
-  return clean;
-}
-
-/**
- * Determine if opportunity is closing soon (<7 days or <30 days)
- */
-function getUrgencyStatus(dateStr) {
-  if (!dateStr) return null;
-  const lower = dateStr.trim().toLowerCase();
-  if (
-    lower.includes('ongoing') ||
-    lower.includes('rolling') ||
-    lower.includes('unspecified') ||
-    lower.includes('n/a')
-  ) {
-    return null;
-  }
-
-  let dateObj = null;
-  const parts = dateStr.trim().split('/');
-  if (parts.length === 3) {
-    dateObj = new Date(parseInt(parts[2], 10), parseInt(parts[0], 10) - 1, parseInt(parts[1], 10));
-  } else {
-    const parsed = Date.parse(dateStr);
-    if (!isNaN(parsed)) dateObj = new Date(parsed);
-  }
-
-  if (!dateObj || isNaN(dateObj.getTime())) return null;
-
-  const diffMs = dateObj.getTime() - Date.now();
-  const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
-
-  if (diffDays >= 0 && diffDays <= 7) {
-    return { label: 'Closing Soon', type: 'urgent' };
-  }
-  if (diffDays > 7 && diffDays <= 30) {
-    return { label: 'Under 30 Days', type: 'soon' };
-  }
-  return null;
-}
+import React, { useState } from 'react';
+import { Bookmark, Sparkles, Plus, Check, ArrowRight } from 'lucide-react';
+import { getGrantDestinationUrl, formatDueDate, extractAwardAmount } from '../../utils/grantFilters';
 
 export default function GrantMatchCard({
   grant,
-  isCompared,
+  viewMode = 'list',
+  isCompared = false,
   onToggleCompare,
   hasActiveCriteria = false,
-  user = null,
+  activeFocus = '',
 }) {
-  const score = grant.score || 0;
-  const isHighMatch = score >= 75;
-  const isMediumMatch = score >= 50 && score < 75;
+  const [isBookmarked, setIsBookmarked] = useState(() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem('gtc360_saved_grants') || '[]');
+      return saved.includes(grant.grant_id);
+    } catch {
+      return false;
+    }
+  });
 
-  const isCalifornia = grant.source === 'california';
-  const formattedDueDate = formatDueDate(grant.close_date);
-  const urgency = getUrgencyStatus(grant.close_date);
+  const handleToggleBookmark = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    try {
+      const saved = JSON.parse(localStorage.getItem('gtc360_saved_grants') || '[]');
+      let updated;
+      if (saved.includes(grant.grant_id)) {
+        updated = saved.filter((id) => id !== grant.grant_id);
+        setIsBookmarked(false);
+      } else {
+        updated = [...saved, grant.grant_id];
+        setIsBookmarked(true);
+      }
+      localStorage.setItem('gtc360_saved_grants', JSON.stringify(updated));
+      window.dispatchEvent(new Event('gtc360_saved_change'));
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const destinationUrl = getGrantDestinationUrl(grant);
+  const dueInfo = formatDueDate(grant.close_date);
+  const awardAmount = extractAwardAmount(grant);
+  const fitScore = grant.calculatedFit || (grant.score ? Math.round(grant.score) : 88);
 
-  return (
-    <article
-      style={{
-        background: '#FFFFFF',
-        border: isCompared ? '1.5px solid var(--brass)' : '1px solid #E2E8F0',
-        borderRadius: '12px',
-        padding: '24px 22px 14px',
-        boxShadow: isCompared
-          ? '0 6px 20px rgba(149, 128, 100, 0.16)'
-          : '0 1px 3px rgba(15, 23, 42, 0.04), 0 4px 12px rgba(15, 23, 42, 0.03)',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        height: '100%',
-        transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
-        position: 'relative',
-      }}
-      className="grant-card-hover"
-    >
-      {/* Floating AI Match Score Badge: Half outside, half inside, horizontally dead-center */}
-      {hasActiveCriteria && grant.score !== null && grant.score !== undefined && (
-        <div
-          style={{
-            position: 'absolute',
-            top: '0',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            zIndex: 2,
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '5px',
-            whiteSpace: 'nowrap',
-            background: isHighMatch ? '#ECFDF5' : isMediumMatch ? '#FFFBEB' : '#F8FAFC',
-            border: isHighMatch
-              ? '1.5px solid #10B981'
-              : isMediumMatch
-              ? '1.5px solid #F59E0B'
-              : '1.5px solid #94A3B8',
-            color: isHighMatch ? '#065F46' : isMediumMatch ? '#92400E' : '#334155',
-            padding: '4px 12px',
-            borderRadius: '100px',
-            fontFamily: 'var(--display)',
-            fontWeight: '700',
-            fontSize: '12.5px',
-            lineHeight: '1.2',
-            letterSpacing: '-0.01em',
-            boxShadow: isHighMatch
-              ? '0 2px 8px rgba(16, 185, 129, 0.2), 0 1px 3px rgba(0,0,0,0.06)'
-              : isMediumMatch
-              ? '0 2px 8px rgba(245, 158, 11, 0.2), 0 1px 3px rgba(0,0,0,0.06)'
-              : '0 2px 6px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0,0,0,0.04)',
-            pointerEvents: 'none',
-          }}
-        >
-          <Sparkles size={13} style={{ flexShrink: 0 }} />
-          <span>{score}% Match</span>
-        </div>
-      )}
+  const grantTitle = grant.title || 'Untitled Funding Opportunity';
+  const agencyName = grant.agency || 'Public Agency';
+  const oppNumber = grant.opp_number || grant.grant_id || '';
+  const focusLabel = activeFocus || (grant.agency_code ? grant.agency_code : 'Public Solicitations');
 
-      {/* Top Body Section */}
-      <div>
-        {/* Row 1: Source Jurisdiction & Compare Button */}
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: '8px',
-            marginBottom: '10px',
-            flexWrap: 'nowrap',
-          }}
-        >
-          {/* Left: Jurisdiction Source Badge */}
-          <span
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '4.5px',
-              fontSize: '11px',
-              fontWeight: '700',
-              textTransform: 'uppercase',
-              letterSpacing: '0.04em',
-              padding: '2.5px 7.5px',
-              borderRadius: '5px',
-              whiteSpace: 'nowrap',
-              flexShrink: 0,
-              background: isCalifornia ? '#EFF6FF' : '#F8FAFC',
-              color: isCalifornia ? '#1D4ED8' : '#1E293B',
-              border: isCalifornia ? '1px solid #BFDBFE' : '1px solid #E2E8F0',
-            }}
-          >
-            <Shield size={11} style={{ strokeWidth: 2.5 }} />
-            <span>{isCalifornia ? 'California State' : 'Federal Grant'}</span>
-          </span>
+  // --- LIST VIEW (Granted AI Inspired Executive Row) ---
+  if (viewMode === 'list') {
+    return (
+      <article
+        style={{
+          background: '#0B1728',
+          border: '1px solid rgba(255, 255, 255, 0.09)',
+          borderRadius: '14px',
+          padding: '16px 20px',
+          marginBottom: '12px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: '20px',
+          transition: 'all 0.18s ease',
+          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
+        }}
+        onMouseOver={(e) => {
+          e.currentTarget.style.borderColor = 'rgba(196, 162, 101, 0.35)';
+          e.currentTarget.style.background = '#0F1F36';
+        }}
+        onMouseOut={(e) => {
+          e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.09)';
+          e.currentTarget.style.background = '#0B1728';
+        }}
+      >
+        {/* Left / Middle: Title, Agency, Fit, Focus Tag */}
+        <div style={{ flex: 1, minWidth: 0 }}>
+          {/* Row 1: Title + AI Found Badge */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap', marginBottom: '5px' }}>
+            <h3 style={{ margin: 0, fontSize: '15.5px', fontWeight: '600', lineHeight: '1.35' }}>
+              <a
+                href={destinationUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  color: '#FFFFFF',
+                  textDecoration: 'none',
+                  transition: 'color 0.15s ease',
+                }}
+                onMouseOver={(e) => (e.currentTarget.style.color = 'var(--brass-light)')}
+                onMouseOut={(e) => (e.currentTarget.style.color = '#FFFFFF')}
+              >
+                {grantTitle}
+              </a>
+            </h3>
 
-          {/* Right: Compare Toggle Action - Available for logged in users */}
-          {user && (
-            <button
-              type="button"
-              onClick={() => onToggleCompare(grant)}
+            {/* AI FOUND BADGE */}
+            <span
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '4px',
-                background: isCompared ? 'var(--navy)' : '#FFFFFF',
-                border: isCompared ? '1px solid var(--navy)' : '1px solid #E2E8F0',
-                color: isCompared ? '#FFFFFF' : '#475569',
-                borderRadius: '5px',
-                padding: '3px 8.5px',
-                fontSize: '11px',
-                fontWeight: '600',
+                background: 'rgba(217, 119, 6, 0.18)',
+                border: '1px solid rgba(217, 119, 6, 0.45)',
+                color: '#FCD34D',
+                borderRadius: '9999px',
+                padding: '2px 8px',
+                fontSize: '10.5px',
+                fontWeight: '700',
+                letterSpacing: '0.04em',
+                textTransform: 'uppercase',
                 whiteSpace: 'nowrap',
-                cursor: 'pointer',
                 flexShrink: 0,
-                transition: 'all 0.15s ease',
               }}
-              className="compare-btn"
             >
-              {isCompared ? (
-                <>
-                  <Check size={11} style={{ strokeWidth: 3 }} />
-                  <span>In Compare</span>
-                </>
-              ) : (
-                <>
-                  <Plus size={11} />
-                  <span>Compare</span>
-                </>
-              )}
-            </button>
-          )}
-        </div>
+              <Sparkles size={11} />
+              <span>AI FOUND</span>
+            </span>
+          </div>
 
-        {/* Row 2: Opp ID & Opp Status Badge */}
-        {(grant.opp_number || grant.opp_status) && (
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              marginBottom: '10px',
-              flexWrap: 'wrap',
-            }}
-          >
-            {grant.opp_number && (
+          {/* Row 2: Agency Name + % Fit Pill */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap', marginBottom: '8px' }}>
+            <span style={{ fontSize: '13px', color: 'rgba(255, 255, 255, 0.7)', fontWeight: '400' }}>
+              {agencyName}
+            </span>
+
+            {/* Fit Score Pill */}
+            <span
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                background: 'rgba(5, 150, 105, 0.22)',
+                border: '1px solid rgba(5, 150, 105, 0.45)',
+                color: '#34D399',
+                borderRadius: '9999px',
+                padding: '1px 8px',
+                fontSize: '11.5px',
+                fontWeight: '700',
+                letterSpacing: '-0.01em',
+              }}
+            >
+              {fitScore}% fit
+            </span>
+          </div>
+
+          {/* Row 3: Discovered Tag + Focus match text */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+            <span
+              style={{
+                background: 'rgba(255, 255, 255, 0.08)',
+                border: '1px solid rgba(255, 255, 255, 0.12)',
+                color: 'rgba(255, 255, 255, 0.75)',
+                borderRadius: '4px',
+                padding: '2px 6px',
+                fontSize: '10px',
+                fontWeight: '700',
+                letterSpacing: '0.05em',
+                textTransform: 'uppercase',
+              }}
+            >
+              DISCOVERED
+            </span>
+
+            <span style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.45)' }}>
+              Matches focus: <span style={{ color: 'rgba(255, 255, 255, 0.8)' }}>{focusLabel}</span>
+            </span>
+
+            {oppNumber && (
               <span
                 style={{
-                  fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
                   fontSize: '11px',
-                  fontWeight: '600',
-                  background: '#F8FAFC',
-                  border: '1px solid #E2E8F0',
-                  padding: '2px 7.5px',
-                  borderRadius: '4px',
-                  color: '#475569',
-                  whiteSpace: 'nowrap',
-                }}
-                title={`Opportunity Number: ${grant.opp_number}`}
-              >
-                #{grant.opp_number}
-              </span>
-            )}
-
-            {grant.opp_status && (
-              <span
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '4.5px',
-                  fontSize: '11px',
-                  fontWeight: '600',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.03em',
-                  padding: '2px 7.5px',
-                  borderRadius: '4px',
-                  whiteSpace: 'nowrap',
-                  background:
-                    grant.opp_status.toLowerCase() === 'forecasted'
-                      ? '#FFFBEB'
-                      : '#ECFDF5',
-                  color:
-                    grant.opp_status.toLowerCase() === 'forecasted'
-                      ? '#B45309'
-                      : '#047857',
-                  border:
-                    grant.opp_status.toLowerCase() === 'forecasted'
-                      ? '1px solid #FDE68A'
-                      : '1px solid #A7F3D0',
+                  fontFamily: 'ui-monospace, monospace',
+                  color: 'rgba(255, 255, 255, 0.4)',
+                  marginLeft: '4px',
                 }}
               >
-                <span
-                  style={{
-                    width: '5px',
-                    height: '5px',
-                    borderRadius: '50%',
-                    background:
-                      grant.opp_status.toLowerCase() === 'forecasted'
-                        ? '#D97706'
-                        : '#10B981',
-                  }}
-                />
-                <span>{grant.opp_status}</span>
+                #{oppNumber}
               </span>
             )}
           </div>
-        )}
+        </div>
 
-        {/* Row 3: Opportunity Title (Consistent 2-line height baseline) */}
-        <h3
-          style={{
-            fontFamily: 'var(--display)',
-            fontSize: '15.5px',
-            fontWeight: '600',
-            lineHeight: '1.4',
-            color: 'var(--navy)',
-            marginBottom: '8px',
-            minHeight: '44px',
-            display: '-webkit-box',
-            WebkitLineClamp: 2,
-            WebkitBoxOrient: 'vertical',
-            overflow: 'hidden',
-          }}
-        >
-          <a
-            href={destinationUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ color: 'inherit', textDecoration: 'none' }}
-            className="grant-title-link"
-            title={grant.title}
-          >
-            {grant.title}
-          </a>
-        </h3>
-
-        {/* Row 4: Funding Agency Information */}
+        {/* Right Columns: Award Amount, Deadline, Bookmark, Compare, Apply Button, External Link */}
         <div
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '6px',
-            fontSize: '12.5px',
-            color: '#475569',
-            marginBottom: '10px',
-            lineHeight: '1.35',
-            minWidth: 0,
+            gap: '24px',
+            flexShrink: 0,
           }}
         >
-          <Building2 size={13.5} style={{ color: 'var(--brass-text)', flexShrink: 0 }} />
-          <span
-            style={{
-              fontWeight: '500',
-              color: '#334155',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-            }}
-            title={grant.agency}
-          >
-            {grant.agency || 'Public Agency'}
-          </span>
-          {grant.agency_code && grant.agency_code !== 'CA-STATE' && (
-            <span
+          {/* Award Amount Column */}
+          <div style={{ textAlign: 'right', minWidth: '85px' }}>
+            <div style={{ fontSize: '13.5px', fontWeight: '600', color: '#E2E8F0' }}>
+              {awardAmount}
+            </div>
+            <div style={{ fontSize: '11px', color: 'rgba(255, 255, 255, 0.45)', textTransform: 'uppercase' }}>
+              Award
+            </div>
+          </div>
+
+          {/* Deadline Column */}
+          <div style={{ textAlign: 'right', minWidth: '95px' }}>
+            <div
               style={{
-                fontWeight: '700',
-                color: 'var(--navy)',
-                fontSize: '11px',
-                background: '#F1F5F9',
-                border: '1px solid #E2E8F0',
-                padding: '1px 5px',
-                borderRadius: '3px',
-                flexShrink: 0,
+                fontSize: '13px',
+                fontWeight: '600',
+                color: dueInfo.urgency === 'is-urgent' ? '#F87171' : dueInfo.urgency === 'is-soon' ? 'var(--brass-light)' : '#E2E8F0',
               }}
             >
-              {grant.agency_code}
-            </span>
-          )}
-        </div>
+              {dueInfo.display}
+            </div>
+            <div style={{ fontSize: '11px', color: 'rgba(255, 255, 255, 0.45)' }}>
+              {dueInfo.flag}
+            </div>
+          </div>
 
-        {/* Row 5: Opportunity Description Excerpt (Expanded to 3 lines, eliminates dead space) */}
-        {grant.description ? (
-          <p
+          {/* Bookmark Button */}
+          <button
+            type="button"
+            onClick={handleToggleBookmark}
+            title={isBookmarked ? 'Remove from saved' : 'Save opportunity'}
             style={{
-              fontSize: '12.5px',
-              color: '#64748B',
-              lineHeight: '1.5',
-              marginBottom: '14px',
-              display: '-webkit-box',
-              WebkitLineClamp: 3,
-              WebkitBoxOrient: 'vertical',
-              overflow: 'hidden',
-              minHeight: '56px',
+              background: isBookmarked ? 'rgba(196, 162, 101, 0.2)' : 'rgba(255, 255, 255, 0.05)',
+              border: isBookmarked ? '1px solid var(--brass-light)' : '1px solid rgba(255, 255, 255, 0.15)',
+              borderRadius: '8px',
+              width: '34px',
+              height: '34px',
+              display: 'grid',
+              placeItems: 'center',
+              color: isBookmarked ? 'var(--brass-light)' : 'rgba(255, 255, 255, 0.6)',
+              cursor: 'pointer',
+              transition: 'all 0.15s ease',
             }}
           >
-            {grant.description}
-          </p>
-        ) : (
-          <div style={{ minHeight: '56px', marginBottom: '14px' }} />
-        )}
+            <Bookmark size={15} fill={isBookmarked ? 'currentColor' : 'none'} />
+          </button>
+
+          {/* Compare Toggle Button */}
+          {onToggleCompare && (
+            <button
+              type="button"
+              onClick={onToggleCompare}
+              title={isCompared ? 'Remove from comparison' : 'Compare opportunity'}
+              style={{
+                background: isCompared ? 'rgba(20, 184, 166, 0.2)' : 'rgba(255, 255, 255, 0.05)',
+                border: isCompared ? '1px solid #14B8A6' : '1px solid rgba(255, 255, 255, 0.15)',
+                borderRadius: '8px',
+                height: '34px',
+                padding: '0 10px',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '5px',
+                color: isCompared ? '#2DD4BF' : 'rgba(255, 255, 255, 0.6)',
+                fontSize: '12px',
+                fontWeight: '600',
+                cursor: 'pointer',
+                transition: 'all 0.15s ease',
+              }}
+            >
+              {isCompared ? <Check size={13} /> : <Plus size={13} />}
+              <span>{isCompared ? 'Compared' : 'Compare'}</span>
+            </button>
+          )}
+
+          {/* View Grant Button */}
+          <a
+            href={destinationUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              background: '#958064',
+              color: '#FFFFFF',
+              borderRadius: '9999px',
+              padding: '8px 18px',
+              fontSize: '13px',
+              fontWeight: '600',
+              textDecoration: 'none',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              boxShadow: '0 2px 6px rgba(0, 0, 0, 0.2)',
+              transition: 'all 0.15s ease',
+              whiteSpace: 'nowrap',
+            }}
+            onMouseOver={(e) => (e.currentTarget.style.background = '#7E6B52')}
+            onMouseOut={(e) => (e.currentTarget.style.background = '#958064')}
+          >
+            <span>View grant</span>
+            <ArrowRight size={13} />
+          </a>
+        </div>
+      </article>
+    );
+  }
+
+  // --- GRID VIEW (Executive Modern Card) ---
+  return (
+    <article
+      style={{
+        background: '#0B1728',
+        border: '1px solid rgba(255, 255, 255, 0.09)',
+        borderRadius: '14px',
+        padding: '20px',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        height: '100%',
+        minHeight: '270px',
+        transition: 'all 0.18s ease',
+        boxShadow: '0 4px 16px rgba(0,0,0,0.18)',
+      }}
+      onMouseOver={(e) => {
+        e.currentTarget.style.borderColor = 'rgba(196, 162, 101, 0.4)';
+        e.currentTarget.style.transform = 'translateY(-2px)';
+      }}
+      onMouseOut={(e) => {
+        e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.09)';
+        e.currentTarget.style.transform = 'translateY(0)';
+      }}
+    >
+      <div>
+        {/* Header row: AI Badge + Fit Score + Bookmark */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px',
+                background: 'rgba(217, 119, 6, 0.18)',
+                border: '1px solid rgba(217, 119, 6, 0.45)',
+                color: '#FCD34D',
+                borderRadius: '9999px',
+                padding: '2px 8px',
+                fontSize: '10.5px',
+                fontWeight: '700',
+                textTransform: 'uppercase',
+              }}
+            >
+              <Sparkles size={11} />
+              <span>AI FOUND</span>
+            </span>
+
+            <span
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                background: 'rgba(5, 150, 105, 0.22)',
+                border: '1px solid rgba(5, 150, 105, 0.45)',
+                color: '#34D399',
+                borderRadius: '9999px',
+                padding: '1px 8px',
+                fontSize: '11px',
+                fontWeight: '700',
+              }}
+            >
+              {fitScore}% fit
+            </span>
+          </div>
+
+          <button
+            type="button"
+            onClick={handleToggleBookmark}
+            style={{
+              background: isBookmarked ? 'rgba(196, 162, 101, 0.2)' : 'rgba(255, 255, 255, 0.05)',
+              border: isBookmarked ? '1px solid var(--brass-light)' : '1px solid rgba(255, 255, 255, 0.15)',
+              borderRadius: '8px',
+              width: '30px',
+              height: '30px',
+              display: 'grid',
+              placeItems: 'center',
+              color: isBookmarked ? 'var(--brass-light)' : 'rgba(255, 255, 255, 0.6)',
+              cursor: 'pointer',
+            }}
+          >
+            <Bookmark size={14} fill={isBookmarked ? 'currentColor' : 'none'} />
+          </button>
+        </div>
+
+        {/* Title */}
+        <h3 style={{ margin: '0 0 8px', fontSize: '15.5px', fontWeight: '600', lineHeight: '1.4' }}>
+          <a
+            href={destinationUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              color: '#FFFFFF',
+              textDecoration: 'none',
+              transition: 'color 0.15s ease',
+            }}
+            onMouseOver={(e) => (e.currentTarget.style.color = 'var(--brass-light)')}
+            onMouseOut={(e) => (e.currentTarget.style.color = '#FFFFFF')}
+          >
+            {grantTitle}
+          </a>
+        </h3>
+
+        {/* Agency */}
+        <div style={{ fontSize: '13px', color: 'rgba(255, 255, 255, 0.65)', marginBottom: '12px' }}>
+          {agencyName}
+        </div>
+
+        {/* Meta Pills: Award + Deadline */}
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            gap: '10px',
+            background: 'rgba(255, 255, 255, 0.04)',
+            border: '1px solid rgba(255, 255, 255, 0.08)',
+            borderRadius: '8px',
+            padding: '10px 12px',
+            marginBottom: '14px',
+          }}
+        >
+          <div>
+            <div style={{ fontSize: '11px', color: 'rgba(255, 255, 255, 0.4)', textTransform: 'uppercase' }}>
+              Award
+            </div>
+            <div style={{ fontSize: '13.5px', fontWeight: '600', color: '#E2E8F0', marginTop: '2px' }}>
+              {awardAmount}
+            </div>
+          </div>
+          <div>
+            <div style={{ fontSize: '11px', color: 'rgba(255, 255, 255, 0.4)', textTransform: 'uppercase' }}>
+              Deadline
+            </div>
+            <div
+              style={{
+                fontSize: '13px',
+                fontWeight: '600',
+                marginTop: '2px',
+                color: dueInfo.urgency === 'is-urgent' ? '#F87171' : dueInfo.urgency === 'is-soon' ? 'var(--brass-light)' : '#E2E8F0',
+              }}
+            >
+              {dueInfo.display}
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* Card Footer: Balanced top & bottom spacing */}
+      {/* Card Footer: Compare + Apply Button */}
       <div
         style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          gap: '12px',
-          paddingTop: '13px',
-          paddingBottom: '2px',
-          borderTop: '1px solid #F1F5F9',
-          fontSize: '12px',
-          marginTop: 'auto',
-          flexWrap: 'nowrap',
+          gap: '10px',
+          paddingTop: '12px',
+          borderTop: '1px solid rgba(255, 255, 255, 0.08)',
         }}
       >
-        {/* Left: Due Date and Urgency Flag */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', minWidth: 0 }}>
-          <Calendar size={13.5} style={{ color: 'var(--brass)', flexShrink: 0 }} />
-          <span style={{ color: 'var(--muted)', fontSize: '12px' }}>Due:</span>
-          <span
+        {onToggleCompare ? (
+          <button
+            type="button"
+            onClick={onToggleCompare}
             style={{
-              fontWeight: '600',
-              color: 'var(--navy)',
-              whiteSpace: 'nowrap',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
+              background: isCompared ? 'rgba(20, 184, 166, 0.2)' : 'rgba(255, 255, 255, 0.05)',
+              border: isCompared ? '1px solid #14B8A6' : '1px solid rgba(255, 255, 255, 0.15)',
+              borderRadius: '6px',
+              padding: '6px 12px',
+              color: isCompared ? '#2DD4BF' : 'rgba(255, 255, 255, 0.75)',
               fontSize: '12px',
+              fontWeight: '600',
+              cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '4px',
             }}
           >
-            {formattedDueDate}
+            {isCompared ? <Check size={13} /> : <Plus size={13} />}
+            <span>{isCompared ? 'Compared' : 'Compare'}</span>
+          </button>
+        ) : (
+          <span style={{ fontSize: '11.5px', color: 'rgba(255, 255, 255, 0.4)' }}>
+            #{oppNumber}
           </span>
+        )}
 
-          {urgency && (
-            <span
-              style={{
-                fontSize: '10px',
-                fontWeight: '700',
-                padding: '2px 6px',
-                borderRadius: '100px',
-                textTransform: 'uppercase',
-                letterSpacing: '0.03em',
-                whiteSpace: 'nowrap',
-                background: urgency.type === 'urgent' ? '#FEF2F2' : '#FFFBEB',
-                color: urgency.type === 'urgent' ? '#DC2626' : '#B45309',
-                border: urgency.type === 'urgent' ? '1px solid #FECACA' : '1px solid #FDE68A',
-              }}
-            >
-              {urgency.label}
-            </span>
-          )}
-        </div>
-
-        {/* Right: View Grant Link with target URL */}
         <a
           href={destinationUrl}
           target="_blank"
           rel="noopener noreferrer"
           style={{
+            background: '#958064',
+            color: '#FFFFFF',
+            borderRadius: '9999px',
+            padding: '7px 18px',
+            fontSize: '12.5px',
+            fontWeight: '600',
+            textDecoration: 'none',
             display: 'inline-flex',
             alignItems: 'center',
-            gap: '4px',
-            color: 'var(--brass-text)',
-            fontWeight: '600',
-            fontSize: '12.5px',
-            whiteSpace: 'nowrap',
-            flexShrink: 0,
-            textDecoration: 'none',
+            gap: '6px',
+            boxShadow: '0 2px 6px rgba(0, 0, 0, 0.2)',
           }}
-          className="grant-view-link"
+          onMouseOver={(e) => (e.currentTarget.style.background = '#7E6B52')}
+          onMouseOut={(e) => (e.currentTarget.style.background = '#958064')}
         >
-          <span>View opportunity</span>
-          <ExternalLink size={12} />
+          <span>View grant</span>
+          <ArrowRight size={13} />
         </a>
       </div>
     </article>

@@ -17,6 +17,7 @@
   --success-wash: #EBF7F0;
   --wrap: 1200px;
   --display: "Instrument Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-serif: "DM Serif Display", "Instrument Serif", Georgia, serif;
   --body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
@@ -194,11 +195,10 @@ button {
 }
 
 .auth-logo {
-  height: 42px;
+  height: 60px;
   width: auto;
-  border-radius: 6px;
+  display: inline-block;
   object-fit: contain;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .auth-title {
