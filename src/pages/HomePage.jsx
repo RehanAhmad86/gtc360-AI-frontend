@@ -772,13 +772,29 @@ export default function HomePage({ matches = [], onApplySearch }) {
                 </div>
               </div>
 
-              {/* Bottom trust caption */}
-              <p style={{ marginTop: '22px', fontSize: '12.5px', color: 'rgba(255, 255, 255, 0.45)' }}>
-                Free to start — no credit card required. Real-time public funding intelligence.{' '}
-                <a href="#how-it-works" style={{ color: 'var(--brass-light)', textDecoration: 'underline' }}>
-                  Platform details →
-                </a>
-              </p>
+              {/* Authentic Platform Trust Points */}
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '18px',
+                  marginTop: '22px',
+                  flexWrap: 'wrap',
+                }}
+              >
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '12.5px', color: 'rgba(255, 255, 255, 0.68)' }}>
+                  <CheckCircle2 size={13} style={{ color: 'var(--brass-light)', flexShrink: 0 }} />
+                  <span>3,500+ Active Public Solicitations</span>
+                </div>
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '12.5px', color: 'rgba(255, 255, 255, 0.68)' }}>
+                  <CheckCircle2 size={13} style={{ color: 'var(--brass-light)', flexShrink: 0 }} />
+                  <span>Direct Agency Synchronization</span>
+                </div>
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '12.5px', color: 'rgba(255, 255, 255, 0.68)' }}>
+                  <CheckCircle2 size={13} style={{ color: 'var(--brass-light)', flexShrink: 0 }} />
+                  <span>Verified CFDA &amp; Eligibility Codes</span>
+                </div>
+              </div>
             </div>
 
             {/* RIGHT COLUMN: THE SIGNATURE GRANTED AI INTERACTIVE MOCK APP WINDOW */}
@@ -1129,7 +1145,7 @@ export default function HomePage({ matches = [], onApplySearch }) {
 
       {/* 3. INTERACTIVE TABBED FEATURE SHOWCASE */}
       <section
-        id="how-it-works"
+        id="platform-showcase"
         style={{
           background: 'radial-gradient(ellipse at 50% 12%, #0E223D 0%, #050C16 100%)',
           color: '#FFFFFF',
