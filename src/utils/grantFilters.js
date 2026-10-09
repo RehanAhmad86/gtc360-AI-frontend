@@ -410,17 +410,11 @@ export function filterAndScoreGrants(grants = [], filters = {}) {
         if (!isMatch) return null;
       }
 
-      // Calculate AI Fit Percentage (based on score or relevance)
-      const baseFit = g.score ? Math.round(g.score) : null;
+      // Calculate AI Fit Percentage (based on real backend vector score or keyword relevance)
+      const baseFit = typeof g.score === 'number' ? Math.round(g.score) : null;
       let calculatedFit = baseFit;
-      if (!calculatedFit) {
-        if (tokens.length > 0) {
-          calculatedFit = Math.min(98, Math.max(76, 75 + Math.round(searchScore / 5)));
-        } else {
-          // Dynamic deterministic fit based on opp_number/id for realistic executive preview
-          const seed = (g.grant_id || '350000').split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-          calculatedFit = 82 + (seed % 16); // Between 82% and 97%
-        }
+      if (calculatedFit === null && tokens.length > 0 && searchScore > 0) {
+        calculatedFit = Math.min(98, Math.max(70, 70 + Math.round(searchScore / 5)));
       }
 
       return {

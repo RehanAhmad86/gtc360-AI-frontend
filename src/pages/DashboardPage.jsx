@@ -252,6 +252,11 @@ export default function DashboardPage({
     });
   };
 
+  // AI Recommended Count (grants matching user's profile with positive vector score >= 35)
+  const recommendedCount = useMemo(() => {
+    return matches.filter((g) => typeof g.score === 'number' && g.score >= 35).length;
+  }, [matches]);
+
   // Spot-on Filter and Score execution
   const processedGrants = useMemo(() => {
     // If custom AI focus is typed, we fold it into the scoring keyword
@@ -263,11 +268,12 @@ export default function DashboardPage({
     if (activeTab === 'saved') {
       baseList = matches.filter((g) => savedGrantIds.includes(g.grant_id));
     } else if (activeTab === 'recommended') {
-      baseList = matches.filter((g) => {
-        const fit = g.score ? Math.round(g.score) : 85;
-        return fit >= 88;
-      });
+      baseList = matches.filter((g) => typeof g.score === 'number' && g.score >= 35);
     }
+
+    const effectiveSort = activeTab === 'recommended' && selectedSort === 'posted-desc'
+      ? 'match-desc'
+      : selectedSort;
 
     return filterAndScoreGrants(baseList, {
       keyword: effectiveKeyword,
@@ -276,7 +282,7 @@ export default function DashboardPage({
       agency: selectedAgency,
       status: selectedStatus,
       award: selectedAward,
-      sort: selectedSort,
+      sort: effectiveSort,
     });
   }, [
     matches,
@@ -1102,7 +1108,7 @@ export default function DashboardPage({
               }}
             >
               <Sparkles size={13} />
-              <span>AI Recommended</span>
+              <span>AI Recommended ({recommendedCount.toLocaleString()})</span>
             </button>
 
             <button
@@ -1430,7 +1436,7 @@ export default function DashboardPage({
 
         {/* Live Tally Bar */}
         <div style={{ marginBottom: '16px', fontSize: '13.5px', color: 'rgba(255, 255, 255, 0.7)' }}>
-          Showing <b>{processedGrants.length.toLocaleString()}</b> verified opportunities
+          Showing <b>{processedGrants.length.toLocaleString()}</b> {activeTab === 'recommended' ? 'AI-recommended' : 'verified'} opportunities
           {activeKeyword && <span> matching "<b>{activeKeyword}</b>"</span>}
         </div>
 
@@ -1488,6 +1494,7 @@ export default function DashboardPage({
                     onToggleCompare={() => handleToggleCompare(grant)}
                     hasActiveCriteria={hasSavedPreferences}
                     activeFocus={customAIFocus || activeKeyword || activeCategoryObj?.label || ''}
+                    showAIMatch={activeTab === 'recommended' || Boolean(customAIFocus)}
                   />
                 );
               })}
@@ -1514,29 +1521,59 @@ export default function DashboardPage({
               marginTop: '10px',
             }}
           >
-            <AlertCircle size={42} style={{ color: 'var(--brass-light)', margin: '0 auto 16px' }} />
-            <h3 style={{ fontSize: '18px', fontWeight: '600', color: '#FFFFFF', marginBottom: '8px' }}>
-              No solicitations match your active filters
-            </h3>
-            <p style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.6)', maxWidth: '460px', margin: '0 auto 20px', lineHeight: '1.5' }}>
-              Try clearing your search query or broadening category, eligibility, or agency filters to expand your search scope.
-            </p>
-            <button
-              type="button"
-              onClick={handleClearAllFilters}
-              style={{
-                background: 'var(--brass)',
-                color: '#FFFFFF',
-                border: 'none',
-                borderRadius: '9999px',
-                padding: '10px 22px',
-                fontSize: '13.5px',
-                fontWeight: '600',
-                cursor: 'pointer',
-              }}
-            >
-              Clear all filters
-            </button>
+            {activeTab === 'recommended' && !hasSavedPreferences ? (
+              <>
+                <Sparkles size={42} style={{ color: 'var(--brass-light)', margin: '0 auto 16px' }} />
+                <h3 style={{ fontSize: '18px', fontWeight: '600', color: '#FFFFFF', marginBottom: '8px' }}>
+                  Activate AI Grant Recommendations
+                </h3>
+                <p style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.6)', maxWidth: '480px', margin: '0 auto 20px', lineHeight: '1.5' }}>
+                  Configure your Funding Profile with your organization&apos;s focus disciplines and preferred funding agencies to receive personalized AI recommendations.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => navigate('/preferences')}
+                  style={{
+                    background: 'var(--brass)',
+                    color: '#FFFFFF',
+                    border: 'none',
+                    borderRadius: '9999px',
+                    padding: '10px 22px',
+                    fontSize: '13.5px',
+                    fontWeight: '600',
+                    cursor: 'pointer',
+                  }}
+                >
+                  Configure Funding Profile
+                </button>
+              </>
+            ) : (
+              <>
+                <AlertCircle size={42} style={{ color: 'var(--brass-light)', margin: '0 auto 16px' }} />
+                <h3 style={{ fontSize: '18px', fontWeight: '600', color: '#FFFFFF', marginBottom: '8px' }}>
+                  No solicitations match your active filters
+                </h3>
+                <p style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.6)', maxWidth: '460px', margin: '0 auto 20px', lineHeight: '1.5' }}>
+                  Try clearing your search query or broadening category, eligibility, or agency filters to expand your search scope.
+                </p>
+                <button
+                  type="button"
+                  onClick={handleClearAllFilters}
+                  style={{
+                    background: 'var(--brass)',
+                    color: '#FFFFFF',
+                    border: 'none',
+                    borderRadius: '9999px',
+                    padding: '10px 22px',
+                    fontSize: '13.5px',
+                    fontWeight: '600',
+                    cursor: 'pointer',
+                  }}
+                >
+                  Clear all filters
+                </button>
+              </>
+            )}
           </div>
         )}
       </main>

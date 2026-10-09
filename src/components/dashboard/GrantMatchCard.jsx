@@ -9,6 +9,7 @@ export default function GrantMatchCard({
   onToggleCompare,
   hasActiveCriteria = false,
   activeFocus = '',
+  showAIMatch = false,
 }) {
   const [isBookmarked, setIsBookmarked] = useState(() => {
     try {
@@ -42,7 +43,9 @@ export default function GrantMatchCard({
   const destinationUrl = getGrantDestinationUrl(grant);
   const dueInfo = formatDueDate(grant.close_date);
   const awardAmount = extractAwardAmount(grant);
-  const fitScore = grant.calculatedFit || (grant.score ? Math.round(grant.score) : 88);
+  const rawFit = typeof grant.score === 'number' ? Math.round(grant.score) : grant.calculatedFit;
+  const fitScore = typeof rawFit === 'number' ? rawFit : null;
+  const displayAIMatch = showAIMatch && fitScore !== null;
 
   const grantTitle = grant.title || 'Untitled Funding Opportunity';
   const agencyName = grant.agency || 'Public Agency';
@@ -96,28 +99,30 @@ export default function GrantMatchCard({
               </a>
             </h3>
 
-            {/* AI FOUND BADGE */}
-            <span
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '4px',
-                background: 'rgba(217, 119, 6, 0.18)',
-                border: '1px solid rgba(217, 119, 6, 0.45)',
-                color: '#FCD34D',
-                borderRadius: '9999px',
-                padding: '2px 8px',
-                fontSize: '10.5px',
-                fontWeight: '700',
-                letterSpacing: '0.04em',
-                textTransform: 'uppercase',
-                whiteSpace: 'nowrap',
-                flexShrink: 0,
-              }}
-            >
-              <Sparkles size={11} />
-              <span>AI FOUND</span>
-            </span>
+            {/* AI MATCH BADGE (Only when AI matching active) */}
+            {displayAIMatch && (
+              <span
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  background: 'rgba(5, 150, 105, 0.2)',
+                  border: '1px solid rgba(16, 185, 129, 0.45)',
+                  color: '#34D399',
+                  borderRadius: '9999px',
+                  padding: '2px 8px',
+                  fontSize: '10.5px',
+                  fontWeight: '700',
+                  letterSpacing: '0.04em',
+                  textTransform: 'uppercase',
+                  whiteSpace: 'nowrap',
+                  flexShrink: 0,
+                }}
+              >
+                <Sparkles size={11} />
+                <span>AI MATCH</span>
+              </span>
+            )}
           </div>
 
           {/* Row 2: Agency Name + % Fit Pill */}
@@ -126,23 +131,25 @@ export default function GrantMatchCard({
               {agencyName}
             </span>
 
-            {/* Fit Score Pill */}
-            <span
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                background: 'rgba(5, 150, 105, 0.22)',
-                border: '1px solid rgba(5, 150, 105, 0.45)',
-                color: '#34D399',
-                borderRadius: '9999px',
-                padding: '1px 8px',
-                fontSize: '11.5px',
-                fontWeight: '700',
-                letterSpacing: '-0.01em',
-              }}
-            >
-              {fitScore}% fit
-            </span>
+            {/* Fit Score Pill (Only when AI match is active) */}
+            {displayAIMatch && (
+              <span
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  background: 'rgba(5, 150, 105, 0.22)',
+                  border: '1px solid rgba(5, 150, 105, 0.45)',
+                  color: '#34D399',
+                  borderRadius: '9999px',
+                  padding: '1px 8px',
+                  fontSize: '11.5px',
+                  fontWeight: '700',
+                  letterSpacing: '-0.01em',
+                }}
+              >
+                {fitScore}% fit
+              </span>
+            )}
           </div>
 
           {/* Row 3: Discovered Tag + Focus match text */}
@@ -163,9 +170,11 @@ export default function GrantMatchCard({
               DISCOVERED
             </span>
 
-            <span style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.45)' }}>
-              Matches focus: <span style={{ color: 'rgba(255, 255, 255, 0.8)' }}>{focusLabel}</span>
-            </span>
+            {displayAIMatch && (
+              <span style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.45)' }}>
+                Matches focus: <span style={{ color: 'rgba(255, 255, 255, 0.8)' }}>{focusLabel}</span>
+              </span>
+            )}
 
             {oppNumber && (
               <span
@@ -322,43 +331,65 @@ export default function GrantMatchCard({
       }}
     >
       <div>
-        {/* Header row: AI Badge + Fit Score + Bookmark */}
+        {/* Header row: AI Badge + Fit Score (or Status Tag) + Bookmark */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '4px',
-                background: 'rgba(217, 119, 6, 0.18)',
-                border: '1px solid rgba(217, 119, 6, 0.45)',
-                color: '#FCD34D',
-                borderRadius: '9999px',
-                padding: '2px 8px',
-                fontSize: '10.5px',
-                fontWeight: '700',
-                textTransform: 'uppercase',
-              }}
-            >
-              <Sparkles size={11} />
-              <span>AI FOUND</span>
-            </span>
+            {displayAIMatch ? (
+              <>
+                <span
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                    background: 'rgba(5, 150, 105, 0.2)',
+                    border: '1px solid rgba(16, 185, 129, 0.45)',
+                    color: '#34D399',
+                    borderRadius: '9999px',
+                    padding: '2px 8px',
+                    fontSize: '10.5px',
+                    fontWeight: '700',
+                    textTransform: 'uppercase',
+                  }}
+                >
+                  <Sparkles size={11} />
+                  <span>AI MATCH</span>
+                </span>
 
-            <span
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                background: 'rgba(5, 150, 105, 0.22)',
-                border: '1px solid rgba(5, 150, 105, 0.45)',
-                color: '#34D399',
-                borderRadius: '9999px',
-                padding: '1px 8px',
-                fontSize: '11px',
-                fontWeight: '700',
-              }}
-            >
-              {fitScore}% fit
-            </span>
+                <span
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    background: 'rgba(5, 150, 105, 0.22)',
+                    border: '1px solid rgba(5, 150, 105, 0.45)',
+                    color: '#34D399',
+                    borderRadius: '9999px',
+                    padding: '1px 8px',
+                    fontSize: '11px',
+                    fontWeight: '700',
+                  }}
+                >
+                  {fitScore}% fit
+                </span>
+              </>
+            ) : (
+              <span
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  background: 'rgba(255, 255, 255, 0.08)',
+                  border: '1px solid rgba(255, 255, 255, 0.12)',
+                  color: 'rgba(255, 255, 255, 0.75)',
+                  borderRadius: '4px',
+                  padding: '2px 7px',
+                  fontSize: '10px',
+                  fontWeight: '700',
+                  letterSpacing: '0.05em',
+                  textTransform: 'uppercase',
+                }}
+              >
+                {(grant.opp_status || 'POSTED').toUpperCase()}
+              </span>
+            )}
           </div>
 
           <button
