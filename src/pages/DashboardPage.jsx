@@ -19,6 +19,7 @@ import {
   awardsList,
   sortOptions,
   filterAndScoreGrants,
+  isGrantActiveOrUpcoming,
 } from '../utils/grantFilters';
 
 export default function DashboardPage({
@@ -252,9 +253,9 @@ export default function DashboardPage({
     });
   };
 
-  // AI Recommended Count (grants matching user's profile with positive vector score >= 35)
+  // AI Recommended Count (grants matching user's profile with positive vector score >= 35 that are active/upcoming and not past deadline)
   const recommendedCount = useMemo(() => {
-    return matches.filter((g) => typeof g.score === 'number' && g.score >= 35).length;
+    return matches.filter((g) => typeof g.score === 'number' && g.score >= 35 && isGrantActiveOrUpcoming(g)).length;
   }, [matches]);
 
   // Spot-on Filter and Score execution
@@ -268,7 +269,10 @@ export default function DashboardPage({
     if (activeTab === 'saved') {
       baseList = matches.filter((g) => savedGrantIds.includes(g.grant_id));
     } else if (activeTab === 'recommended') {
-      baseList = matches.filter((g) => typeof g.score === 'number' && g.score >= 35);
+      baseList = matches.filter((g) => typeof g.score === 'number' && g.score >= 35 && isGrantActiveOrUpcoming(g));
+    } else if (customAIFocus.trim()) {
+      // In matched focus mode, only show opportunities that are active, upcoming, or forecasted (not older than today)
+      baseList = matches.filter((g) => isGrantActiveOrUpcoming(g));
     }
 
     const effectiveSort = activeTab === 'recommended' && selectedSort === 'posted-desc'

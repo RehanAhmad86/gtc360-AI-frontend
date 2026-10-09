@@ -255,6 +255,51 @@ export function formatDueDate(dateStr) {
 }
 
 /**
+ * Checks whether an opportunity is active, forecasted, or upcoming (not past deadline/closed, not older than today)
+ */
+export function isGrantActiveOrUpcoming(grant) {
+  if (!grant) return false;
+  const status = (grant.opp_status || '').toLowerCase().trim();
+  if (status === 'closed' || status === 'archived' || status === 'expired') {
+    return false;
+  }
+  const closeDate = (grant.close_date || '').trim();
+  if (!closeDate) return true;
+  const lower = closeDate.toLowerCase();
+  if (
+    lower.includes('ongoing') ||
+    lower.includes('rolling') ||
+    lower.includes('unspecified') ||
+    lower.includes('n/a') ||
+    lower.includes('continuous')
+  ) {
+    return true;
+  }
+
+  let dateObj = null;
+  if (closeDate.includes('/')) {
+    const parts = closeDate.split('/');
+    if (parts.length === 3) {
+      dateObj = new Date(parseInt(parts[2], 10), parseInt(parts[0], 10) - 1, parseInt(parts[1], 10), 23, 59, 59);
+    }
+  } else {
+    dateObj = new Date(closeDate);
+    if (!isNaN(dateObj.getTime()) && !closeDate.includes(':')) {
+      dateObj.setHours(23, 59, 59, 999);
+    }
+  }
+
+  if (dateObj && !isNaN(dateObj.getTime())) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    if (dateObj.getTime() < today.getTime()) {
+      return false; // Close date is strictly older than today
+    }
+  }
+  return true;
+}
+
+/**
  * Extract award ceiling or amount display string
  */
 export function extractAwardAmount(grant) {
