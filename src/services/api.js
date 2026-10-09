@@ -123,3 +123,20 @@ export const systemAPI = {
     return res.data;
   },
 };
+
+export const notificationsAPI = {
+  sendTestAlert: async () => {
+    const res = await apiClient.post('/notifications/test');
+    return res.data;
+  },
+
+  getStatus: async () => {
+    const res = await apiClient.get('/notifications/status');
+    return res.data;
+  },
+
+  dispatchCycle: async () => {
+    const res = await apiClient.post('/notifications/dispatch');
+    return res.data;
+  },
+};
