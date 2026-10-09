@@ -13,9 +13,8 @@ import {
   AlertCircle,
   Bell,
   Mail,
-  Send,
 } from 'lucide-react';
-import { userAPI, authAPI, notificationsAPI } from '../../services/api';
+import { userAPI, authAPI } from '../../services/api';
 
 export const CATEGORIES_LOOKUP = [
   { id: 'agriculture-farming', name: 'Agriculture & Farming' },
@@ -98,11 +97,6 @@ export default function PreferencesModal({ isOpen, onClose, currentPreferences, 
       ? currentPreferences.emailNotificationsEnabled
       : true
   );
-  const [notificationFrequency, setNotificationFrequency] = useState(
-    currentPreferences?.notificationFrequency || 'daily'
-  );
-  const [testEmailSending, setTestEmailSending] = useState(false);
-  const [testEmailResult, setTestEmailResult] = useState(null);
   const [loading, setLoading] = useState(false);
 
   // Sync state whenever modal opens or preferences change
@@ -119,8 +113,6 @@ export default function PreferencesModal({ isOpen, onClose, currentPreferences, 
           ? currentPreferences.emailNotificationsEnabled
           : true
       );
-      setNotificationFrequency(currentPreferences?.notificationFrequency || 'daily');
-      setTestEmailResult(null);
       setFilterQuery('');
     }
   }, [isOpen, currentPreferences, user]);
@@ -167,8 +159,6 @@ export default function PreferencesModal({ isOpen, onClose, currentPreferences, 
     setSelectedOrgType('');
     setCustomKeyword('');
     setEmailNotificationsEnabled(true);
-    setNotificationFrequency('daily');
-    setTestEmailResult(null);
   };
 
   const handleSave = async () => {
@@ -181,7 +171,6 @@ export default function PreferencesModal({ isOpen, onClose, currentPreferences, 
       maxAward: Number(maxAward) || 0,
       customKeywords: customKeyword.trim(),
       emailNotificationsEnabled,
-      notificationFrequency,
       userId: user?._id || user?.id || null,
     };
 
@@ -203,41 +192,6 @@ export default function PreferencesModal({ isOpen, onClose, currentPreferences, 
     if (onSave) onSave(updated);
     setLoading(false);
     onClose();
-  };
-
-  const handleSendTestEmail = async () => {
-    setTestEmailSending(true);
-    setTestEmailResult(null);
-    try {
-      const prefs = {
-        targetCategories: selectedCategories,
-        targetAgencies: selectedAgencies,
-        organizationType: selectedOrgType,
-        minAward: Number(minAward) || 0,
-        maxAward: Number(maxAward) || 0,
-        customKeywords: customKeyword.trim(),
-        emailNotificationsEnabled,
-        notificationFrequency,
-      };
-      if (user) {
-        await userAPI.updatePreferences(prefs);
-      }
-      const res = await notificationsAPI.sendTestAlert();
-      const isSuccess = res.status === 'sent' || res.delivery?.success;
-      setTestEmailResult({
-        success: isSuccess,
-        message: res.delivery?.message || res.message || 'Test alert dispatched!',
-        details: res,
-      });
-    } catch (err) {
-      console.error('Test notification error:', err);
-      setTestEmailResult({
-        success: false,
-        message: err.response?.data?.detail || 'Failed to dispatch test alert. Check server logs.',
-      });
-    } finally {
-      setTestEmailSending(false);
-    }
   };
 
   const filteredCategories = CATEGORIES_LOOKUP.filter((c) =>
@@ -840,9 +794,9 @@ export default function PreferencesModal({ isOpen, onClose, currentPreferences, 
             </div>
           )}
 
-          {/* TAB 4: Email Alerts & Notification Preferences */}
+          {/* TAB 4: Email Notifications */}
           {activeTab === 'notifications' && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '22px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
               {/* Master Notification Toggle Card */}
               <div
                 style={{
@@ -850,35 +804,36 @@ export default function PreferencesModal({ isOpen, onClose, currentPreferences, 
                   border: '1px solid var(--line)',
                   borderRadius: '10px',
                   padding: '20px',
-                  boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
                 }}
               >
                 <div
                   style={{
                     display: 'flex',
-                    alignItems: 'flex-start',
+                    alignItems: 'center',
                     justifyContent: 'space-between',
                     gap: '16px',
-                    marginBottom: '16px',
+                    flexWrap: 'wrap',
                   }}
                 >
-                  <div style={{ display: 'flex', gap: '14px', alignItems: 'flex-start' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '14px', maxWidth: '520px' }}>
                     <div
                       style={{
                         width: '42px',
                         height: '42px',
                         borderRadius: '8px',
-                        background: 'rgba(20,45,76,0.06)',
-                        color: 'var(--navy)',
+                        background: emailNotificationsEnabled ? 'var(--navy)' : 'var(--mist)',
+                        color: emailNotificationsEnabled ? 'var(--brass-light)' : 'var(--muted)',
                         display: 'grid',
                         placeItems: 'center',
                         flexShrink: 0,
+                        transition: 'all 0.2s ease',
                       }}
                     >
                       <Bell size={20} />
                     </div>
                     <div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '4px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
                         <h4 style={{ fontSize: '15px', fontWeight: '700', color: 'var(--navy)', margin: 0 }}>
                           Grant Opportunity Email Alerts
                         </h4>
@@ -888,254 +843,155 @@ export default function PreferencesModal({ isOpen, onClose, currentPreferences, 
                             fontWeight: '700',
                             padding: '2px 8px',
                             borderRadius: '100px',
-                            background: emailNotificationsEnabled ? '#ECFDF5' : '#F1F5F9',
-                            color: emailNotificationsEnabled ? '#047857' : '#64748B',
-                            border: `1px solid ${emailNotificationsEnabled ? '#A7F3D0' : '#E2E8F0'}`,
+                            background: emailNotificationsEnabled ? 'rgba(16, 185, 129, 0.12)' : 'rgba(148, 163, 184, 0.15)',
+                            color: emailNotificationsEnabled ? '#059669' : '#64748B',
                           }}
                         >
                           {emailNotificationsEnabled ? 'Alerts Active' : 'Alerts Paused'}
                         </span>
                       </div>
-                      <p style={{ fontSize: '13px', color: 'var(--muted)', margin: 0, lineHeight: '1.45' }}>
-                        Automatically notify <strong>{user?.email || 'your registered email'}</strong> when new opportunities match your target categories, funders, and award criteria.
+                      <p style={{ fontSize: '12.5px', color: 'var(--muted)', margin: 0, lineHeight: '1.45' }}>
+                        Automatically notify <strong>{user?.email || 'your registered email'}</strong> when new opportunities match your organization's focus disciplines and award range.
                       </p>
                     </div>
                   </div>
 
-                  {/* Toggle Switch */}
-                  <label
+                  {/* Clean Toggle Switch */}
+                  <button
+                    type="button"
+                    role="switch"
+                    aria-checked={emailNotificationsEnabled}
+                    onClick={() => setEmailNotificationsEnabled(!emailNotificationsEnabled)}
                     style={{
                       position: 'relative',
-                      display: 'inline-block',
-                      width: '52px',
+                      width: '54px',
                       height: '28px',
+                      borderRadius: '30px',
+                      background: emailNotificationsEnabled ? 'var(--brass)' : '#CBD5E1',
+                      border: 'none',
                       cursor: 'pointer',
+                      padding: 0,
+                      transition: 'background-color 0.2s ease',
                       flexShrink: 0,
+                      outline: 'none',
                     }}
                   >
-                    <input
-                      type="checkbox"
-                      checked={emailNotificationsEnabled}
-                      onChange={(e) => setEmailNotificationsEnabled(e.target.checked)}
-                      style={{ opacity: 0, width: 0, height: 0 }}
-                    />
                     <span
                       style={{
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                        backgroundColor: emailNotificationsEnabled ? 'var(--brass)' : '#CBD5E1',
-                        borderRadius: '30px',
-                        transition: '0.2s ease',
+                        display: 'block',
+                        width: '22px',
+                        height: '22px',
+                        borderRadius: '50%',
+                        backgroundColor: '#FFFFFF',
+                        transform: emailNotificationsEnabled ? 'translateX(28px)' : 'translateX(3px)',
+                        transition: 'transform 0.2s ease',
+                        boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
                       }}
-                    >
-                      <span
-                        style={{
-                          position: 'absolute',
-                          height: '20px',
-                          width: '20px',
-                          left: emailNotificationsEnabled ? '26px' : '4px',
-                          bottom: '4px',
-                          backgroundColor: 'white',
-                          borderRadius: '50%',
-                          transition: '0.2s ease',
-                          boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
-                        }}
-                      />
-                    </span>
-                  </label>
-                </div>
-
-                {/* Direct quick action toggle buttons */}
-                <div style={{ display: 'flex', gap: '8px', paddingTop: '12px', borderTop: '1px solid var(--line)' }}>
-                  <button
-                    type="button"
-                    onClick={() => setEmailNotificationsEnabled(true)}
-                    style={{
-                      flex: 1,
-                      padding: '8px 12px',
-                      borderRadius: '6px',
-                      fontSize: '12.5px',
-                      fontWeight: '600',
-                      border: emailNotificationsEnabled ? '1.5px solid var(--navy)' : '1px solid var(--line)',
-                      background: emailNotificationsEnabled ? 'var(--navy)' : '#FFFFFF',
-                      color: emailNotificationsEnabled ? '#FFFFFF' : '#475569',
-                      cursor: 'pointer',
-                      transition: 'all 0.15s ease',
-                    }}
-                  >
-                    ✓ Receive Notifications (ON)
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setEmailNotificationsEnabled(false)}
-                    style={{
-                      flex: 1,
-                      padding: '8px 12px',
-                      borderRadius: '6px',
-                      fontSize: '12.5px',
-                      fontWeight: '600',
-                      border: !emailNotificationsEnabled ? '1.5px solid #64748B' : '1px solid var(--line)',
-                      background: !emailNotificationsEnabled ? '#64748B' : '#FFFFFF',
-                      color: !emailNotificationsEnabled ? '#FFFFFF' : '#475569',
-                      cursor: 'pointer',
-                      transition: 'all 0.15s ease',
-                    }}
-                  >
-                    ✕ Pause Notifications (OFF)
+                    />
                   </button>
                 </div>
               </div>
 
-              {/* Delivery Cadence Selection */}
-              <div style={{ opacity: emailNotificationsEnabled ? 1 : 0.6, pointerEvents: emailNotificationsEnabled ? 'auto' : 'none' }}>
-                <label style={{ display: 'block', fontSize: '13px', fontWeight: '700', color: 'var(--navy)', marginBottom: '4px' }}>
-                  Notification Frequency & Cadence
-                </label>
-                <p style={{ fontSize: '12.5px', color: 'var(--muted)', marginBottom: '12px' }}>
-                  Choose how often GrantSignal 360° sends opportunity notifications to your inbox.
-                </p>
-
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '12px' }}>
-                  {/* Instant Option */}
+              {/* Option Selector Cards */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '12px' }}>
+                {/* Option 1: Enabled */}
+                <div
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => setEmailNotificationsEnabled(true)}
+                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setEmailNotificationsEnabled(true); }}
+                  style={{
+                    background: '#FFFFFF',
+                    border: emailNotificationsEnabled ? '2px solid var(--navy)' : '1px solid var(--line)',
+                    borderRadius: '8px',
+                    padding: '16px',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: '12px',
+                    transition: 'all 0.15s ease',
+                  }}
+                >
                   <div
-                    role="button"
-                    tabIndex={0}
-                    onClick={() => setNotificationFrequency('instant')}
-                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setNotificationFrequency('instant'); }}
                     style={{
-                      background: '#FFFFFF',
-                      border: notificationFrequency === 'instant' ? '2px solid var(--brass)' : '1px solid var(--line)',
-                      borderRadius: '8px',
-                      padding: '14px',
-                      cursor: 'pointer',
-                      display: 'flex',
-                      alignItems: 'flex-start',
-                      gap: '10px',
+                      width: '18px',
+                      height: '18px',
+                      borderRadius: '50%',
+                      border: emailNotificationsEnabled ? '5px solid var(--navy)' : '2px solid var(--line)',
+                      marginTop: '2px',
+                      flexShrink: 0,
                     }}
-                  >
-                    <div
-                      style={{
-                        width: '16px',
-                        height: '16px',
-                        borderRadius: '50%',
-                        border: notificationFrequency === 'instant' ? '5px solid var(--brass)' : '2px solid var(--line)',
-                        marginTop: '2px',
-                        flexShrink: 0,
-                      }}
-                    />
-                    <div>
-                      <div style={{ fontSize: '13.5px', fontWeight: '700', color: 'var(--navy)', marginBottom: '2px' }}>
-                        Instant Alerts
-                      </div>
-                      <div style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: '1.4' }}>
-                        Immediate notification when a new high-priority grant is ingested.
-                      </div>
+                  />
+                  <div>
+                    <div style={{ fontSize: '13.5px', fontWeight: '700', color: 'var(--navy)', marginBottom: '3px' }}>
+                      Receive Email Alerts (Recommended)
+                    </div>
+                    <div style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: '1.4' }}>
+                      Stay updated on matching funding opportunities as they are published.
                     </div>
                   </div>
+                </div>
 
-                  {/* Daily Option */}
+                {/* Option 2: Disabled */}
+                <div
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => setEmailNotificationsEnabled(false)}
+                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setEmailNotificationsEnabled(false); }}
+                  style={{
+                    background: '#FFFFFF',
+                    border: !emailNotificationsEnabled ? '2px solid var(--navy)' : '1px solid var(--line)',
+                    borderRadius: '8px',
+                    padding: '16px',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: '12px',
+                    transition: 'all 0.15s ease',
+                  }}
+                >
                   <div
-                    role="button"
-                    tabIndex={0}
-                    onClick={() => setNotificationFrequency('daily')}
-                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setNotificationFrequency('daily'); }}
                     style={{
-                      background: '#FFFFFF',
-                      border: notificationFrequency === 'daily' ? '2px solid var(--brass)' : '1px solid var(--line)',
-                      borderRadius: '8px',
-                      padding: '14px',
-                      cursor: 'pointer',
-                      display: 'flex',
-                      alignItems: 'flex-start',
-                      gap: '10px',
+                      width: '18px',
+                      height: '18px',
+                      borderRadius: '50%',
+                      border: !emailNotificationsEnabled ? '5px solid var(--navy)' : '2px solid var(--line)',
+                      marginTop: '2px',
+                      flexShrink: 0,
                     }}
-                  >
-                    <div
-                      style={{
-                        width: '16px',
-                        height: '16px',
-                        borderRadius: '50%',
-                        border: notificationFrequency === 'daily' ? '5px solid var(--brass)' : '2px solid var(--line)',
-                        marginTop: '2px',
-                        flexShrink: 0,
-                      }}
-                    />
-                    <div>
-                      <div style={{ fontSize: '13.5px', fontWeight: '700', color: 'var(--navy)', marginBottom: '2px' }}>
-                        Daily Digest (Recommended)
-                      </div>
-                      <div style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: '1.4' }}>
-                        Curated executive summary of top matches once every 24 hours.
-                      </div>
+                  />
+                  <div>
+                    <div style={{ fontSize: '13.5px', fontWeight: '700', color: 'var(--navy)', marginBottom: '3px' }}>
+                      Do Not Send Email Alerts
+                    </div>
+                    <div style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: '1.4' }}>
+                      Pause automated alerts while keeping active matching on your dashboard.
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Test Alert Sandbox */}
+              {/* Criteria Summary Strip */}
               <div
                 style={{
-                  background: '#F8FAFC',
+                  background: 'var(--mist)',
                   border: '1px solid var(--line)',
-                  borderRadius: '10px',
-                  padding: '16px',
+                  borderRadius: '8px',
+                  padding: '14px 18px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  fontSize: '12.5px',
+                  color: 'var(--muted)',
+                  flexWrap: 'wrap',
+                  gap: '10px',
                 }}
               >
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
-                  <div>
-                    <div style={{ fontSize: '13px', fontWeight: '700', color: 'var(--navy)', marginBottom: '2px' }}>
-                      Verify Alert Delivery
-                    </div>
-                    <div style={{ fontSize: '12px', color: 'var(--muted)' }}>
-                      Send an immediate test alert to <strong>{user?.email || 'your email'}</strong> based on current matches.
-                    </div>
-                  </div>
-
-                  <button
-                    type="button"
-                    disabled={testEmailSending}
-                    onClick={handleSendTestEmail}
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '6px',
-                      background: testEmailSending ? 'var(--muted)' : 'var(--navy)',
-                      color: '#FFFFFF',
-                      border: 'none',
-                      borderRadius: '6px',
-                      padding: '8px 14px',
-                      fontSize: '12.5px',
-                      fontWeight: '600',
-                      cursor: testEmailSending ? 'wait' : 'pointer',
-                    }}
-                  >
-                    <Send size={13} />
-                    <span>{testEmailSending ? 'Dispatching...' : 'Send Test Alert'}</span>
-                  </button>
-                </div>
-
-                {testEmailResult && (
-                  <div
-                    style={{
-                      marginTop: '12px',
-                      padding: '10px 14px',
-                      borderRadius: '6px',
-                      fontSize: '12.5px',
-                      background: testEmailResult.success ? '#ECFDF5' : '#FEF2F2',
-                      border: testEmailResult.success ? '1px solid #A7F3D0' : '1px solid #FCA5A5',
-                      color: testEmailResult.success ? '#047857' : '#991B1B',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '8px',
-                    }}
-                  >
-                    {testEmailResult.success ? <CheckCircle size={15} /> : <AlertCircle size={15} />}
-                    <span>{testEmailResult.message}</span>
-                  </div>
-                )}
+                <span>Matching <strong>{selectedCategories.length}</strong> focus areas</span>
+                <span>•</span>
+                <span>Tracking <strong>{selectedAgencies.length}</strong> preferred funders</span>
+                <span>•</span>
+                <span>{minAward > 0 || maxAward > 0 ? 'Custom budget threshold' : 'Any award amount'}</span>
               </div>
             </div>
           )}
