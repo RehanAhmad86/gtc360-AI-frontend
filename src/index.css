@@ -1220,7 +1220,7 @@ button {
   backdrop-filter: blur(12px);
   border-top: 1px solid var(--line);
   box-shadow: 0 -8px 24px rgba(20,45,76,0.08);
-  padding: 14px 24px;
+  padding: 8px 20px;
   z-index: 90;
 }
 
@@ -1231,40 +1231,57 @@ button {
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  gap: 14px;
+  gap: 10px;
+  min-height: 38px;
 }
 
 .pref-footer-status {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 .pref-footer-tag {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   font-size: 13px;
   color: var(--navy);
   font-weight: 600;
+  line-height: 1;
+}
+
+.pref-footer-tag svg {
+  flex-shrink: 0;
+  display: block;
 }
 
 .pref-footer-actions {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
 .pref-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
   background: #FFFFFF;
   border: 1px solid var(--line);
   color: var(--navy);
-  border-radius: 8px;
-  padding: 9px 18px;
-  font-size: 13px;
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-size: 12.5px;
   font-weight: 600;
+  line-height: 1;
   cursor: pointer;
   transition: all 0.15s ease;
+}
+
+.pref-btn-secondary svg {
+  flex-shrink: 0;
+  display: block;
 }
 
 .pref-btn-secondary:hover {
@@ -1275,17 +1292,24 @@ button {
 .pref-btn-primary {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
+  gap: 7px;
   background: var(--navy);
   border: 1px solid var(--navy);
   color: #FFFFFF;
-  border-radius: 8px;
-  padding: 10px 22px;
-  font-size: 13.5px;
+  border-radius: 6px;
+  padding: 7px 18px;
+  font-size: 13px;
   font-weight: 600;
+  line-height: 1;
   cursor: pointer;
   box-shadow: 0 4px 14px rgba(20,45,76,0.18);
   transition: all 0.15s ease;
+}
+
+.pref-btn-primary svg {
+  flex-shrink: 0;
+  display: block;
 }
 
 .pref-btn-primary:hover:not(:disabled) {

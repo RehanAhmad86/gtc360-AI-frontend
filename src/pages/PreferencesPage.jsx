@@ -1189,7 +1189,7 @@ export default function PreferencesPage({ user, onPreferencesSaved }) {
         <div className="pref-footer-inner">
           <div className="pref-footer-status">
             <div className="pref-footer-tag">
-              <CheckCircle2 size={16} style={{ color: 'var(--brass)' }} />
+              <CheckCircle2 size={15} style={{ color: 'var(--brass)', flexShrink: 0 }} />
               <span>
                 {totalSelected > 0
                   ? `${totalSelected} Profile Criteria Configured (${selectedCategories.length} Areas of Interest, ${selectedAgencies.length} Preferred Funders)`
@@ -1197,7 +1197,7 @@ export default function PreferencesPage({ user, onPreferencesSaved }) {
               </span>
             </div>
             {budgetConfigured && (
-              <span style={{ fontSize: '12.5px', color: 'var(--muted)' }}>
+              <span style={{ fontSize: '12px', color: 'var(--muted)', display: 'inline-flex', alignItems: 'center' }}>
                 · Funding Range: {minAward > 0 ? `$${(minAward / 1000).toFixed(0)}k` : '$0'} to {maxAward > 0 ? `$${(maxAward / 1000).toFixed(0)}k` : 'Any'}
               </span>
             )}
@@ -1209,7 +1209,7 @@ export default function PreferencesPage({ user, onPreferencesSaved }) {
               onClick={handleReset}
               className="pref-btn-secondary"
             >
-              <RotateCcw size={13} />
+              <RotateCcw size={12} style={{ flexShrink: 0 }} />
               <span>Reset Defaults</span>
             </button>
             <button
@@ -1227,7 +1227,7 @@ export default function PreferencesPage({ user, onPreferencesSaved }) {
             >
               {saveSuccess ? (
                 <>
-                  <CheckCircle2 size={16} />
+                  <CheckCircle2 size={14} style={{ flexShrink: 0 }} />
                   <span>Saved!</span>
                 </>
               ) : loading ? (
@@ -1235,7 +1235,7 @@ export default function PreferencesPage({ user, onPreferencesSaved }) {
               ) : (
                 <>
                   <span>Find Matching Opportunities</span>
-                  <ArrowRight size={15} />
+                  <ArrowRight size={13} style={{ flexShrink: 0 }} />
                 </>
               )}
             </button>

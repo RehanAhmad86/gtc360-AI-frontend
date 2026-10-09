@@ -8,6 +8,7 @@ import SearchHistoryPage from './pages/SearchHistoryPage';
 import PreferencesPage from './pages/PreferencesPage';
 import DashboardPage from './pages/DashboardPage';
 import HomePage from './pages/HomePage';
+import ScrollToTop from './components/common/ScrollToTop';
 import { authAPI, matchingAPI, systemAPI } from './services/api';
 
 export default function App() {
@@ -118,6 +119,7 @@ export default function App() {
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+      <ScrollToTop />
       <Navbar
         user={user}
         onSyncGrants={handleSyncGrants}
