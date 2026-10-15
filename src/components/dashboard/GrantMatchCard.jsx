@@ -95,8 +95,8 @@ export default function GrantMatchCard({
             gap: '20px',
             transition: 'all 0.18s ease',
             boxShadow: '0 2px 8px rgba(15, 23, 42, 0.04)',
-            filter: isBlurred ? 'blur(5px)' : 'none',
-            opacity: isBlurred ? 0.45 : 1,
+            filter: isBlurred ? 'blur(4px)' : 'none',
+            opacity: isBlurred ? 0.85 : 1,
             pointerEvents: isBlurred ? 'none' : 'auto',
             userSelect: isBlurred ? 'none' : 'auto',
           }}
@@ -384,10 +384,10 @@ export default function GrantMatchCard({
               right: 0,
               bottom: 0,
               zIndex: 10,
-              background: 'rgba(255, 255, 255, 0.88)',
-              backdropFilter: 'blur(3px)',
+              background: 'rgba(255, 255, 255, 0.16)',
+              backdropFilter: 'blur(1.5px)',
               borderRadius: '12px',
-              border: '1px dashed rgba(149, 128, 100, 0.55)',
+              border: '1px solid rgba(196, 162, 101, 0.35)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -396,12 +396,12 @@ export default function GrantMatchCard({
               transition: 'all 0.18s ease',
             }}
             onMouseOver={(e) => {
-              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.94)';
+              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.26)';
               e.currentTarget.style.borderColor = 'var(--brass)';
             }}
             onMouseOut={(e) => {
-              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.88)';
-              e.currentTarget.style.borderColor = 'rgba(149, 128, 100, 0.55)';
+              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.16)';
+              e.currentTarget.style.borderColor = 'rgba(196, 162, 101, 0.35)';
             }}
           >
             <div
@@ -409,14 +409,15 @@ export default function GrantMatchCard({
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '8px',
-                background: 'var(--navy-deep)',
+                background: 'rgba(12, 29, 51, 0.94)',
+                backdropFilter: 'blur(8px)',
                 border: '1px solid var(--brass)',
                 borderRadius: '9999px',
-                padding: '8px 20px',
+                padding: '9px 22px',
                 color: '#FFFFFF',
                 fontSize: '13px',
                 fontWeight: '600',
-                boxShadow: '0 8px 24px rgba(12, 29, 51, 0.28)',
+                boxShadow: '0 8px 28px rgba(12, 29, 51, 0.35)',
               }}
             >
               <Lock size={14} style={{ color: 'var(--brass-light)' }} />
@@ -444,8 +445,8 @@ export default function GrantMatchCard({
           minHeight: '270px',
           transition: 'all 0.18s ease',
           boxShadow: '0 3px 12px rgba(15, 23, 42, 0.04)',
-          filter: isBlurred ? 'blur(5px)' : 'none',
-          opacity: isBlurred ? 0.45 : 1,
+          filter: isBlurred ? 'blur(4px)' : 'none',
+          opacity: isBlurred ? 0.85 : 1,
           pointerEvents: isBlurred ? 'none' : 'auto',
           userSelect: isBlurred ? 'none' : 'auto',
         }}
@@ -688,10 +689,10 @@ export default function GrantMatchCard({
             right: 0,
             bottom: 0,
             zIndex: 10,
-            background: 'rgba(255, 255, 255, 0.92)',
-            backdropFilter: 'blur(3px)',
+            background: 'rgba(255, 255, 255, 0.16)',
+            backdropFilter: 'blur(1.5px)',
             borderRadius: '14px',
-            border: '1px dashed rgba(149, 128, 100, 0.55)',
+            border: '1px solid rgba(196, 162, 101, 0.35)',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -699,28 +700,52 @@ export default function GrantMatchCard({
             padding: '20px',
             cursor: 'pointer',
             textAlign: 'center',
+            transition: 'all 0.18s ease',
+          }}
+          onMouseOver={(e) => {
+            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.26)';
+            e.currentTarget.style.borderColor = 'var(--brass)';
+          }}
+          onMouseOut={(e) => {
+            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.16)';
+            e.currentTarget.style.borderColor = 'rgba(196, 162, 101, 0.35)';
           }}
         >
           <div
             style={{
-              width: '36px',
-              height: '36px',
+              width: '40px',
+              height: '40px',
               borderRadius: '50%',
-              background: 'var(--navy-deep)',
+              background: 'rgba(12, 29, 51, 0.94)',
+              backdropFilter: 'blur(8px)',
+              border: '1px solid var(--brass)',
               display: 'grid',
               placeItems: 'center',
               color: 'var(--brass-light)',
-              marginBottom: '8px',
-              boxShadow: '0 4px 12px rgba(12, 29, 51, 0.25)',
+              marginBottom: '10px',
+              boxShadow: '0 6px 18px rgba(12, 29, 51, 0.3)',
             }}
           >
             <Lock size={16} />
           </div>
-          <div style={{ fontSize: '13px', fontWeight: '700', color: 'var(--navy)', marginBottom: '4px' }}>
-            Locked for Visitors
-          </div>
-          <div style={{ fontSize: '11.5px', color: '#64748B' }}>
-            Sign up free to unlock
+          <div
+            style={{
+              background: 'rgba(12, 29, 51, 0.94)',
+              backdropFilter: 'blur(8px)',
+              border: '1px solid var(--brass)',
+              borderRadius: '9999px',
+              padding: '6px 16px',
+              color: '#FFFFFF',
+              boxShadow: '0 6px 20px rgba(12, 29, 51, 0.3)',
+              textAlign: 'center',
+            }}
+          >
+            <div style={{ fontSize: '13px', fontWeight: '700', marginBottom: '2px' }}>
+              Locked for Visitors
+            </div>
+            <div style={{ fontSize: '11px', color: 'var(--brass-light)', fontWeight: '500' }}>
+              Click to unlock with free account
+            </div>
           </div>
         </div>
       )}
