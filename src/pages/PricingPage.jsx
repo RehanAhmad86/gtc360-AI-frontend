@@ -5,20 +5,19 @@ import {
   X,
   Lock,
   Sparkles,
-  Eye,
-  CheckCircle2,
-  ArrowRight,
   ShieldCheck,
-  HelpCircle,
-  Users,
-  Compass,
-  Layers,
-  Search,
-  Bookmark,
-  FileText,
-  Mail,
+  Database,
+  Clock,
+  Award,
+  ArrowRight,
   Zap,
-  PhoneCall
+  Users,
+  Search,
+  FileText,
+  PhoneCall,
+  Bell,
+  BarChart3,
+  CheckCircle2
 } from 'lucide-react';
 
 export default function PricingPage() {
@@ -26,11 +25,11 @@ export default function PricingPage() {
   const [billingCycle, setBillingCycle] = useState('monthly'); // 'monthly' | 'annual'
 
   return (
-    <div style={{ background: '#071220', minHeight: '100vh', color: '#FFFFFF', padding: '40px 20px 80px' }}>
-      <div style={{ maxWidth: '1240px', margin: '0 auto' }}>
+    <div style={{ background: '#071220', minHeight: '100vh', color: '#FFFFFF', padding: '48px 20px 88px' }}>
+      <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
 
         {/* 1. Header & Billing Switcher */}
-        <div style={{ textAlign: 'center', marginBottom: '36px' }}>
+        <div style={{ textAlign: 'center', marginBottom: '44px' }}>
           <div
             style={{
               display: 'inline-flex',
@@ -55,17 +54,17 @@ export default function PricingPage() {
           <h1
             style={{
               fontFamily: 'var(--font-serif)',
-              fontSize: 'clamp(30px, 4vw, 44px)',
+              fontSize: 'clamp(32px, 4.5vw, 46px)',
               fontWeight: '400',
               letterSpacing: '-0.02em',
               lineHeight: '1.2',
-              marginBottom: '10px',
+              marginBottom: '12px',
             }}
           >
             GrantSignal 360° — Tier Comparison
           </h1>
-          <p style={{ fontSize: '15px', color: 'rgba(255, 255, 255, 0.65)', maxWidth: '640px', margin: '0 auto 24px' }}>
-            Choose the level of intelligence and advisory support tailored to your organization’s grant volume and pursuit strategy.
+          <p style={{ fontSize: '15px', color: 'rgba(255, 255, 255, 0.65)', maxWidth: '680px', margin: '0 auto 28px', lineHeight: 1.5 }}>
+            Choose the level of intelligence, search depth, and advisory support tailored to your organization’s grant volume and pursuit strategy.
           </p>
 
           {/* Monthly / Annual Billing Toggle */}
@@ -88,7 +87,7 @@ export default function PricingPage() {
                 color: billingCycle === 'monthly' ? '#FFFFFF' : 'rgba(255, 255, 255, 0.7)',
                 border: 'none',
                 borderRadius: '9999px',
-                padding: '8px 18px',
+                padding: '8px 20px',
                 fontSize: '13px',
                 fontWeight: '600',
                 cursor: 'pointer',
@@ -105,13 +104,13 @@ export default function PricingPage() {
                 color: billingCycle === 'annual' ? '#FFFFFF' : 'rgba(255, 255, 255, 0.7)',
                 border: 'none',
                 borderRadius: '9999px',
-                padding: '8px 18px',
+                padding: '8px 20px',
                 fontSize: '13px',
                 fontWeight: '600',
                 cursor: 'pointer',
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: '6px',
+                gap: '8px',
                 transition: 'all 0.15s ease',
               }}
             >
@@ -132,78 +131,23 @@ export default function PricingPage() {
           </div>
         </div>
 
-        {/* 2. Client Guest Tease Mechanic Callout */}
-        <div
-          style={{
-            background: 'linear-gradient(135deg, rgba(13, 21, 38, 0.95), rgba(26, 39, 68, 0.95))',
-            borderRadius: '14px',
-            padding: '20px 24px',
-            border: '1px solid rgba(196, 162, 101, 0.35)',
-            boxShadow: '0 8px 30px rgba(0, 0, 0, 0.35)',
-            display: 'flex',
-            alignItems: 'flex-start',
-            gap: '16px',
-            marginBottom: '36px',
-          }}
-        >
-          <div
-            style={{
-              background: 'rgba(201, 146, 30, 0.18)',
-              border: '1px solid rgba(201, 146, 30, 0.4)',
-              borderRadius: '10px',
-              padding: '10px',
-              display: 'grid',
-              placeItems: 'center',
-              color: 'var(--brass-light)',
-              flexShrink: 0,
-            }}
-          >
-            <Eye size={24} />
-          </div>
-          <div style={{ flex: 1 }}>
-            <div style={{ fontSize: '14.5px', fontWeight: '700', color: 'var(--brass-light)', marginBottom: '4px' }}>
-              Guest Tease Mechanic — No Sign-Up Required
-            </div>
-            <p style={{ fontSize: '13px', color: 'rgba(255, 255, 255, 0.75)', lineHeight: 1.5, margin: 0 }}>
-              Visitors get <strong style={{ color: '#FFFFFF' }}>5 free searches tracked by IP address</strong>. Each search shows the top 3 results in full. Results 4+ are blurred with an interactive sign-up prompt. Clicking any result reveals the grant detail page with a frosted-glass blur overlay — showing just enough to demonstrate value before gating on sign-up.
-            </p>
-            <div style={{ display: 'flex', gap: '8px', marginTop: '12px', flexWrap: 'wrap' }}>
-              <span style={{ fontSize: '11px', background: 'rgba(255, 255, 255, 0.08)', border: '1px solid rgba(255, 255, 255, 0.12)', borderRadius: '9999px', padding: '3px 10px', color: 'rgba(255, 255, 255, 0.7)' }}>
-                5 searches total (IP-tracked)
-              </span>
-              <span style={{ fontSize: '11px', background: 'rgba(255, 255, 255, 0.08)', border: '1px solid rgba(255, 255, 255, 0.12)', borderRadius: '9999px', padding: '3px 10px', color: 'rgba(255, 255, 255, 0.7)' }}>
-                Top 3 results visible
-              </span>
-              <span style={{ fontSize: '11px', background: 'rgba(255, 255, 255, 0.08)', border: '1px solid rgba(255, 255, 255, 0.12)', borderRadius: '9999px', padding: '3px 10px', color: 'rgba(255, 255, 255, 0.7)' }}>
-                Results 4+ blurred
-              </span>
-              <span style={{ fontSize: '11px', background: 'rgba(255, 255, 255, 0.08)', border: '1px solid rgba(255, 255, 255, 0.12)', borderRadius: '9999px', padding: '3px 10px', color: 'rgba(255, 255, 255, 0.7)' }}>
-                Grant detail page blurred on click
-              </span>
-              <span style={{ fontSize: '11px', background: 'rgba(16, 185, 129, 0.15)', border: '1px solid rgba(16, 185, 129, 0.35)', borderRadius: '9999px', padding: '3px 10px', color: '#34D399', fontWeight: '600' }}>
-                CTA: &quot;Create free account to continue&quot;
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* 3. Four Comprehensive Executive Tier Cards */}
+        {/* 2. Comprehensive Four Executive Tier Cards */}
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(270px, 1fr))',
-            gap: '22px',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(285px, 1fr))',
+            gap: '24px',
             marginBottom: '48px',
             alignItems: 'stretch',
           }}
         >
-          {/* Tier 1: Visitor (No Account) */}
+          {/* TIER 1: VISITOR (NO ACCOUNT) */}
           <div
             style={{
               background: '#0B1728',
               border: '1px solid rgba(255, 255, 255, 0.12)',
               borderRadius: '16px',
-              padding: '28px 24px',
+              padding: '28px 22px',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between',
@@ -226,57 +170,91 @@ export default function PricingPage() {
                 >
                   Visitor
                 </span>
-                <span style={{ fontSize: '11px', color: 'rgba(255, 255, 255, 0.4)' }}>No Sign-Up</span>
+                <span style={{ fontSize: '11px', color: 'rgba(255, 255, 255, 0.45)' }}>No Sign-Up</span>
               </div>
 
-              <h3 style={{ fontSize: '20px', fontWeight: '700', color: '#FFFFFF', marginBottom: '6px' }}>No Account</h3>
-              <p style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.55)', minHeight: '34px', lineHeight: 1.4, marginBottom: '16px' }}>
-                Quick exploratory search without creating an account or providing card details.
+              <h3 style={{ fontSize: '22px', fontWeight: '700', color: '#FFFFFF', marginBottom: '6px' }}>No Account</h3>
+              <p style={{ fontSize: '12.5px', color: 'rgba(255, 255, 255, 0.55)', minHeight: '38px', lineHeight: 1.45, marginBottom: '18px' }}>
+                Instant exploration across federal grants without creating an account or providing card details.
               </p>
 
-              <div style={{ marginBottom: '18px', paddingBottom: '16px', borderBottom: '1px solid rgba(255, 255, 255, 0.08)' }}>
-                <div style={{ fontSize: '32px', fontWeight: '800', color: 'rgba(255, 255, 255, 0.9)', lineHeight: 1 }}>
+              <div style={{ marginBottom: '22px', paddingBottom: '16px', borderBottom: '1px solid rgba(255, 255, 255, 0.08)' }}>
+                <div style={{ fontSize: '38px', fontWeight: '800', color: 'rgba(255, 255, 255, 0.95)', lineHeight: 1 }}>
                   Free
                 </div>
-                <div style={{ fontSize: '11.5px', color: 'rgba(255, 255, 255, 0.45)', marginTop: '4px' }}>
+                <div style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.5)', marginTop: '8px' }}>
                   5 searches total · Tracked by IP address
                 </div>
               </div>
 
-              <div style={{ marginBottom: '24px' }}>
-                <div style={{ fontSize: '11px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.06em', color: 'rgba(255, 255, 255, 0.4)', marginBottom: '10px' }}>
-                  What&apos;s Included:
+              {/* Categorized Features */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '26px' }}>
+                {/* Search & Databases */}
+                <div>
+                  <div style={{ fontSize: '10.5px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'rgba(255, 255, 255, 0.45)', marginBottom: '9px' }}>
+                    Search &amp; Access
+                  </div>
+                  <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '12.5px', color: 'rgba(255, 255, 255, 0.75)' }}>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                      <span><strong>5 total searches</strong> (tracked by IP)</span>
+                    </li>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                      <span>Searches <strong>all 24 federal databases</strong></span>
+                    </li>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                      <span><strong>Top 3 results visible in full</strong></span>
+                    </li>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <Lock size={14} color="var(--brass-light)" style={{ flexShrink: 0, marginTop: '2px' }} />
+                      <span><strong>Results 4+ blurred</strong> with sign-up prompt</span>
+                    </li>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <Lock size={14} color="var(--brass-light)" style={{ flexShrink: 0, marginTop: '2px' }} />
+                      <span><strong>Grant detail page teased</strong> (frosted blur)</span>
+                    </li>
+                  </ul>
                 </div>
-                <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '9px', fontSize: '12.5px', color: 'rgba(255, 255, 255, 0.75)' }}>
-                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-                    <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
-                    <span><strong>5 total free searches</strong> (tracked by IP)</span>
-                  </li>
-                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-                    <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
-                    <span><strong>Top 3 results in full</strong> per query</span>
-                  </li>
-                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-                    <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
-                    <span>Search across all <strong>24 federal databases</strong></span>
-                  </li>
-                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-                    <Lock size={14} color="var(--brass-light)" style={{ flexShrink: 0, marginTop: '2px' }} />
-                    <span><strong>Results 4+ blurred</strong> with signup prompt</span>
-                  </li>
-                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-                    <Lock size={14} color="var(--brass-light)" style={{ flexShrink: 0, marginTop: '2px' }} />
-                    <span><strong>Grant detail tease</strong> with frosted overlay</span>
-                  </li>
-                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-                    <Lock size={14} color="var(--brass-light)" style={{ flexShrink: 0, marginTop: '2px' }} />
-                    <span><strong>AI Match Score teased</strong> (🔒 92% Fit badge)</span>
-                  </li>
-                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-                    <X size={14} color="rgba(255, 255, 255, 0.25)" style={{ flexShrink: 0, marginTop: '2px' }} />
-                    <span style={{ color: 'rgba(255, 255, 255, 0.4)' }}>No saved pipeline or email alerts</span>
-                  </li>
-                </ul>
+
+                {/* Intelligence & AI */}
+                <div>
+                  <div style={{ fontSize: '10.5px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'rgba(255, 255, 255, 0.45)', marginBottom: '9px' }}>
+                    Intelligence &amp; AI
+                  </div>
+                  <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '12.5px', color: 'rgba(255, 255, 255, 0.75)' }}>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <Lock size={14} color="var(--brass-light)" style={{ flexShrink: 0, marginTop: '2px' }} />
+                      <span><strong>AI Match Score teased</strong> (🔒 92% Fit badge)</span>
+                    </li>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <X size={14} color="rgba(255, 255, 255, 0.25)" style={{ flexShrink: 0, marginTop: '2px' }} />
+                      <span style={{ color: 'rgba(255, 255, 255, 0.4)' }}>No organization profile</span>
+                    </li>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <X size={14} color="rgba(255, 255, 255, 0.25)" style={{ flexShrink: 0, marginTop: '2px' }} />
+                      <span style={{ color: 'rgba(255, 255, 255, 0.4)' }}>No AI Funding Advisor</span>
+                    </li>
+                  </ul>
+                </div>
+
+                {/* Tracking & Export */}
+                <div>
+                  <div style={{ fontSize: '10.5px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'rgba(255, 255, 255, 0.45)', marginBottom: '9px' }}>
+                    Pipeline &amp; Alerts
+                  </div>
+                  <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '12.5px', color: 'rgba(255, 255, 255, 0.4)' }}>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <X size={14} color="rgba(255, 255, 255, 0.25)" style={{ flexShrink: 0, marginTop: '2px' }} />
+                      <span>No saved pipeline opportunities</span>
+                    </li>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <X size={14} color="rgba(255, 255, 255, 0.25)" style={{ flexShrink: 0, marginTop: '2px' }} />
+                      <span>No inbox delivery or alerts</span>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
 
@@ -296,17 +274,17 @@ export default function PricingPage() {
                 transition: 'all 0.15s ease',
               }}
             >
-              Explore Free as Guest
+              Search Grants Now
             </button>
           </div>
 
-          {/* Tier 2: Explorer (Free Account) */}
+          {/* TIER 2: EXPLORER (FREE ACCOUNT) */}
           <div
             style={{
               background: '#0B1728',
               border: '1px solid rgba(26, 86, 219, 0.45)',
               borderRadius: '16px',
-              padding: '28px 24px',
+              padding: '28px 22px',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between',
@@ -329,57 +307,95 @@ export default function PricingPage() {
                 >
                   Explorer
                 </span>
-                <span style={{ fontSize: '11px', color: '#93C5FD' }}>Free Registration</span>
+                <span style={{ fontSize: '11px', color: '#93C5FD', fontWeight: '600' }}>Free Forever</span>
               </div>
 
-              <h3 style={{ fontSize: '20px', fontWeight: '700', color: '#FFFFFF', marginBottom: '6px' }}>Free Account</h3>
-              <p style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.55)', minHeight: '34px', lineHeight: 1.4, marginBottom: '16px' }}>
+              <h3 style={{ fontSize: '22px', fontWeight: '700', color: '#FFFFFF', marginBottom: '6px' }}>Free Account</h3>
+              <p style={{ fontSize: '12.5px', color: 'rgba(255, 255, 255, 0.55)', minHeight: '38px', lineHeight: 1.45, marginBottom: '18px' }}>
                 For non-profits and teams getting started with ongoing federal and state funding tracking.
               </p>
 
-              <div style={{ marginBottom: '18px', paddingBottom: '16px', borderBottom: '1px solid rgba(255, 255, 255, 0.08)' }}>
-                <div style={{ fontSize: '32px', fontWeight: '800', color: '#FFFFFF', lineHeight: 1 }}>
+              <div style={{ marginBottom: '22px', paddingBottom: '16px', borderBottom: '1px solid rgba(255, 255, 255, 0.08)' }}>
+                <div style={{ fontSize: '38px', fontWeight: '800', color: '#FFFFFF', lineHeight: 1 }}>
                   $0
                 </div>
-                <div style={{ fontSize: '11.5px', color: 'rgba(255, 255, 255, 0.45)', marginTop: '4px' }}>
+                <div style={{ fontSize: '12px', color: '#93C5FD', marginTop: '8px' }}>
                   Free forever · No credit card required
                 </div>
               </div>
 
-              <div style={{ marginBottom: '24px' }}>
-                <div style={{ fontSize: '11px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.06em', color: 'rgba(255, 255, 255, 0.4)', marginBottom: '10px' }}>
-                  What&apos;s Included:
+              {/* Categorized Features */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '26px' }}>
+                {/* Search & Databases */}
+                <div>
+                  <div style={{ fontSize: '10.5px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#93C5FD', marginBottom: '9px' }}>
+                    Search &amp; Databases
+                  </div>
+                  <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '12.5px', color: 'rgba(255, 255, 255, 0.8)' }}>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                      <span><strong>10 searches per month</strong></span>
+                    </li>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                      <span>Searches <strong>all 24 federal databases</strong></span>
+                    </li>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                      <span><strong>Top 5 results visible in full</strong></span>
+                    </li>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                      <span><strong>Summary view</strong> for grant details</span>
+                    </li>
+                  </ul>
                 </div>
-                <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '9px', fontSize: '12.5px', color: 'rgba(255, 255, 255, 0.75)' }}>
-                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-                    <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
-                    <span><strong>10 searches per month</strong> across all databases</span>
-                  </li>
-                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-                    <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
-                    <span><strong>Top 5 results visible</strong> per search query</span>
-                  </li>
-                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-                    <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
-                    <span><strong>1 Organization Funding Profile</strong> setup</span>
-                  </li>
-                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-                    <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
-                    <span><strong>5 Saved Grant Pipeline slots</strong> to bookmark</span>
-                  </li>
-                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-                    <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
-                    <span><strong>Weekly email digest</strong> of matching solicitations</span>
-                  </li>
-                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-                    <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
-                    <span><strong>3 AI Funding Advisor questions</strong> / month</span>
-                  </li>
-                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-                    <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
-                    <span>View-only pipeline value estimate summary</span>
-                  </li>
-                </ul>
+
+                {/* Profile & AI Tools */}
+                <div>
+                  <div style={{ fontSize: '10.5px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#93C5FD', marginBottom: '9px' }}>
+                    Profile &amp; AI Tools
+                  </div>
+                  <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '12.5px', color: 'rgba(255, 255, 255, 0.8)' }}>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                      <span><strong>1 Organization Profile</strong></span>
+                    </li>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                      <span><strong>Basic tailored results</strong> to profile</span>
+                    </li>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                      <span><strong>3 AI Funding Advisor</strong> questions / mo</span>
+                    </li>
+                  </ul>
+                </div>
+
+                {/* Pipeline & Delivery */}
+                <div>
+                  <div style={{ fontSize: '10.5px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#93C5FD', marginBottom: '9px' }}>
+                    Pipeline &amp; Team
+                  </div>
+                  <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '12.5px', color: 'rgba(255, 255, 255, 0.8)' }}>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                      <span><strong>5 Saved opportunities</strong> in pipeline</span>
+                    </li>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                      <span><strong>Pipeline value snapshot</strong> (view only)</span>
+                    </li>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                      <span><strong>Weekly email digest</strong> to inbox</span>
+                    </li>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                      <span><strong>1 User seat</strong> · Community support</span>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
 
@@ -403,13 +419,13 @@ export default function PricingPage() {
             </button>
           </div>
 
-          {/* Tier 3: Advanced (Convert Target) - Featured & Highlighted */}
+          {/* TIER 3: ADVANCED (CONVERT TARGET) - FEATURED */}
           <div
             style={{
               background: 'linear-gradient(180deg, #13243C 0%, #0B1728 100%)',
               border: '2px solid var(--brass)',
               borderRadius: '16px',
-              padding: '28px 24px',
+              padding: '28px 22px',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between',
@@ -456,65 +472,107 @@ export default function PricingPage() {
                 <span style={{ fontSize: '11px', color: '#4ADE80', fontWeight: '600' }}>14-Day Free Trial</span>
               </div>
 
-              <h3 style={{ fontSize: '20px', fontWeight: '700', color: '#FFFFFF', marginBottom: '6px' }}>Advanced Tier</h3>
-              <p style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.65)', minHeight: '34px', lineHeight: 1.4, marginBottom: '16px' }}>
+              <h3 style={{ fontSize: '22px', fontWeight: '700', color: '#FFFFFF', marginBottom: '6px' }}>Advanced Tier</h3>
+              <p style={{ fontSize: '12.5px', color: 'rgba(255, 255, 255, 0.65)', minHeight: '38px', lineHeight: 1.45, marginBottom: '18px' }}>
                 Full-scale AI funding intelligence, custom fit scoring, and pipeline tools for active grant seekers.
               </p>
 
-              <div style={{ marginBottom: '18px', paddingBottom: '16px', borderBottom: '1px solid rgba(255, 255, 255, 0.12)' }}>
+              <div style={{ marginBottom: '22px', paddingBottom: '16px', borderBottom: '1px solid rgba(255, 255, 255, 0.12)' }}>
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
-                  <span style={{ fontSize: '36px', fontWeight: '800', color: 'var(--brass-light)', lineHeight: 1 }}>
+                  <span style={{ fontSize: '38px', fontWeight: '800', color: 'var(--brass-light)', lineHeight: 1 }}>
                     {billingCycle === 'annual' ? '$249' : '$299'}
                   </span>
                   <span style={{ fontSize: '13px', color: 'rgba(255, 255, 255, 0.5)' }}>/ month</span>
                 </div>
-                <div style={{ fontSize: '11.5px', color: '#4ADE80', fontWeight: '600', marginTop: '6px' }}>
+                <div style={{ fontSize: '12px', color: '#4ADE80', fontWeight: '600', marginTop: '8px' }}>
                   {billingCycle === 'annual' ? 'Billed annually ($2,990/yr · 2 Months Free)' : '14-day free trial · Cancel anytime'}
                 </div>
               </div>
 
-              <div style={{ marginBottom: '24px' }}>
-                <div style={{ fontSize: '11px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--brass-light)', marginBottom: '10px' }}>
-                  Everything in Explorer, plus:
+              {/* Categorized Features */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '26px' }}>
+                {/* Search & Intelligence */}
+                <div>
+                  <div style={{ fontSize: '10.5px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--brass-light)', marginBottom: '9px' }}>
+                    Full Search &amp; Intelligence
+                  </div>
+                  <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '12.5px', color: '#FFFFFF' }}>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                      <span><strong>Unlimited searches</strong> across all 24 databases</span>
+                    </li>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                      <span><strong>All results visible</strong> (zero blurred records)</span>
+                    </li>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                      <span><strong>Full Grant Dossiers</strong> (CFDA, links, rules)</span>
+                    </li>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                      <span><strong>AI Match Scoring (0–100%)</strong> with rationale</span>
+                    </li>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                      <span><strong>Eligibility filtering</strong> controls</span>
+                    </li>
+                  </ul>
                 </div>
-                <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '9px', fontSize: '12.5px', color: '#FFFFFF' }}>
-                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-                    <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
-                    <span><strong>Unlimited searches</strong> across all 24 databases</span>
-                  </li>
-                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-                    <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
-                    <span><strong>100% visible results</strong> (zero blurred records)</span>
-                  </li>
-                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-                    <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
-                    <span><strong>0–100% AI Fit Scoring</strong> with match explanations</span>
-                  </li>
-                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-                    <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
-                    <span><strong>Full Grant Dossiers</strong> (CFDA, deadlines, application links)</span>
-                  </li>
-                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-                    <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
-                    <span><strong>3 Organization Funding Profiles</strong></span>
-                  </li>
-                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-                    <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
-                    <span><strong>50 Saved Pipeline Grants</strong> + 5 comparison slots</span>
-                  </li>
-                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-                    <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
-                    <span><strong>CSV Data Export</strong> &amp; Monthly PDF Pipeline Report</span>
-                  </li>
-                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-                    <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
-                    <span><strong>20 AI Funding Advisor questions</strong> / month</span>
-                  </li>
-                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-                    <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
-                    <span>Weekly digest + tailored keyword alert emails</span>
-                  </li>
-                </ul>
+
+                {/* Profiles & AI Tools */}
+                <div>
+                  <div style={{ fontSize: '10.5px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--brass-light)', marginBottom: '9px' }}>
+                    Profiles, AI &amp; Alerts
+                  </div>
+                  <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '12.5px', color: '#FFFFFF' }}>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                      <span><strong>3 Organization Profiles</strong> (enhanced tailored)</span>
+                    </li>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                      <span><strong>20 AI Funding Advisor queries</strong> / month</span>
+                    </li>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                      <span><strong>Custom keyword alerts</strong> &amp; weekly digest</span>
+                    </li>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                      <span><strong>Tailored inbox delivery</strong> to profile</span>
+                    </li>
+                  </ul>
+                </div>
+
+                {/* Pipeline, Reports & Team */}
+                <div>
+                  <div style={{ fontSize: '10.5px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--brass-light)', marginBottom: '9px' }}>
+                    Pipeline, Reports &amp; Support
+                  </div>
+                  <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '12.5px', color: '#FFFFFF' }}>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                      <span><strong>50 Saved Grants</strong> + <strong>5 comparison slots</strong></span>
+                    </li>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                      <span><strong>Full Pipeline Value Snapshot</strong> access</span>
+                    </li>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                      <span><strong>Analytics dashboard</strong></span>
+                    </li>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                      <span><strong>CSV export</strong> + <strong>Monthly Pipeline PDF Report</strong></span>
+                    </li>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                      <span><strong>1 User seat</strong> · Email support (48h response)</span>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
 
@@ -539,13 +597,13 @@ export default function PricingPage() {
             </button>
           </div>
 
-          {/* Tier 4: Professional (Full Advisory) */}
+          {/* TIER 4: PROFESSIONAL (FULL ADVISORY) */}
           <div
             style={{
               background: '#0B1728',
               border: '1px solid rgba(201, 146, 30, 0.35)',
               borderRadius: '16px',
-              padding: '28px 24px',
+              padding: '28px 22px',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between',
@@ -568,68 +626,110 @@ export default function PricingPage() {
                 >
                   Professional
                 </span>
-                <span style={{ fontSize: '11px', color: 'var(--brass-light)' }}>Includes Advisory</span>
+                <span style={{ fontSize: '11px', color: 'var(--brass-light)', fontWeight: '600' }}>Full Advisory Suite</span>
               </div>
 
-              <h3 style={{ fontSize: '20px', fontWeight: '700', color: '#FFFFFF', marginBottom: '6px' }}>Professional</h3>
-              <p style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.55)', minHeight: '34px', lineHeight: 1.4, marginBottom: '16px' }}>
+              <h3 style={{ fontSize: '22px', fontWeight: '700', color: '#FFFFFF', marginBottom: '6px' }}>Professional</h3>
+              <p style={{ fontSize: '12.5px', color: 'rgba(255, 255, 255, 0.55)', minHeight: '38px', lineHeight: 1.45, marginBottom: '18px' }}>
                 Full software intelligence plus dedicated human strategy reviews and narrative assistance.
               </p>
 
-              <div style={{ marginBottom: '18px', paddingBottom: '16px', borderBottom: '1px solid rgba(255, 255, 255, 0.08)' }}>
+              <div style={{ marginBottom: '22px', paddingBottom: '16px', borderBottom: '1px solid rgba(255, 255, 255, 0.08)' }}>
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
-                  <span style={{ fontSize: '36px', fontWeight: '800', color: '#FFFFFF', lineHeight: 1 }}>
+                  <span style={{ fontSize: '38px', fontWeight: '800', color: '#FFFFFF', lineHeight: 1 }}>
                     {billingCycle === 'annual' ? '$415' : '$499'}
                   </span>
                   <span style={{ fontSize: '13px', color: 'rgba(255, 255, 255, 0.5)' }}>/ month</span>
                 </div>
-                <div style={{ fontSize: '11.5px', color: '#4ADE80', fontWeight: '600', marginTop: '6px' }}>
-                  {billingCycle === 'annual' ? 'Billed annually ($4,990/yr · 2 Months Free)' : '14-day free trial · Includes Advisory'}
+                <div style={{ fontSize: '12px', color: '#4ADE80', fontWeight: '600', marginTop: '8px' }}>
+                  {billingCycle === 'annual' ? 'Billed annually ($4,990/yr · 2 Months Free)' : '14-day free trial · Includes Human Advisory'}
                 </div>
               </div>
 
-              <div style={{ marginBottom: '24px' }}>
-                <div style={{ fontSize: '11px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.06em', color: 'rgba(255, 255, 255, 0.4)', marginBottom: '10px' }}>
-                  Everything in Advanced, plus:
+              {/* Categorized Features */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '26px' }}>
+                {/* Advisory & Assistant */}
+                <div>
+                  <div style={{ fontSize: '10.5px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--brass-light)', marginBottom: '9px' }}>
+                    Dedicated Advisory &amp; AI
+                  </div>
+                  <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '12.5px', color: 'rgba(255, 255, 255, 0.85)' }}>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                      <span><strong>Monthly 30-min strategy call</strong> with advisor</span>
+                    </li>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                      <span><strong>Advisor-written Quarterly Assessment</strong></span>
+                    </li>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                      <span><strong>Preferred consulting access</strong></span>
+                    </li>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                      <span><strong>AI Application Assistant</strong> (narratives)</span>
+                    </li>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                      <span><strong>Unlimited AI Funding Advisor</strong> questions</span>
+                    </li>
+                  </ul>
                 </div>
-                <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '9px', fontSize: '12.5px', color: 'rgba(255, 255, 255, 0.85)' }}>
-                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-                    <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
-                    <span><strong>Monthly 30-min strategy call</strong> with funding expert</span>
-                  </li>
-                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-                    <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
-                    <span><strong>AI Application Assistant</strong> (drafts initial narratives)</span>
-                  </li>
-                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-                    <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
-                    <span><strong>Unlimited AI Funding Advisor</strong> questions</span>
-                  </li>
-                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-                    <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
-                    <span><strong>3 Team User Seats</strong> included for collaboration</span>
-                  </li>
-                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-                    <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
-                    <span><strong>Unlimited Saved Grants</strong> + 10 comparison slots</span>
-                  </li>
-                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-                    <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
-                    <span><strong>Advisor-written Quarterly Assessment</strong></span>
-                  </li>
-                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-                    <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
-                    <span><strong>Win rate &amp; award benchmarking</strong> intelligence</span>
-                  </li>
-                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-                    <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
-                    <span><strong>SAM.gov compliance</strong> &amp; registration checker</span>
-                  </li>
-                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-                    <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
-                    <span>DOCX branded proposal reports + Priority support</span>
-                  </li>
-                </ul>
+
+                {/* Search & Benchmarking */}
+                <div>
+                  <div style={{ fontSize: '10.5px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--brass-light)', marginBottom: '9px' }}>
+                    Advanced Analytics &amp; Filters
+                  </div>
+                  <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '12.5px', color: 'rgba(255, 255, 255, 0.85)' }}>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                      <span><strong>Geographic &amp; state-specific</strong> filtering</span>
+                    </li>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                      <span><strong>Win rate &amp; award benchmarking</strong></span>
+                    </li>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                      <span><strong>SAM.gov registration checker</strong></span>
+                    </li>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                      <span><strong>Real-time alerts (email + SMS)</strong></span>
+                    </li>
+                  </ul>
+                </div>
+
+                {/* Team, Pipeline & Reports */}
+                <div>
+                  <div style={{ fontSize: '10.5px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--brass-light)', marginBottom: '9px' }}>
+                    Team, Reports &amp; Pipeline
+                  </div>
+                  <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '12.5px', color: 'rgba(255, 255, 255, 0.85)' }}>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                      <span><strong>3 Team User Seats</strong> (collaboration)</span>
+                    </li>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                      <span><strong>Unlimited Organization Profiles</strong></span>
+                    </li>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                      <span><strong>Unlimited Saved Grants</strong> + 10 comparison slots</span>
+                    </li>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                      <span><strong>DOCX branded reports</strong>, CSV &amp; auto PDF</span>
+                    </li>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                      <span><strong>Priority Support</strong> (same-day response)</span>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
 
@@ -654,160 +754,37 @@ export default function PricingPage() {
           </div>
         </div>
 
-        {/* 4. Full Visual Comparison Table */}
-        <div style={{ marginBottom: '40px', overflowX: 'auto', background: '#0B1728', borderRadius: '14px', border: '1px solid rgba(255, 255, 255, 0.12)' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', textAlign: 'left' }}>
-            <thead>
-              <tr style={{ borderBottom: '2px solid rgba(255, 255, 255, 0.12)' }}>
-                <th style={{ padding: '16px 20px', color: 'rgba(255, 255, 255, 0.5)', textTransform: 'uppercase', fontSize: '11px', letterSpacing: '0.08em', width: '32%' }}>
-                  Feature Comparison
-                </th>
-                <th style={{ padding: '16px 14px', width: '16%', background: 'rgba(255, 255, 255, 0.02)' }}>
-                  <div style={{ fontSize: '13px', fontWeight: '700', color: 'rgba(255, 255, 255, 0.7)' }}>Visitor</div>
-                  <div style={{ fontSize: '11px', color: 'rgba(255, 255, 255, 0.4)' }}>No Account</div>
-                </th>
-                <th style={{ padding: '16px 14px', width: '16%' }}>
-                  <div style={{ fontSize: '13px', fontWeight: '700', color: '#93C5FD' }}>Explorer</div>
-                  <div style={{ fontSize: '11px', color: 'rgba(255, 255, 255, 0.4)' }}>Free ($0)</div>
-                </th>
-                <th style={{ padding: '16px 14px', width: '18%', background: 'rgba(201, 146, 30, 0.1)' }}>
-                  <div style={{ fontSize: '13px', fontWeight: '800', color: 'var(--brass-light)' }}>✦ Advanced</div>
-                  <div style={{ fontSize: '11px', color: '#4ADE80' }}>$299/mo (Convert Target)</div>
-                </th>
-                <th style={{ padding: '16px 14px', width: '18%' }}>
-                  <div style={{ fontSize: '13px', fontWeight: '700', color: '#FFFFFF' }}>Professional</div>
-                  <div style={{ fontSize: '11px', color: 'rgba(255, 255, 255, 0.4)' }}>$499/mo (Full Advisory)</div>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {/* SECTION: BASICS */}
-              <tr style={{ background: 'rgba(255, 255, 255, 0.04)', borderTop: '1px solid rgba(255, 255, 255, 0.1)' }}>
-                <td colSpan={5} style={{ padding: '8px 20px', fontSize: '11px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--brass-light)' }}>
-                  Basics
-                </td>
-              </tr>
-              <tr style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.06)' }}>
-                <td style={{ padding: '10px 20px', color: '#FFFFFF', fontWeight: '500' }}>Free trial</td>
-                <td style={{ padding: '10px 14px', color: 'rgba(255, 255, 255, 0.4)' }}>—</td>
-                <td style={{ padding: '10px 14px', color: 'rgba(255, 255, 255, 0.4)' }}>—</td>
-                <td style={{ padding: '10px 14px', color: '#4ADE80', fontWeight: '600', background: 'rgba(201, 146, 30, 0.05)' }}>14 days free</td>
-                <td style={{ padding: '10px 14px', color: '#4ADE80', fontWeight: '600' }}>14 days free</td>
-              </tr>
-              <tr style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.06)' }}>
-                <td style={{ padding: '10px 20px', color: '#FFFFFF', fontWeight: '500' }}>Billing</td>
-                <td style={{ padding: '10px 14px', color: 'rgba(255, 255, 255, 0.4)' }}>—</td>
-                <td style={{ padding: '10px 14px', color: 'rgba(255, 255, 255, 0.8)' }}>Free forever</td>
-                <td style={{ padding: '10px 14px', color: 'rgba(255, 255, 255, 0.9)', background: 'rgba(201, 146, 30, 0.05)' }}>Monthly or annual</td>
-                <td style={{ padding: '10px 14px', color: 'rgba(255, 255, 255, 0.9)' }}>Monthly or annual</td>
-              </tr>
-              <tr style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.06)' }}>
-                <td style={{ padding: '10px 20px', color: '#FFFFFF', fontWeight: '500' }}>Annual discount</td>
-                <td style={{ padding: '10px 14px', color: 'rgba(255, 255, 255, 0.4)' }}>—</td>
-                <td style={{ padding: '10px 14px', color: 'rgba(255, 255, 255, 0.4)' }}>—</td>
-                <td style={{ padding: '10px 14px', color: '#4ADE80', fontWeight: '600', background: 'rgba(201, 146, 30, 0.05)' }}>$2,990/yr (2 mo free)</td>
-                <td style={{ padding: '10px 14px', color: '#4ADE80', fontWeight: '600' }}>$4,990/yr (2 mo free)</td>
-              </tr>
-
-              {/* SECTION: SEARCH */}
-              <tr style={{ background: 'rgba(255, 255, 255, 0.04)', borderTop: '1px solid rgba(255, 255, 255, 0.1)' }}>
-                <td colSpan={5} style={{ padding: '8px 20px', fontSize: '11px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--brass-light)' }}>
-                  Search &amp; Databases
-                </td>
-              </tr>
-              <tr style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.06)' }}>
-                <td style={{ padding: '10px 20px', color: '#FFFFFF', fontWeight: '500' }}>Searches available</td>
-                <td style={{ padding: '10px 14px', color: 'var(--brass-light)', fontWeight: '600' }}>5 total (IP-tracked)</td>
-                <td style={{ padding: '10px 14px', color: 'rgba(255, 255, 255, 0.8)' }}>10 / month</td>
-                <td style={{ padding: '10px 14px', color: '#4ADE80', fontWeight: '700', background: 'rgba(201, 146, 30, 0.05)' }}>Unlimited</td>
-                <td style={{ padding: '10px 14px', color: '#4ADE80', fontWeight: '700' }}>Unlimited</td>
-              </tr>
-              <tr style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.06)' }}>
-                <td style={{ padding: '10px 20px', color: '#FFFFFF', fontWeight: '500' }}>Federal databases searched</td>
-                <td style={{ padding: '10px 14px', color: 'rgba(255, 255, 255, 0.8)' }}>All 24</td>
-                <td style={{ padding: '10px 14px', color: 'rgba(255, 255, 255, 0.8)' }}>All 24</td>
-                <td style={{ padding: '10px 14px', color: '#FFFFFF', background: 'rgba(201, 146, 30, 0.05)' }}>All 24</td>
-                <td style={{ padding: '10px 14px', color: '#FFFFFF' }}>All 24</td>
-              </tr>
-              <tr style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.06)' }}>
-                <td style={{ padding: '10px 20px', color: '#FFFFFF', fontWeight: '500' }}>Results shown per search</td>
-                <td style={{ padding: '10px 14px', color: 'var(--brass-light)' }}>Top 3 visible (4+ blurred)</td>
-                <td style={{ padding: '10px 14px', color: 'rgba(255, 255, 255, 0.8)' }}>Top 5 visible</td>
-                <td style={{ padding: '10px 14px', color: '#4ADE80', fontWeight: '600', background: 'rgba(201, 146, 30, 0.05)' }}>All results visible</td>
-                <td style={{ padding: '10px 14px', color: '#4ADE80', fontWeight: '600' }}>All results visible</td>
-              </tr>
-              <tr style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.06)' }}>
-                <td style={{ padding: '10px 20px', color: '#FFFFFF', fontWeight: '500' }}>Grant detail page</td>
-                <td style={{ padding: '10px 14px', color: 'rgba(255, 255, 255, 0.5)' }}>🔒 Blurred — tease only</td>
-                <td style={{ padding: '10px 14px', color: 'rgba(255, 255, 255, 0.6)' }}>Summary only</td>
-                <td style={{ padding: '10px 14px', color: '#4ADE80', fontWeight: '600', background: 'rgba(201, 146, 30, 0.05)' }}>✓ Full details</td>
-                <td style={{ padding: '10px 14px', color: '#4ADE80', fontWeight: '600' }}>✓ Full details</td>
-              </tr>
-              <tr style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.06)' }}>
-                <td style={{ padding: '10px 20px', color: '#FFFFFF', fontWeight: '500' }}>AI Match Scoring (0–100%)</td>
-                <td style={{ padding: '10px 14px', color: 'rgba(255, 255, 255, 0.35)' }}>🔒 Blurred teaser</td>
-                <td style={{ padding: '10px 14px', color: 'rgba(255, 255, 255, 0.35)' }}>—</td>
-                <td style={{ padding: '10px 14px', color: '#4ADE80', fontWeight: '700', background: 'rgba(201, 146, 30, 0.05)' }}>✓ Full Fit Score</td>
-                <td style={{ padding: '10px 14px', color: '#4ADE80', fontWeight: '700' }}>✓ Full Fit Score</td>
-              </tr>
-
-              {/* SECTION: PROFILE & PIPELINE */}
-              <tr style={{ background: 'rgba(255, 255, 255, 0.04)', borderTop: '1px solid rgba(255, 255, 255, 0.1)' }}>
-                <td colSpan={5} style={{ padding: '8px 20px', fontSize: '11px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--brass-light)' }}>
-                  Profile &amp; Pipeline Tools
-                </td>
-              </tr>
-              <tr style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.06)' }}>
-                <td style={{ padding: '10px 20px', color: '#FFFFFF', fontWeight: '500' }}>Organization Profile</td>
-                <td style={{ padding: '10px 14px', color: 'rgba(255, 255, 255, 0.35)' }}>—</td>
-                <td style={{ padding: '10px 14px', color: '#93C5FD' }}>✓ 1 profile</td>
-                <td style={{ padding: '10px 14px', color: '#4ADE80', fontWeight: '600', background: 'rgba(201, 146, 30, 0.05)' }}>✓ 3 profiles</td>
-                <td style={{ padding: '10px 14px', color: '#4ADE80', fontWeight: '600' }}>✓ Unlimited</td>
-              </tr>
-              <tr style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.06)' }}>
-                <td style={{ padding: '10px 20px', color: '#FFFFFF', fontWeight: '500' }}>Saved opportunities</td>
-                <td style={{ padding: '10px 14px', color: 'rgba(255, 255, 255, 0.35)' }}>—</td>
-                <td style={{ padding: '10px 14px', color: 'rgba(255, 255, 255, 0.8)' }}>5</td>
-                <td style={{ padding: '10px 14px', color: '#4ADE80', fontWeight: '600', background: 'rgba(201, 146, 30, 0.05)' }}>50</td>
-                <td style={{ padding: '10px 14px', color: '#4ADE80', fontWeight: '600' }}>Unlimited</td>
-              </tr>
-              <tr style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.06)' }}>
-                <td style={{ padding: '10px 20px', color: '#FFFFFF', fontWeight: '500' }}>Comparison Board</td>
-                <td style={{ padding: '10px 14px', color: 'rgba(255, 255, 255, 0.35)' }}>—</td>
-                <td style={{ padding: '10px 14px', color: 'rgba(255, 255, 255, 0.35)' }}>—</td>
-                <td style={{ padding: '10px 14px', color: '#4ADE80', fontWeight: '600', background: 'rgba(201, 146, 30, 0.05)' }}>Up to 5 grants</td>
-                <td style={{ padding: '10px 14px', color: '#4ADE80', fontWeight: '600' }}>Up to 10 grants</td>
-              </tr>
-
-              {/* SECTION: AI TOOLS & ADVISORY */}
-              <tr style={{ background: 'rgba(255, 255, 255, 0.04)', borderTop: '1px solid rgba(255, 255, 255, 0.1)' }}>
-                <td colSpan={5} style={{ padding: '8px 20px', fontSize: '11px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--brass-light)' }}>
-                  AI Tools &amp; Advisory
-                </td>
-              </tr>
-              <tr style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.06)' }}>
-                <td style={{ padding: '10px 20px', color: '#FFFFFF', fontWeight: '500' }}>AI Funding Advisor</td>
-                <td style={{ padding: '10px 14px', color: 'rgba(255, 255, 255, 0.35)' }}>—</td>
-                <td style={{ padding: '10px 14px', color: 'rgba(255, 255, 255, 0.8)' }}>3 queries / mo</td>
-                <td style={{ padding: '10px 14px', color: '#4ADE80', fontWeight: '600', background: 'rgba(201, 146, 30, 0.05)' }}>20 queries / mo</td>
-                <td style={{ padding: '10px 14px', color: '#4ADE80', fontWeight: '600' }}>Unlimited</td>
-              </tr>
-              <tr style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.06)' }}>
-                <td style={{ padding: '10px 20px', color: '#FFFFFF', fontWeight: '500' }}>Monthly 30-min strategy call</td>
-                <td style={{ padding: '10px 14px', color: 'rgba(255, 255, 255, 0.35)' }}>—</td>
-                <td style={{ padding: '10px 14px', color: 'rgba(255, 255, 255, 0.35)' }}>—</td>
-                <td style={{ padding: '10px 14px', color: 'rgba(255, 255, 255, 0.35)', background: 'rgba(201, 146, 30, 0.05)' }}>—</td>
-                <td style={{ padding: '10px 14px', color: '#4ADE80', fontWeight: '700' }}>✓ 30 min / month</td>
-              </tr>
-              <tr>
-                <td style={{ padding: '10px 20px', color: '#FFFFFF', fontWeight: '500' }}>User seats</td>
-                <td style={{ padding: '10px 14px', color: 'rgba(255, 255, 255, 0.35)' }}>—</td>
-                <td style={{ padding: '10px 14px', color: 'rgba(255, 255, 255, 0.8)' }}>1 user</td>
-                <td style={{ padding: '10px 14px', color: '#FFFFFF', background: 'rgba(201, 146, 30, 0.05)' }}>1 user</td>
-                <td style={{ padding: '10px 14px', color: '#4ADE80', fontWeight: '600' }}>3 team seats</td>
-              </tr>
-            </tbody>
-          </table>
+        {/* 3. Enterprise Trust & Confidence Banner */}
+        <div
+          style={{
+            background: 'rgba(255, 255, 255, 0.03)',
+            border: '1px solid rgba(255, 255, 255, 0.08)',
+            borderRadius: '12px',
+            padding: '18px 24px',
+            display: 'flex',
+            justifyContent: 'space-around',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: '16px',
+            textAlign: 'center',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'rgba(255, 255, 255, 0.8)', fontSize: '13px' }}>
+            <ShieldCheck size={18} color="#10B981" />
+            <span>14-Day Risk-Free Trial</span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'rgba(255, 255, 255, 0.8)', fontSize: '13px' }}>
+            <Database size={18} color="var(--brass-light)" />
+            <span>All 24 Federal &amp; State Databases</span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'rgba(255, 255, 255, 0.8)', fontSize: '13px' }}>
+            <Clock size={18} color="#60A5FA" />
+            <span>Cancel or Switch Tiers Anytime</span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'rgba(255, 255, 255, 0.8)', fontSize: '13px' }}>
+            <CheckCircle2 size={18} color="#A78BFA" />
+            <span>No Card Needed for Free Tiers</span>
+          </div>
         </div>
 
       </div>
