@@ -20,10 +20,10 @@ const TIERS = [
     term: 'No Sign-Up',
     termColor: 'rgba(255, 255, 255, 0.45)',
     title: 'No Account',
-    description: 'Instant exploration across federal grants with no registration required.',
+    description: 'Instant exploration across public funding opportunities with no registration required.',
     isFixedPrice: true,
     fixedPriceText: 'Free',
-    priceSubtext: '5 searches total · Tracked by IP address',
+    priceSubtext: '5 complimentary searches total',
     featured: false,
     cardBorder: '1px solid rgba(255, 255, 255, 0.12)',
     cardBg: '#0B1728',
@@ -35,51 +35,26 @@ const TIERS = [
       border: '1px solid rgba(255, 255, 255, 0.2)',
       color: '#FFFFFF',
     },
-    sections: [
-      {
-        category: 'Search & Databases',
-        categoryColor: 'rgba(255, 255, 255, 0.45)',
-        items: [
-          { text: '5 total searches (IP-tracked)', included: true },
-          { text: 'Access to all 24 federal databases', included: true },
-          { text: 'Top 3 matching results visible', included: true },
-          { text: 'Executive solicitation overview', included: true },
-          { text: 'Complete dossiers (CFDA, full requirements)', included: false },
-          { text: 'Eligibility & agency filters', included: false },
-        ]
-      },
-      {
-        category: 'AI & Intelligence',
-        categoryColor: 'rgba(255, 255, 255, 0.45)',
-        items: [
-          { text: 'AI Fit Score preview indicator', included: true },
-          { text: '0–100% Fit Scoring & match breakdown', included: false },
-          { text: 'AI Funding Advisor questions', included: false },
-          { text: 'AI Application Assistant', included: false },
-        ]
-      },
-      {
-        category: 'Profile & Pipeline',
-        categoryColor: 'rgba(255, 255, 255, 0.45)',
-        items: [
-          { text: 'Organization funding profiles', included: false },
-          { text: 'Pipeline builder & saved opportunities', included: false },
-          { text: 'Opportunity comparison board', included: false },
-          { text: 'Pipeline dollar value snapshot', included: false },
-          { text: 'Custom keyword alerts & email digest', included: false },
-        ]
-      },
-      {
-        category: 'Reports & Advisory',
-        categoryColor: 'rgba(255, 255, 255, 0.45)',
-        items: [
-          { text: 'Analytics dashboard', included: false },
-          { text: 'Win rate benchmarking & SAM.gov checker', included: false },
-          { text: 'CSV export & monthly PDF reports', included: false },
-          { text: 'Monthly advisor call & strategy reviews', included: false },
-          { text: 'Team user seats & support', included: false },
-        ]
-      }
+    features: [
+      { text: '5 searches total', included: true },
+      { text: 'Access to 24 public grant databases', included: true },
+      { text: 'Top 3 matching results visible', included: true },
+      { text: 'Executive solicitation overview', included: true },
+      { text: 'AI Fit Score preview indicator', included: true },
+      { text: 'Complete dossiers (CFDA, full requirements)', included: false },
+      { text: 'Eligibility & agency filters', included: false },
+      { text: '0–100% Fit Scoring & match breakdown', included: false },
+      { text: 'AI Funding Advisor questions', included: false },
+      { text: 'AI Application Assistant', included: false },
+      { text: 'Organization funding profiles', included: false },
+      { text: 'Pipeline builder & saved opportunities', included: false },
+      { text: 'Opportunity comparison board', included: false },
+      { text: 'Pipeline dollar value snapshot', included: false },
+      { text: 'Custom keyword alerts & email digest', included: false },
+      { text: 'Analytics dashboard & benchmarking', included: false },
+      { text: 'CSV export & monthly PDF reports', included: false },
+      { text: 'Monthly advisor call & strategy reviews', included: false },
+      { text: 'Team user seats & support', included: false },
     ]
   },
   {
@@ -92,7 +67,7 @@ const TIERS = [
     term: 'Free Forever',
     termColor: '#93C5FD',
     title: 'Free Account',
-    description: 'For non-profits and teams getting started with ongoing funding discovery.',
+    description: 'For non-profits and organizations tracking active grant solicitations.',
     isFixedPrice: true,
     fixedPriceText: '$0',
     priceSubtext: 'Free forever · No credit card required',
@@ -107,52 +82,27 @@ const TIERS = [
       border: '1px solid rgba(26, 86, 219, 0.65)',
       color: '#BFDBFE',
     },
-    sections: [
-      {
-        category: 'Search & Databases',
-        categoryColor: '#93C5FD',
-        items: [
-          { text: '10 searches per month', included: true },
-          { text: 'Access to all 24 federal databases', included: true },
-          { text: 'Top 5 matching results visible', included: true },
-          { text: 'Structured solicitation summary view', included: true },
-          { text: 'Complete dossiers (CFDA, full requirements)', included: false },
-          { text: 'Eligibility & agency filters', included: false },
-        ]
-      },
-      {
-        category: 'AI & Intelligence',
-        categoryColor: '#93C5FD',
-        items: [
-          { text: 'Basic profile-tailored match indicators', included: true },
-          { text: '3 AI Funding Advisor questions / month', included: true },
-          { text: '0–100% Fit Scoring & match breakdown', included: false },
-          { text: 'AI Application Assistant', included: false },
-        ]
-      },
-      {
-        category: 'Profile & Pipeline',
-        categoryColor: '#93C5FD',
-        items: [
-          { text: '1 Organization Funding Profile', included: true },
-          { text: '5 Saved pipeline opportunities', included: true },
-          { text: 'Pipeline value snapshot (view only)', included: true },
-          { text: 'Weekly email digest of new matches', included: true },
-          { text: 'Opportunity comparison board', included: false },
-          { text: 'Custom keyword alerts', included: false },
-        ]
-      },
-      {
-        category: 'Reports & Advisory',
-        categoryColor: '#93C5FD',
-        items: [
-          { text: 'Analytics dashboard', included: false },
-          { text: 'Win rate benchmarking & SAM.gov checker', included: false },
-          { text: 'CSV export & monthly PDF reports', included: false },
-          { text: 'Monthly advisor call & strategy reviews', included: false },
-          { text: '1 User seat · Community support', included: true },
-        ]
-      }
+    features: [
+      { text: '10 searches per month', included: true },
+      { text: 'Access to 24 public grant databases', included: true },
+      { text: 'Top 5 matching results visible', included: true },
+      { text: 'Structured solicitation summary view', included: true },
+      { text: '1 Organization Funding Profile', included: true },
+      { text: 'Basic profile-tailored match indicators', included: true },
+      { text: '5 Saved pipeline opportunities', included: true },
+      { text: 'Pipeline value snapshot (view only)', included: true },
+      { text: '3 AI Funding Advisor questions / month', included: true },
+      { text: 'Weekly email digest of new matches', included: true },
+      { text: '1 User seat · Community support', included: true },
+      { text: 'Complete dossiers (CFDA, full requirements)', included: false },
+      { text: 'Eligibility & agency filters', included: false },
+      { text: '0–100% Fit Scoring & match breakdown', included: false },
+      { text: 'AI Application Assistant', included: false },
+      { text: 'Opportunity comparison board', included: false },
+      { text: 'Custom keyword alerts', included: false },
+      { text: 'Analytics dashboard & benchmarking', included: false },
+      { text: 'CSV export & monthly PDF reports', included: false },
+      { text: 'Monthly advisor call & strategy reviews', included: false },
     ]
   },
   {
@@ -185,53 +135,28 @@ const TIERS = [
       color: '#FFFFFF',
       boxShadow: '0 4px 14px rgba(201, 146, 30, 0.4)',
     },
-    sections: [
-      {
-        category: 'Search & Databases',
-        categoryColor: 'var(--brass-light)',
-        items: [
-          { text: 'Unlimited searches across all databases', included: true },
-          { text: 'Access to all 24 federal databases', included: true },
-          { text: 'Full result set visibility across all matches', included: true },
-          { text: 'Complete dossiers (CFDA, requirements, portals)', included: true },
-          { text: 'Eligibility & agency filtering controls', included: true },
-          { text: 'Geographic & state-specific targeting', included: false },
-        ]
-      },
-      {
-        category: 'AI & Intelligence',
-        categoryColor: 'var(--brass-light)',
-        items: [
-          { text: '0–100% AI Fit Scoring with match breakdown', included: true },
-          { text: '20 AI Funding Advisor queries / month', included: true },
-          { text: 'Enhanced profile-tailored matching', included: true },
-          { text: 'AI Application Assistant', included: false },
-        ]
-      },
-      {
-        category: 'Profile & Pipeline',
-        categoryColor: 'var(--brass-light)',
-        items: [
-          { text: '3 Organization Funding Profiles', included: true },
-          { text: 'Full Pipeline Builder with 50 saved grants', included: true },
-          { text: 'Opportunity comparison board (up to 5 grants)', included: true },
-          { text: 'Full pipeline dollar value snapshot', included: true },
-          { text: 'Custom keyword alerts & tailored inbox digest', included: true },
-          { text: 'Real-time SMS alerts', included: false },
-        ]
-      },
-      {
-        category: 'Reports & Advisory',
-        categoryColor: 'var(--brass-light)',
-        items: [
-          { text: 'Analytics dashboard', included: true },
-          { text: 'CSV data export', included: true },
-          { text: 'Monthly Pipeline Report (auto PDF)', included: true },
-          { text: 'Win rate benchmarking & SAM.gov checker', included: false },
-          { text: 'Monthly advisor call & strategy reviews', included: false },
-          { text: '1 User seat · 48h email support', included: true },
-        ]
-      }
+    features: [
+      { text: 'Unlimited searches across all databases', included: true },
+      { text: 'Access to 24 public grant databases', included: true },
+      { text: 'Full result set visibility across all matches', included: true },
+      { text: 'Complete dossiers (CFDA, requirements, portals)', included: true },
+      { text: 'Eligibility & agency filtering controls', included: true },
+      { text: '0–100% AI Fit Scoring with match breakdown', included: true },
+      { text: 'Enhanced profile-tailored matching', included: true },
+      { text: '3 Organization Funding Profiles', included: true },
+      { text: 'Full Pipeline Builder with 50 saved grants', included: true },
+      { text: 'Opportunity comparison board (up to 5 grants)', included: true },
+      { text: 'Full pipeline dollar value snapshot', included: true },
+      { text: '20 AI Funding Advisor queries / month', included: true },
+      { text: 'Custom keyword alerts & tailored inbox digest', included: true },
+      { text: 'Analytics dashboard', included: true },
+      { text: 'CSV export & Monthly Pipeline PDF Report', included: true },
+      { text: '1 User seat · 48h email support', included: true },
+      { text: 'Geographic & state-specific targeting', included: false },
+      { text: 'AI Application Assistant', included: false },
+      { text: 'Real-time SMS alerts', included: false },
+      { text: 'Win rate benchmarking & SAM.gov checker', included: false },
+      { text: 'Monthly advisor call & strategy reviews', included: false },
     ]
   },
   {
@@ -262,54 +187,30 @@ const TIERS = [
       border: '1px solid rgba(255, 255, 255, 0.2)',
       color: '#FFFFFF',
     },
-    sections: [
-      {
-        category: 'Search & Databases',
-        categoryColor: 'var(--brass-light)',
-        items: [
-          { text: 'Unlimited searches across all databases', included: true },
-          { text: 'Access to all 24 federal databases', included: true },
-          { text: 'Full result set visibility across all matches', included: true },
-          { text: 'Complete dossiers (CFDA, requirements, portals)', included: true },
-          { text: 'Eligibility & agency filtering controls', included: true },
-          { text: 'Geographic & state-specific targeting', included: true },
-        ]
-      },
-      {
-        category: 'AI & Intelligence',
-        categoryColor: 'var(--brass-light)',
-        items: [
-          { text: '0–100% AI Fit Scoring with match breakdown', included: true },
-          { text: 'Unlimited AI Funding Advisor questions', included: true },
-          { text: 'Enhanced profile-tailored matching', included: true },
-          { text: 'AI Application Assistant (proposal narratives)', included: true },
-        ]
-      },
-      {
-        category: 'Profile & Pipeline',
-        categoryColor: 'var(--brass-light)',
-        items: [
-          { text: 'Unlimited Organization Funding Profiles', included: true },
-          { text: 'Full Pipeline Builder (Unlimited saved grants)', included: true },
-          { text: 'Opportunity comparison board (up to 10 grants)', included: true },
-          { text: 'Full pipeline dollar value snapshot', included: true },
-          { text: 'Real-time alerts (email + SMS) & keyword tracking', included: true },
-        ]
-      },
-      {
-        category: 'Reports & Advisory',
-        categoryColor: 'var(--brass-light)',
-        items: [
-          { text: 'Analytics dashboard', included: true },
-          { text: 'Win rate & award benchmarking intelligence', included: true },
-          { text: 'SAM.gov registration & compliance checker', included: true },
-          { text: 'Branded DOCX reports, CSV & auto PDF', included: true },
-          { text: 'Monthly 30-min strategy call with advisor', included: true },
-          { text: 'Advisor-written Quarterly Assessment', included: true },
-          { text: 'Preferred consulting access', included: true },
-          { text: '3 Team User Seats · Priority same-day support', included: true },
-        ]
-      }
+    features: [
+      { text: 'Unlimited searches across all databases', included: true },
+      { text: 'Access to 24 public grant databases', included: true },
+      { text: 'Full result set visibility across all matches', included: true },
+      { text: 'Complete dossiers (CFDA, requirements, portals)', included: true },
+      { text: 'Eligibility & agency filtering controls', included: true },
+      { text: 'Geographic & state-specific targeting', included: true },
+      { text: '0–100% AI Fit Scoring with match breakdown', included: true },
+      { text: 'Unlimited AI Funding Advisor questions', included: true },
+      { text: 'Enhanced profile-tailored matching', included: true },
+      { text: 'AI Application Assistant (proposal narratives)', included: true },
+      { text: 'Unlimited Organization Funding Profiles', included: true },
+      { text: 'Full Pipeline Builder (Unlimited saved grants)', included: true },
+      { text: 'Opportunity comparison board (up to 10 grants)', included: true },
+      { text: 'Full pipeline dollar value snapshot', included: true },
+      { text: 'Real-time alerts (email + SMS) & keyword tracking', included: true },
+      { text: 'Analytics dashboard', included: true },
+      { text: 'Win rate & award benchmarking intelligence', included: true },
+      { text: 'SAM.gov registration & compliance checker', included: true },
+      { text: 'Branded DOCX reports, CSV & auto PDF', included: true },
+      { text: 'Monthly 30-min strategy call with advisor', included: true },
+      { text: 'Advisor-written Quarterly Assessment', included: true },
+      { text: 'Preferred consulting access', included: true },
+      { text: '3 Team User Seats · Priority same-day support', included: true },
     ]
   }
 ];
@@ -548,72 +449,56 @@ export default function PricingPage() {
                   </div>
                 </div>
 
-                {/* Feature Sections: flex: 1 expands so buttons align identically at bottom */}
-                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '18px', marginBottom: '28px' }}>
-                  {tier.sections.map((section, sIdx) => (
-                    <div key={sIdx}>
-                      <div
+                {/* Clean Feature List without Subheadings: flex: 1 expands so buttons align identically at bottom */}
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', marginBottom: '28px' }}>
+                  <ul
+                    style={{
+                      listStyle: 'none',
+                      padding: 0,
+                      margin: 0,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '9px',
+                      fontSize: '12.5px',
+                    }}
+                  >
+                    {tier.features.map((item, iIdx) => (
+                      <li
+                        key={iIdx}
                         style={{
-                          fontSize: '10.5px',
-                          fontWeight: '700',
-                          textTransform: 'uppercase',
-                          letterSpacing: '0.08em',
-                          color: section.categoryColor,
-                          marginBottom: '9px',
-                        }}
-                      >
-                        {section.category}
-                      </div>
-                      <ul
-                        style={{
-                          listStyle: 'none',
-                          padding: 0,
-                          margin: 0,
                           display: 'flex',
-                          flexDirection: 'column',
+                          alignItems: 'flex-start',
                           gap: '8px',
-                          fontSize: '12.5px',
+                          lineHeight: 1.45,
                         }}
                       >
-                        {section.items.map((item, iIdx) => (
-                          <li
-                            key={iIdx}
-                            style={{
-                              display: 'flex',
-                              alignItems: 'flex-start',
-                              gap: '8px',
-                              lineHeight: 1.45,
-                            }}
-                          >
-                            {item.included ? (
-                              <Check
-                                size={14}
-                                color="#10B981"
-                                style={{ flexShrink: 0, marginTop: '3px' }}
-                              />
-                            ) : (
-                              <X
-                                size={14}
-                                color="rgba(255, 255, 255, 0.3)"
-                                style={{ flexShrink: 0, marginTop: '3px' }}
-                              />
-                            )}
-                            <span
-                              style={{
-                                color: item.included
-                                  ? tier.featured
-                                    ? '#FFFFFF'
-                                    : 'rgba(255, 255, 255, 0.88)'
-                                  : 'rgba(255, 255, 255, 0.38)',
-                              }}
-                            >
-                              {item.text}
-                            </span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  ))}
+                        {item.included ? (
+                          <Check
+                            size={14}
+                            color="#10B981"
+                            style={{ flexShrink: 0, marginTop: '3px' }}
+                          />
+                        ) : (
+                          <X
+                            size={14}
+                            color="rgba(255, 255, 255, 0.28)"
+                            style={{ flexShrink: 0, marginTop: '3px' }}
+                          />
+                        )}
+                        <span
+                          style={{
+                            color: item.included
+                              ? tier.featured
+                                ? '#FFFFFF'
+                                : 'rgba(255, 255, 255, 0.88)'
+                              : 'rgba(255, 255, 255, 0.36)',
+                          }}
+                        >
+                          {item.text}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
 
                 {/* Call to Action Button: Pinned to bottom for perfect cross-card alignment */}
