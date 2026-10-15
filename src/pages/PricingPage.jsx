@@ -10,7 +10,6 @@ import {
   CheckCircle2,
   ArrowRight,
   ShieldCheck,
-  Zap,
   HelpCircle,
   Users,
   Compass,
@@ -862,79 +861,6 @@ CTA after 5 searches: "Create a free account to continue — no card required"`;
               </tr>
             </tbody>
           </table>
-        </div>
-
-        {/* 6. Key Upgrade Triggers Summary */}
-        <div
-          style={{
-            background: '#0B1728',
-            borderRadius: '14px',
-            border: '1px solid rgba(255, 255, 255, 0.12)',
-            overflow: 'hidden',
-            marginBottom: '40px',
-          }}
-        >
-          <div
-            style={{
-              background: 'rgba(255, 255, 255, 0.04)',
-              borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-              padding: '14px 20px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-            }}
-          >
-            <Zap size={16} color="var(--brass-light)" />
-            <span style={{ fontSize: '13.5px', fontWeight: '700', color: '#FFFFFF' }}>
-              Key Upgrade Triggers — What Moves Users to the Next Tier
-            </span>
-          </div>
-
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-              gap: '1px',
-              background: 'rgba(255, 255, 255, 0.08)',
-            }}
-          >
-            {/* Column 1 */}
-            <div style={{ background: '#0B1728', padding: '20px' }}>
-              <div style={{ fontSize: '11px', fontWeight: '700', textTransform: 'uppercase', color: '#F87171', marginBottom: '12px', letterSpacing: '0.06em' }}>
-                Guest → Explorer (Free)
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '12.5px', color: 'rgba(255, 255, 255, 0.75)' }}>
-                <div><strong>1. 5 searches run out:</strong> &quot;Create a free account to continue searching — no card required&quot;</div>
-                <div><strong>2. Blurred results:</strong> Visitor sees matching solicitation titles but cannot view requirements without signing in.</div>
-                <div><strong>3. Grant detail click:</strong> Clicking a grant reveals frosted blur on critical deadlines and CFDA.</div>
-                <div><strong>4. Free email alerts:</strong> Setting up a profile unlocks weekly funding opportunity alerts.</div>
-              </div>
-            </div>
-
-            {/* Column 2 */}
-            <div style={{ background: '#0D1B30', padding: '20px' }}>
-              <div style={{ fontSize: '11px', fontWeight: '700', textTransform: 'uppercase', color: '#60A5FA', marginBottom: '12px', letterSpacing: '0.06em' }}>
-                Explorer → Advanced ($299/mo)
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '12.5px', color: 'rgba(255, 255, 255, 0.85)' }}>
-                <div><strong>1. Specific result locked:</strong> Explorer spots an urgent $500k+ grant but deadline and application link are locked. Fast upgrade decision.</div>
-                <div><strong>2. 10 searches / month limit:</strong> Research momentum hits monthly cap; 14-day trial unlocks unlimited searches immediately.</div>
-                <div><strong>3. Pipeline value tease:</strong> &quot;You qualify for ~$8.4M in matching opportunities&quot; — user upgrades to track and export.</div>
-              </div>
-            </div>
-
-            {/* Column 3 */}
-            <div style={{ background: '#0B1728', padding: '20px' }}>
-              <div style={{ fontSize: '11px', fontWeight: '700', textTransform: 'uppercase', color: 'var(--brass-light)', marginBottom: '12px', letterSpacing: '0.06em' }}>
-                Advanced → Professional ($499/mo)
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '12.5px', color: 'rgba(255, 255, 255, 0.75)' }}>
-                <div><strong>1. Draft proposal narrative:</strong> AI Application Assistant is locked; user upgrades to generate draft narrative sections.</div>
-                <div><strong>2. Team collaboration:</strong> Multiple grant writers need access; 3-seat bundle unlocks seamless sharing.</div>
-                <div><strong>3. Dedicated strategist validation:</strong> Monthly 30-min call with a federal funding expert validates pursuit decisions.</div>
-              </div>
-            </div>
-          </div>
         </div>
 
         {/* 7. Plain Text Display Block */}
