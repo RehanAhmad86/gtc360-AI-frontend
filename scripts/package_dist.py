@@ -9,6 +9,16 @@ def package_dist():
         print(f"Error: '{dist_dir}' directory does not exist. Run 'npm run build' first.")
         return
 
+    # Ensure any assets are also mirrored into root of dist for flat-extract hostings
+    assets_dir = os.path.join(dist_dir, 'assets')
+    if os.path.exists(assets_dir):
+        for af in os.listdir(assets_dir):
+            src_af = os.path.join(assets_dir, af)
+            dest_af = os.path.join(dist_dir, af)
+            if os.path.isfile(src_af):
+                import shutil
+                shutil.copy2(src_af, dest_af)
+
     with zipfile.ZipFile(zip_name, 'w', zipfile.ZIP_DEFLATED) as zf:
         for root, dirs, files in os.walk(dist_dir):
             dirs.sort()
@@ -33,7 +43,7 @@ def package_dist():
                 zinfo.compress_type = zipfile.ZIP_DEFLATED
                 zf.writestr(zinfo, data)
                 
-    print(f"Linux-compliant '{zip_name}' created successfully with forward slashes.")
+    print(f"Linux-compliant '{zip_name}' created successfully (with dual-path root/assets support).")
 
 if __name__ == '__main__':
     package_dist()

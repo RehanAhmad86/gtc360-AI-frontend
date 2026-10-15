@@ -1,8 +1,21 @@
+<IfModule mod_mime.c>
+  AddType application/javascript .js
+  AddType application/javascript .mjs
+  AddType text/css .css
+</IfModule>
+
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
+
+  # Fallback: if asset was requested at /assets/... but placed directly in root directory
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteRule ^assets/(.+)$ $1 [L]
+
+  # SPA deep link fallback
   RewriteRule ^index\.html$ - [L]
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteRule . /index.html [L]
 </IfModule>
+
