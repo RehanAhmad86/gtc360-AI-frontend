@@ -37,7 +37,7 @@ const TIERS = [
     },
     features: [
       { text: '5 searches total', included: true },
-      { text: 'Top 3 matching results visible', included: true },
+      { text: 'Top 3 matching results', included: true },
       { text: 'Executive solicitation overview', included: true },
       { text: 'Complete dossiers (CFDA, full requirements)', included: false },
       { text: 'Eligibility & agency filters', included: false },
@@ -78,7 +78,7 @@ const TIERS = [
     },
     features: [
       { text: '10 searches per month', included: true },
-      { text: 'Top 5 matching results visible', included: true },
+      { text: 'Top 5 matching results', included: true },
       { text: 'Structured solicitation summary view', included: true },
       { text: 'Basic profile-tailored match indicators', included: true },
       { text: '5 Saved pipeline opportunities', included: true },
