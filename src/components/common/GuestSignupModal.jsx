@@ -43,6 +43,16 @@ export default function GuestSignupModal({
       subtitle: 'Guest access reveals the top 3 results. Create a free account to unlock full visibility across all verified funding opportunities.',
       cta: 'Unlock Free Account — See All Results',
     },
+    locked_filter: {
+      badge: 'FILTER ACCESS RESTRICTED',
+      badgeColor: '#B45309',
+      badgeBg: '#FEF3C7',
+      badgeBorder: '#FDE68A',
+      icon: Lock,
+      title: grantTitle ? `Unlock ${grantTitle} with a Free Account` : 'Sign In to Filter Solicitations',
+      subtitle: 'Eligibility, Agency, Status, and Award Ceiling filters require a free account. Sign in or create a free Explorer account in 30 seconds to access advanced filtering.',
+      cta: 'Sign In / Create Free Account to Filter',
+    },
     locked_feature: {
       badge: 'PREMIUM INTELLIGENCE FEATURE',
       badgeColor: '#059669',

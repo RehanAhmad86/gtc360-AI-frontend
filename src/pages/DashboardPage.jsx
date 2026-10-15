@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
   Search, X, Sparkles, ChevronDown, Tag,
   Building2, Landmark, Clock, DollarSign, LayoutGrid, List,
-  Bookmark, AlertCircle, RefreshCw
+  Bookmark, AlertCircle, RefreshCw, Lock
 } from 'lucide-react';
 
 import GrantMatchCard from '../components/dashboard/GrantMatchCard';
@@ -722,41 +722,97 @@ export default function DashboardPage({
                     padding: '6px',
                     minWidth: '250px',
                     maxHeight: '260px',
-                    overflowY: 'auto',
+                    overflowY: isUserAuthenticated ? 'auto' : 'hidden',
+                    overflowX: 'hidden',
                   }}
                 >
-                  {eligibilitiesList.map((el) => (
+                  <div
+                    style={{
+                      filter: !isUserAuthenticated ? 'blur(3.5px)' : 'none',
+                      opacity: !isUserAuthenticated ? 0.65 : 1,
+                      pointerEvents: !isUserAuthenticated ? 'none' : 'auto',
+                      userSelect: !isUserAuthenticated ? 'none' : 'auto',
+                    }}
+                  >
+                    {eligibilitiesList.map((el) => (
+                      <div
+                        key={el.label}
+                        onClick={() => {
+                          setSelectedEligibility(el.value);
+                          setIsEligibilityOpen(false);
+                          if (setCurrentPage) setCurrentPage(1);
+                          updateUrlParams({
+                            keyword: activeKeyword,
+                            category: selectedCategory,
+                            eligibility: el.value,
+                            agency: selectedAgency,
+                            status: selectedStatus,
+                            award: selectedAward,
+                            sort: selectedSort,
+                            page: 1,
+                          });
+                        }}
+                        style={{
+                          padding: '6px 12px',
+                          fontSize: '12.5px',
+                          color: selectedEligibility === el.value ? 'var(--brass-light)' : '#FFFFFF',
+                          fontWeight: selectedEligibility === el.value ? '600' : '400',
+                          cursor: 'pointer',
+                          borderRadius: '4px',
+                        }}
+                        onMouseOver={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.1)')}
+                        onMouseOut={(e) => (e.currentTarget.style.background = 'transparent')}
+                      >
+                        {el.label}
+                      </div>
+                    ))}
+                  </div>
+
+                  {!isUserAuthenticated && (
                     <div
-                      key={el.label}
                       onClick={() => {
-                        setSelectedEligibility(el.value);
                         setIsEligibilityOpen(false);
-                        if (setCurrentPage) setCurrentPage(1);
-                        updateUrlParams({
-                          keyword: activeKeyword,
-                          category: selectedCategory,
-                          eligibility: el.value,
-                          agency: selectedAgency,
-                          status: selectedStatus,
-                          award: selectedAward,
-                          sort: selectedSort,
-                          page: 1,
-                        });
+                        setGuestModalReason('locked_filter');
+                        setGuestModalGrantTitle('Eligibility Filters');
+                        setIsGuestModalOpen(true);
                       }}
                       style={{
-                        padding: '6px 12px',
-                        fontSize: '12.5px',
-                        color: selectedEligibility === el.value ? 'var(--brass-light)' : '#FFFFFF',
-                        fontWeight: selectedEligibility === el.value ? '600' : '400',
+                        position: 'absolute',
+                        inset: 0,
+                        zIndex: 10,
+                        background: 'rgba(14, 31, 53, 0.55)',
+                        backdropFilter: 'blur(1px)',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        padding: '16px',
                         cursor: 'pointer',
-                        borderRadius: '4px',
+                        textAlign: 'center',
                       }}
-                      onMouseOver={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.1)')}
-                      onMouseOut={(e) => (e.currentTarget.style.background = 'transparent')}
                     >
-                      {el.label}
+                      <div
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '6px',
+                          background: 'var(--brass)',
+                          color: '#FFFFFF',
+                          borderRadius: '9999px',
+                          padding: '6px 14px',
+                          fontSize: '11.5px',
+                          fontWeight: '700',
+                          boxShadow: '0 4px 14px rgba(0, 0, 0, 0.4)',
+                        }}
+                      >
+                        <Lock size={12} />
+                        <span>Sign In to Filter</span>
+                      </div>
+                      <span style={{ fontSize: '11px', color: 'rgba(255, 255, 255, 0.8)', marginTop: '8px', lineHeight: 1.3 }}>
+                        Unlock all eligibility filters
+                      </span>
                     </div>
-                  ))}
+                  )}
                 </div>
               )}
             </div>
@@ -818,41 +874,97 @@ export default function DashboardPage({
                     padding: '6px',
                     minWidth: '260px',
                     maxHeight: '260px',
-                    overflowY: 'auto',
+                    overflowY: isUserAuthenticated ? 'auto' : 'hidden',
+                    overflowX: 'hidden',
                   }}
                 >
-                  {agenciesList.map((ag) => (
+                  <div
+                    style={{
+                      filter: !isUserAuthenticated ? 'blur(3.5px)' : 'none',
+                      opacity: !isUserAuthenticated ? 0.65 : 1,
+                      pointerEvents: !isUserAuthenticated ? 'none' : 'auto',
+                      userSelect: !isUserAuthenticated ? 'none' : 'auto',
+                    }}
+                  >
+                    {agenciesList.map((ag) => (
+                      <div
+                        key={ag.label}
+                        onClick={() => {
+                          setSelectedAgency(ag.value);
+                          setIsAgencyOpen(false);
+                          if (setCurrentPage) setCurrentPage(1);
+                          updateUrlParams({
+                            keyword: activeKeyword,
+                            category: selectedCategory,
+                            eligibility: selectedEligibility,
+                            agency: ag.value,
+                            status: selectedStatus,
+                            award: selectedAward,
+                            sort: selectedSort,
+                            page: 1,
+                          });
+                        }}
+                        style={{
+                          padding: '6px 12px',
+                          fontSize: '12.5px',
+                          color: selectedAgency === ag.value ? 'var(--brass-light)' : '#FFFFFF',
+                          fontWeight: selectedAgency === ag.value ? '600' : '400',
+                          cursor: 'pointer',
+                          borderRadius: '4px',
+                        }}
+                        onMouseOver={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.1)')}
+                        onMouseOut={(e) => (e.currentTarget.style.background = 'transparent')}
+                      >
+                        {ag.label}
+                      </div>
+                    ))}
+                  </div>
+
+                  {!isUserAuthenticated && (
                     <div
-                      key={ag.label}
                       onClick={() => {
-                        setSelectedAgency(ag.value);
                         setIsAgencyOpen(false);
-                        if (setCurrentPage) setCurrentPage(1);
-                        updateUrlParams({
-                          keyword: activeKeyword,
-                          category: selectedCategory,
-                          eligibility: selectedEligibility,
-                          agency: ag.value,
-                          status: selectedStatus,
-                          award: selectedAward,
-                          sort: selectedSort,
-                          page: 1,
-                        });
+                        setGuestModalReason('locked_filter');
+                        setGuestModalGrantTitle('Agency Filters');
+                        setIsGuestModalOpen(true);
                       }}
                       style={{
-                        padding: '6px 12px',
-                        fontSize: '12.5px',
-                        color: selectedAgency === ag.value ? 'var(--brass-light)' : '#FFFFFF',
-                        fontWeight: selectedAgency === ag.value ? '600' : '400',
+                        position: 'absolute',
+                        inset: 0,
+                        zIndex: 10,
+                        background: 'rgba(14, 31, 53, 0.55)',
+                        backdropFilter: 'blur(1px)',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        padding: '16px',
                         cursor: 'pointer',
-                        borderRadius: '4px',
+                        textAlign: 'center',
                       }}
-                      onMouseOver={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.1)')}
-                      onMouseOut={(e) => (e.currentTarget.style.background = 'transparent')}
                     >
-                      {ag.label}
+                      <div
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '6px',
+                          background: 'var(--brass)',
+                          color: '#FFFFFF',
+                          borderRadius: '9999px',
+                          padding: '6px 14px',
+                          fontSize: '11.5px',
+                          fontWeight: '700',
+                          boxShadow: '0 4px 14px rgba(0, 0, 0, 0.4)',
+                        }}
+                      >
+                        <Lock size={12} />
+                        <span>Sign In to Filter</span>
+                      </div>
+                      <span style={{ fontSize: '11px', color: 'rgba(255, 255, 255, 0.8)', marginTop: '8px', lineHeight: 1.3 }}>
+                        Unlock all agency filters
+                      </span>
                     </div>
-                  ))}
+                  )}
                 </div>
               )}
             </div>
@@ -913,40 +1025,96 @@ export default function DashboardPage({
                     boxShadow: '0 12px 32px rgba(0,0,0,0.6)',
                     padding: '6px',
                     minWidth: '190px',
+                    overflow: 'hidden',
                   }}
                 >
-                  {statusesList.map((st) => (
+                  <div
+                    style={{
+                      filter: !isUserAuthenticated ? 'blur(3.5px)' : 'none',
+                      opacity: !isUserAuthenticated ? 0.65 : 1,
+                      pointerEvents: !isUserAuthenticated ? 'none' : 'auto',
+                      userSelect: !isUserAuthenticated ? 'none' : 'auto',
+                    }}
+                  >
+                    {statusesList.map((st) => (
+                      <div
+                        key={st.label}
+                        onClick={() => {
+                          setSelectedStatus(st.value);
+                          setIsStatusOpen(false);
+                          if (setCurrentPage) setCurrentPage(1);
+                          updateUrlParams({
+                            keyword: activeKeyword,
+                            category: selectedCategory,
+                            eligibility: selectedEligibility,
+                            agency: selectedAgency,
+                            status: st.value,
+                            award: selectedAward,
+                            sort: selectedSort,
+                            page: 1,
+                          });
+                        }}
+                        style={{
+                          padding: '6px 12px',
+                          fontSize: '12.5px',
+                          color: selectedStatus === st.value ? 'var(--brass-light)' : '#FFFFFF',
+                          fontWeight: selectedStatus === st.value ? '600' : '400',
+                          cursor: 'pointer',
+                          borderRadius: '4px',
+                        }}
+                        onMouseOver={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.1)')}
+                        onMouseOut={(e) => (e.currentTarget.style.background = 'transparent')}
+                      >
+                        {st.label}
+                      </div>
+                    ))}
+                  </div>
+
+                  {!isUserAuthenticated && (
                     <div
-                      key={st.label}
                       onClick={() => {
-                        setSelectedStatus(st.value);
                         setIsStatusOpen(false);
-                        if (setCurrentPage) setCurrentPage(1);
-                        updateUrlParams({
-                          keyword: activeKeyword,
-                          category: selectedCategory,
-                          eligibility: selectedEligibility,
-                          agency: selectedAgency,
-                          status: st.value,
-                          award: selectedAward,
-                          sort: selectedSort,
-                          page: 1,
-                        });
+                        setGuestModalReason('locked_filter');
+                        setGuestModalGrantTitle('Status Filters');
+                        setIsGuestModalOpen(true);
                       }}
                       style={{
-                        padding: '6px 12px',
-                        fontSize: '12.5px',
-                        color: selectedStatus === st.value ? 'var(--brass-light)' : '#FFFFFF',
-                        fontWeight: selectedStatus === st.value ? '600' : '400',
+                        position: 'absolute',
+                        inset: 0,
+                        zIndex: 10,
+                        background: 'rgba(14, 31, 53, 0.55)',
+                        backdropFilter: 'blur(1px)',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        padding: '16px',
                         cursor: 'pointer',
-                        borderRadius: '4px',
+                        textAlign: 'center',
                       }}
-                      onMouseOver={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.1)')}
-                      onMouseOut={(e) => (e.currentTarget.style.background = 'transparent')}
                     >
-                      {st.label}
+                      <div
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '6px',
+                          background: 'var(--brass)',
+                          color: '#FFFFFF',
+                          borderRadius: '9999px',
+                          padding: '6px 14px',
+                          fontSize: '11.5px',
+                          fontWeight: '700',
+                          boxShadow: '0 4px 14px rgba(0, 0, 0, 0.4)',
+                        }}
+                      >
+                        <Lock size={12} />
+                        <span>Sign In to Filter</span>
+                      </div>
+                      <span style={{ fontSize: '11px', color: 'rgba(255, 255, 255, 0.8)', marginTop: '8px', lineHeight: 1.3 }}>
+                        Unlock all status filters
+                      </span>
                     </div>
-                  ))}
+                  )}
                 </div>
               )}
             </div>
@@ -1007,40 +1175,96 @@ export default function DashboardPage({
                     boxShadow: '0 12px 32px rgba(0,0,0,0.6)',
                     padding: '6px',
                     minWidth: '180px',
+                    overflow: 'hidden',
                   }}
                 >
-                  {awardsList.map((aw) => (
+                  <div
+                    style={{
+                      filter: !isUserAuthenticated ? 'blur(3.5px)' : 'none',
+                      opacity: !isUserAuthenticated ? 0.65 : 1,
+                      pointerEvents: !isUserAuthenticated ? 'none' : 'auto',
+                      userSelect: !isUserAuthenticated ? 'none' : 'auto',
+                    }}
+                  >
+                    {awardsList.map((aw) => (
+                      <div
+                        key={aw.label}
+                        onClick={() => {
+                          setSelectedAward(aw.value);
+                          setIsAwardOpen(false);
+                          if (setCurrentPage) setCurrentPage(1);
+                          updateUrlParams({
+                            keyword: activeKeyword,
+                            category: selectedCategory,
+                            eligibility: selectedEligibility,
+                            agency: selectedAgency,
+                            status: selectedStatus,
+                            award: aw.value,
+                            sort: selectedSort,
+                            page: 1,
+                          });
+                        }}
+                        style={{
+                          padding: '6px 12px',
+                          fontSize: '12.5px',
+                          color: selectedAward === aw.value ? 'var(--brass-light)' : '#FFFFFF',
+                          fontWeight: selectedAward === aw.value ? '600' : '400',
+                          cursor: 'pointer',
+                          borderRadius: '4px',
+                        }}
+                        onMouseOver={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.1)')}
+                        onMouseOut={(e) => (e.currentTarget.style.background = 'transparent')}
+                      >
+                        {aw.label}
+                      </div>
+                    ))}
+                  </div>
+
+                  {!isUserAuthenticated && (
                     <div
-                      key={aw.label}
                       onClick={() => {
-                        setSelectedAward(aw.value);
                         setIsAwardOpen(false);
-                        if (setCurrentPage) setCurrentPage(1);
-                        updateUrlParams({
-                          keyword: activeKeyword,
-                          category: selectedCategory,
-                          eligibility: selectedEligibility,
-                          agency: selectedAgency,
-                          status: selectedStatus,
-                          award: aw.value,
-                          sort: selectedSort,
-                          page: 1,
-                        });
+                        setGuestModalReason('locked_filter');
+                        setGuestModalGrantTitle('Award Ceiling Filters');
+                        setIsGuestModalOpen(true);
                       }}
                       style={{
-                        padding: '6px 12px',
-                        fontSize: '12.5px',
-                        color: selectedAward === aw.value ? 'var(--brass-light)' : '#FFFFFF',
-                        fontWeight: selectedAward === aw.value ? '600' : '400',
+                        position: 'absolute',
+                        inset: 0,
+                        zIndex: 10,
+                        background: 'rgba(14, 31, 53, 0.55)',
+                        backdropFilter: 'blur(1px)',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        padding: '16px',
                         cursor: 'pointer',
-                        borderRadius: '4px',
+                        textAlign: 'center',
                       }}
-                      onMouseOver={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.1)')}
-                      onMouseOut={(e) => (e.currentTarget.style.background = 'transparent')}
                     >
-                      {aw.label}
+                      <div
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '6px',
+                          background: 'var(--brass)',
+                          color: '#FFFFFF',
+                          borderRadius: '9999px',
+                          padding: '6px 14px',
+                          fontSize: '11.5px',
+                          fontWeight: '700',
+                          boxShadow: '0 4px 14px rgba(0, 0, 0, 0.4)',
+                        }}
+                      >
+                        <Lock size={12} />
+                        <span>Sign In to Filter</span>
+                      </div>
+                      <span style={{ fontSize: '11px', color: 'rgba(255, 255, 255, 0.8)', marginTop: '8px', lineHeight: 1.3 }}>
+                        Unlock award ceiling filters
+                      </span>
                     </div>
-                  ))}
+                  )}
                 </div>
               )}
             </div>
