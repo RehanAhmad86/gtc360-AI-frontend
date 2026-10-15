@@ -436,13 +436,15 @@ export default function DashboardPage({
   );
 
   return (
-    <div style={{ background: '#071220', minHeight: '100vh', color: '#FFFFFF' }}>
-      {/* 1. HERO SEARCH & FILTER CONTAINER (110% Aligned with Homepage Hero) */}
+    <div style={{ background: '#FAFBFC', minHeight: '100vh', color: 'var(--navy)' }}>
+      {/* 1. HERO SEARCH & FILTER CONTAINER */}
       <section
         style={{
-          background: 'radial-gradient(ellipse at 75% 20%, rgba(20, 45, 76, 0.95) 0%, #071220 100%)',
-          borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-          padding: '48px 20px 36px',
+          background: 'radial-gradient(ellipse at 75% 20%, rgba(20, 45, 76, 0.95) 0%, var(--navy-deep) 100%)',
+          borderBottom: '1px solid rgba(219, 225, 233, 0.12)',
+          padding: '52px 20px 40px',
+          color: '#FFFFFF',
+          position: 'relative',
         }}
       >
         <div style={{ maxWidth: '1240px', margin: '0 auto' }}>
@@ -1125,34 +1127,35 @@ export default function DashboardPage({
       </section>
 
       {/* 2. MAIN RESULTS AREA */}
-      <main style={{ maxWidth: '1240px', margin: '0 auto', padding: '24px 20px 60px' }} id="grants-results-top">
+      <main style={{ maxWidth: '1240px', margin: '0 auto', padding: '32px 20px 64px' }} id="grants-results-top">
         {/* Guest Visitor Quota Banner */}
         {!isUserAuthenticated && (
           <div
             style={{
-              background: 'linear-gradient(90deg, rgba(201, 146, 30, 0.12) 0%, rgba(13, 138, 109, 0.12) 100%)',
-              border: '1px solid rgba(201, 146, 30, 0.3)',
-              borderRadius: '10px',
-              padding: '12px 18px',
+              background: '#FFFFFF',
+              border: '1px solid var(--line-brass)',
+              borderRadius: '12px',
+              padding: '14px 20px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
               flexWrap: 'wrap',
-              gap: '12px',
-              marginBottom: '20px',
+              gap: '14px',
+              marginBottom: '24px',
+              boxShadow: '0 2px 10px rgba(149, 128, 100, 0.08)',
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
               <div
                 style={{
                   background: 'var(--brass)',
                   color: '#FFFFFF',
                   borderRadius: '50%',
-                  width: '24px',
-                  height: '24px',
+                  width: '28px',
+                  height: '28px',
                   display: 'grid',
                   placeItems: 'center',
-                  fontSize: '11px',
+                  fontSize: '12px',
                   fontWeight: '700',
                   flexShrink: 0,
                 }}
@@ -1160,18 +1163,18 @@ export default function DashboardPage({
                 {guestQuota.remaining}
               </div>
               <div>
-                <div style={{ fontSize: '13px', fontWeight: '600', color: '#FFFFFF' }}>
-                  Visitor Access: {guestQuota.remaining} of 5 free searches remaining (tracked by IP)
+                <div style={{ fontSize: '13.5px', fontWeight: '700', color: 'var(--navy)' }}>
+                  Complimentary Visitor Access: {guestQuota.remaining} of 5 free searches remaining
                 </div>
-                <div style={{ fontSize: '11.5px', color: 'rgba(255, 255, 255, 0.65)' }}>
-                  Top 3 opportunities are shown in full. Results 4+ and AI Match Scores are blurred for guests.
+                <div style={{ fontSize: '12px', color: '#64748B' }}>
+                  Create a free account to unlock complete solicitation dossiers, eligibility criteria, and pipeline tools.
                 </div>
               </div>
             </div>
             <button
               type="button"
               onClick={() => {
-                setGuestModalReason('blurred_result');
+                setGuestModalReason('limit_reached');
                 setIsGuestModalOpen(true);
               }}
               style={{
@@ -1179,13 +1182,16 @@ export default function DashboardPage({
                 color: '#FFFFFF',
                 border: 'none',
                 borderRadius: '9999px',
-                padding: '6px 14px',
-                fontSize: '12px',
+                padding: '7px 18px',
+                fontSize: '12.5px',
                 fontWeight: '600',
                 cursor: 'pointer',
                 whiteSpace: 'nowrap',
-                boxShadow: '0 2px 8px rgba(149, 128, 100, 0.3)',
+                boxShadow: '0 2px 8px rgba(149, 128, 100, 0.25)',
+                transition: 'background 0.15s ease',
               }}
+              onMouseOver={(e) => (e.currentTarget.style.background = 'var(--brass-fill)')}
+              onMouseOut={(e) => (e.currentTarget.style.background = 'var(--brass)')}
             >
               Sign Up Free to Unlock All
             </button>
@@ -1201,8 +1207,8 @@ export default function DashboardPage({
             gap: '16px',
             flexWrap: 'wrap',
             paddingBottom: '16px',
-            marginBottom: '16px',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+            marginBottom: '18px',
+            borderBottom: '1px solid #E2E8F0',
           }}
         >
           {/* Navigation Tabs: All / Recommended / Saved */}
@@ -1214,15 +1220,16 @@ export default function DashboardPage({
                 if (setCurrentPage) setCurrentPage(1);
               }}
               style={{
-                background: activeTab === 'all' ? 'rgba(255, 255, 255, 0.12)' : 'transparent',
-                color: activeTab === 'all' ? '#FFFFFF' : 'rgba(255, 255, 255, 0.6)',
-                border: activeTab === 'all' ? '1px solid var(--brass-light)' : '1px solid transparent',
+                background: activeTab === 'all' ? 'var(--navy)' : '#FFFFFF',
+                color: activeTab === 'all' ? '#FFFFFF' : '#64748B',
+                border: activeTab === 'all' ? '1px solid var(--navy)' : '1px solid #E2E8F0',
                 borderRadius: '8px',
-                padding: '6px 14px',
+                padding: '7px 15px',
                 fontSize: '13px',
                 fontWeight: '600',
                 cursor: 'pointer',
                 transition: 'all 0.15s ease',
+                boxShadow: activeTab === 'all' ? '0 2px 6px rgba(20, 45, 76, 0.15)' : 'none',
               }}
             >
               All Solicitations ({matches.length.toLocaleString()})
@@ -1241,11 +1248,11 @@ export default function DashboardPage({
                 if (setCurrentPage) setCurrentPage(1);
               }}
               style={{
-                background: activeTab === 'recommended' ? 'rgba(5, 150, 105, 0.2)' : 'transparent',
-                color: activeTab === 'recommended' ? '#34D399' : 'rgba(255, 255, 255, 0.6)',
-                border: activeTab === 'recommended' ? '1px solid #10B981' : '1px solid transparent',
+                background: activeTab === 'recommended' ? 'rgba(5, 150, 105, 0.12)' : '#FFFFFF',
+                color: activeTab === 'recommended' ? '#065F46' : '#64748B',
+                border: activeTab === 'recommended' ? '1px solid #10B981' : '1px solid #E2E8F0',
                 borderRadius: '8px',
-                padding: '6px 14px',
+                padding: '7px 15px',
                 fontSize: '13px',
                 fontWeight: '600',
                 cursor: 'pointer',
@@ -1253,9 +1260,10 @@ export default function DashboardPage({
                 alignItems: 'center',
                 gap: '5px',
                 transition: 'all 0.15s ease',
+                boxShadow: activeTab === 'recommended' ? '0 2px 6px rgba(16, 185, 129, 0.15)' : 'none',
               }}
             >
-              <Sparkles size={13} />
+              <Sparkles size={13} color={activeTab === 'recommended' ? '#059669' : '#10B981'} />
               <span>AI Recommended ({recommendedCount.toLocaleString()})</span>
             </button>
 
@@ -1272,11 +1280,11 @@ export default function DashboardPage({
                 if (setCurrentPage) setCurrentPage(1);
               }}
               style={{
-                background: activeTab === 'saved' ? 'rgba(196, 162, 101, 0.2)' : 'transparent',
-                color: activeTab === 'saved' ? 'var(--brass-light)' : 'rgba(255, 255, 255, 0.6)',
-                border: activeTab === 'saved' ? '1px solid var(--brass-light)' : '1px solid transparent',
+                background: activeTab === 'saved' ? 'rgba(149, 128, 100, 0.12)' : '#FFFFFF',
+                color: activeTab === 'saved' ? 'var(--brass-text)' : '#64748B',
+                border: activeTab === 'saved' ? '1px solid var(--brass)' : '1px solid #E2E8F0',
                 borderRadius: '8px',
-                padding: '6px 14px',
+                padding: '7px 15px',
                 fontSize: '13px',
                 fontWeight: '600',
                 cursor: 'pointer',
@@ -1284,9 +1292,10 @@ export default function DashboardPage({
                 alignItems: 'center',
                 gap: '5px',
                 transition: 'all 0.15s ease',
+                boxShadow: activeTab === 'saved' ? '0 2px 6px rgba(149, 128, 100, 0.15)' : 'none',
               }}
             >
-              <Bookmark size={13} />
+              <Bookmark size={13} color={activeTab === 'saved' ? 'var(--brass-text)' : '#64748B'} />
               <span>Saved ({savedGrantIds.length})</span>
             </button>
           </div>
@@ -1295,7 +1304,7 @@ export default function DashboardPage({
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
             {/* Sort Selector */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <span style={{ fontSize: '12.5px', color: 'rgba(255, 255, 255, 0.5)' }}>Sort:</span>
+              <span style={{ fontSize: '12.5px', color: '#64748B', fontWeight: '500' }}>Sort:</span>
               <select
                 value={selectedSort}
                 onChange={(e) => {
@@ -1313,12 +1322,13 @@ export default function DashboardPage({
                   });
                 }}
                 style={{
-                  background: '#0B1728',
-                  color: '#FFFFFF',
-                  border: '1px solid rgba(255, 255, 255, 0.15)',
+                  background: '#FFFFFF',
+                  color: 'var(--navy)',
+                  border: '1px solid #CBD5E1',
                   borderRadius: '6px',
-                  padding: '5px 12px',
+                  padding: '6px 12px',
                   fontSize: '12.5px',
+                  fontWeight: '500',
                   cursor: 'pointer',
                   outline: 'none',
                 }}
@@ -1336,8 +1346,8 @@ export default function DashboardPage({
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                background: 'rgba(255, 255, 255, 0.06)',
-                border: '1px solid rgba(255, 255, 255, 0.12)',
+                background: '#F1F5F9',
+                border: '1px solid #E2E8F0',
                 borderRadius: '6px',
                 padding: '2px',
               }}
@@ -1347,8 +1357,8 @@ export default function DashboardPage({
                 onClick={() => handleSetViewMode('list')}
                 title="List View"
                 style={{
-                  background: viewMode === 'list' ? 'var(--brass)' : 'transparent',
-                  color: viewMode === 'list' ? '#FFFFFF' : 'rgba(255, 255, 255, 0.6)',
+                  background: viewMode === 'list' ? '#FFFFFF' : 'transparent',
+                  color: viewMode === 'list' ? 'var(--navy)' : '#64748B',
                   border: 'none',
                   borderRadius: '4px',
                   padding: '5px 8px',
@@ -1356,6 +1366,7 @@ export default function DashboardPage({
                   display: 'grid',
                   placeItems: 'center',
                   transition: 'all 0.15s ease',
+                  boxShadow: viewMode === 'list' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
                 }}
               >
                 <List size={15} />
@@ -1365,8 +1376,8 @@ export default function DashboardPage({
                 onClick={() => handleSetViewMode('grid')}
                 title="Grid View"
                 style={{
-                  background: viewMode === 'grid' ? 'var(--brass)' : 'transparent',
-                  color: viewMode === 'grid' ? '#FFFFFF' : 'rgba(255, 255, 255, 0.6)',
+                  background: viewMode === 'grid' ? '#FFFFFF' : 'transparent',
+                  color: viewMode === 'grid' ? 'var(--navy)' : '#64748B',
                   border: 'none',
                   borderRadius: '4px',
                   padding: '5px 8px',
@@ -1374,6 +1385,7 @@ export default function DashboardPage({
                   display: 'grid',
                   placeItems: 'center',
                   transition: 'all 0.15s ease',
+                  boxShadow: viewMode === 'grid' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
                 }}
               >
                 <LayoutGrid size={15} />
@@ -1390,10 +1402,10 @@ export default function DashboardPage({
               alignItems: 'center',
               gap: '8px',
               flexWrap: 'wrap',
-              marginBottom: '16px',
+              marginBottom: '18px',
             }}
           >
-            <span style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.5)', marginRight: '4px' }}>Active filters:</span>
+            <span style={{ fontSize: '12px', color: '#64748B', fontWeight: '500', marginRight: '4px' }}>Active filters:</span>
 
             {activeKeyword && (
               <span
@@ -1401,12 +1413,13 @@ export default function DashboardPage({
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '6px',
-                  background: 'rgba(196, 162, 101, 0.18)',
-                  border: '1px solid rgba(196, 162, 101, 0.4)',
-                  color: 'var(--brass-light)',
+                  background: '#FFFFFF',
+                  border: '1px solid var(--line-brass)',
+                  color: 'var(--brass-text)',
                   borderRadius: '9999px',
                   padding: '3px 10px',
                   fontSize: '12px',
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
                 }}
               >
                 <span>Keyword: <b>{activeKeyword}</b></span>
@@ -1426,12 +1439,13 @@ export default function DashboardPage({
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '6px',
-                  background: 'rgba(196, 162, 101, 0.18)',
-                  border: '1px solid rgba(196, 162, 101, 0.4)',
-                  color: 'var(--brass-light)',
+                  background: '#FFFFFF',
+                  border: '1px solid var(--line-brass)',
+                  color: 'var(--brass-text)',
                   borderRadius: '9999px',
                   padding: '3px 10px',
                   fontSize: '12px',
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
                 }}
               >
                 <span>Category: <b>{activeCategoryObj.label}</b></span>
@@ -1451,12 +1465,13 @@ export default function DashboardPage({
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '6px',
-                  background: 'rgba(196, 162, 101, 0.18)',
-                  border: '1px solid rgba(196, 162, 101, 0.4)',
-                  color: 'var(--brass-light)',
+                  background: '#FFFFFF',
+                  border: '1px solid var(--line-brass)',
+                  color: 'var(--brass-text)',
                   borderRadius: '9999px',
                   padding: '3px 10px',
                   fontSize: '12px',
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
                 }}
               >
                 <span>Eligibility: <b>{activeEligibilityObj.label}</b></span>
@@ -1476,12 +1491,13 @@ export default function DashboardPage({
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '6px',
-                  background: 'rgba(196, 162, 101, 0.18)',
-                  border: '1px solid rgba(196, 162, 101, 0.4)',
-                  color: 'var(--brass-light)',
+                  background: '#FFFFFF',
+                  border: '1px solid var(--line-brass)',
+                  color: 'var(--brass-text)',
                   borderRadius: '9999px',
                   padding: '3px 10px',
                   fontSize: '12px',
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
                 }}
               >
                 <span>Agency: <b>{activeAgencyObj.label}</b></span>
@@ -1501,12 +1517,13 @@ export default function DashboardPage({
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '6px',
-                  background: 'rgba(196, 162, 101, 0.18)',
-                  border: '1px solid rgba(196, 162, 101, 0.4)',
-                  color: 'var(--brass-light)',
+                  background: '#FFFFFF',
+                  border: '1px solid var(--line-brass)',
+                  color: 'var(--brass-text)',
                   borderRadius: '9999px',
                   padding: '3px 10px',
                   fontSize: '12px',
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
                 }}
               >
                 <span>Status: <b>{activeStatusObj.label}</b></span>
@@ -1526,12 +1543,13 @@ export default function DashboardPage({
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '6px',
-                  background: 'rgba(196, 162, 101, 0.18)',
-                  border: '1px solid rgba(196, 162, 101, 0.4)',
-                  color: 'var(--brass-light)',
+                  background: '#FFFFFF',
+                  border: '1px solid var(--line-brass)',
+                  color: 'var(--brass-text)',
                   borderRadius: '9999px',
                   padding: '3px 10px',
                   fontSize: '12px',
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
                 }}
               >
                 <span>Award: <b>{activeAwardObj.label}</b></span>
@@ -1551,12 +1569,13 @@ export default function DashboardPage({
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '6px',
-                  background: 'rgba(5, 150, 105, 0.22)',
+                  background: '#ECFDF5',
                   border: '1px solid #10B981',
-                  color: '#34D399',
+                  color: '#065F46',
                   borderRadius: '9999px',
                   padding: '3px 10px',
                   fontSize: '12px',
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
                 }}
               >
                 <span>AI Focus: <b>{customAIFocus}</b></span>
@@ -1576,7 +1595,7 @@ export default function DashboardPage({
               style={{
                 background: 'transparent',
                 border: 'none',
-                color: 'rgba(255, 255, 255, 0.5)',
+                color: '#64748B',
                 fontSize: '12px',
                 cursor: 'pointer',
                 textDecoration: 'underline',
@@ -1589,9 +1608,9 @@ export default function DashboardPage({
         )}
 
         {/* Live Tally Bar */}
-        <div style={{ marginBottom: '16px', fontSize: '13.5px', color: 'rgba(255, 255, 255, 0.7)' }}>
-          Showing <b>{processedGrants.length.toLocaleString()}</b> {activeTab === 'recommended' ? 'AI-recommended' : 'verified'} opportunities
-          {activeKeyword && <span> matching "<b>{activeKeyword}</b>"</span>}
+        <div style={{ marginBottom: '16px', fontSize: '13.5px', color: '#64748B' }}>
+          Showing <strong style={{ color: 'var(--navy)' }}>{processedGrants.length.toLocaleString()}</strong> {activeTab === 'recommended' ? 'AI-recommended' : 'verified'} opportunities
+          {activeKeyword && <span> matching "<strong style={{ color: 'var(--navy)' }}>{activeKeyword}</strong>"</span>}
         </div>
 
         {/* Loading State with View-Matched Compact Skeletons */}
@@ -1602,15 +1621,16 @@ export default function DashboardPage({
                 display: 'flex',
                 alignItems: 'center',
                 gap: '10px',
-                background: 'rgba(196, 162, 101, 0.1)',
-                border: '1px solid rgba(196, 162, 101, 0.25)',
+                background: 'rgba(149, 128, 100, 0.08)',
+                border: '1px solid var(--line-brass)',
                 padding: '12px 18px',
                 borderRadius: '8px',
-                color: 'var(--brass-light)',
+                color: 'var(--brass-text)',
                 fontSize: '13.5px',
+                fontWeight: '500',
               }}
             >
-              <RefreshCw size={16} className="animate-spin" />
+              <RefreshCw size={16} className="animate-spin" color="var(--brass)" />
               <span>Scanning and ranking live solicitations...</span>
             </div>
             <div
@@ -1684,19 +1704,20 @@ export default function DashboardPage({
             style={{
               textAlign: 'center',
               padding: '60px 20px',
-              background: '#0B1728',
+              background: '#FFFFFF',
               borderRadius: '14px',
-              border: '1px solid rgba(255, 255, 255, 0.08)',
+              border: '1px solid #E2E8F0',
+              boxShadow: '0 4px 18px rgba(15, 23, 42, 0.04)',
               marginTop: '10px',
             }}
           >
             {activeTab === 'recommended' && !hasSavedPreferences ? (
               <>
-                <Sparkles size={42} style={{ color: 'var(--brass-light)', margin: '0 auto 16px' }} />
-                <h3 style={{ fontSize: '18px', fontWeight: '600', color: '#FFFFFF', marginBottom: '8px' }}>
+                <Sparkles size={42} style={{ color: 'var(--brass)', margin: '0 auto 16px' }} />
+                <h3 style={{ fontSize: '18px', fontWeight: '700', color: 'var(--navy)', marginBottom: '8px' }}>
                   Activate AI Grant Recommendations
                 </h3>
-                <p style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.6)', maxWidth: '480px', margin: '0 auto 20px', lineHeight: '1.5' }}>
+                <p style={{ fontSize: '14px', color: '#64748B', maxWidth: '480px', margin: '0 auto 20px', lineHeight: '1.5' }}>
                   Configure your Funding Profile with your organization&apos;s focus disciplines and preferred funding agencies to receive personalized AI recommendations.
                 </p>
                 <button
@@ -1711,18 +1732,22 @@ export default function DashboardPage({
                     fontSize: '13.5px',
                     fontWeight: '600',
                     cursor: 'pointer',
+                    boxShadow: '0 2px 8px rgba(149, 128, 100, 0.25)',
+                    transition: 'background 0.15s ease',
                   }}
+                  onMouseOver={(e) => (e.currentTarget.style.background = 'var(--brass-fill)')}
+                  onMouseOut={(e) => (e.currentTarget.style.background = 'var(--brass)')}
                 >
                   Configure Funding Profile
                 </button>
               </>
             ) : (
               <>
-                <AlertCircle size={42} style={{ color: 'var(--brass-light)', margin: '0 auto 16px' }} />
-                <h3 style={{ fontSize: '18px', fontWeight: '600', color: '#FFFFFF', marginBottom: '8px' }}>
+                <AlertCircle size={42} style={{ color: 'var(--brass)', margin: '0 auto 16px' }} />
+                <h3 style={{ fontSize: '18px', fontWeight: '700', color: 'var(--navy)', marginBottom: '8px' }}>
                   No solicitations match your active filters
                 </h3>
-                <p style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.6)', maxWidth: '460px', margin: '0 auto 20px', lineHeight: '1.5' }}>
+                <p style={{ fontSize: '14px', color: '#64748B', maxWidth: '460px', margin: '0 auto 20px', lineHeight: '1.5' }}>
                   Try clearing your search query or broadening category, eligibility, or agency filters to expand your search scope.
                 </p>
                 <button
@@ -1737,7 +1762,11 @@ export default function DashboardPage({
                     fontSize: '13.5px',
                     fontWeight: '600',
                     cursor: 'pointer',
+                    boxShadow: '0 2px 8px rgba(149, 128, 100, 0.25)',
+                    transition: 'background 0.15s ease',
                   }}
+                  onMouseOver={(e) => (e.currentTarget.style.background = 'var(--brass-fill)')}
+                  onMouseOut={(e) => (e.currentTarget.style.background = 'var(--brass)')}
                 >
                   Clear all filters
                 </button>

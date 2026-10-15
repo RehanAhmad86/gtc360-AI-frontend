@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function SkeletonCard({ viewMode = 'list' }) {
   const shimmerStyle = {
-    background: 'linear-gradient(90deg, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.12) 50%, rgba(255, 255, 255, 0.05) 75%)',
+    background: 'linear-gradient(90deg, #F1F5F9 25%, #E2E8F0 50%, #F1F5F9 75%)',
     backgroundSize: '200% 100%',
     animation: 'skeletonShimmer 1.8s infinite ease-in-out',
     borderRadius: '4px',
@@ -13,9 +13,9 @@ export default function SkeletonCard({ viewMode = 'list' }) {
     return (
       <div
         style={{
-          background: '#0B1728',
-          border: '1px solid rgba(255, 255, 255, 0.08)',
-          borderRadius: '14px',
+          background: '#FFFFFF',
+          border: '1px solid #E2E8F0',
+          borderRadius: '12px',
           padding: '16px 20px',
           marginBottom: '10px',
           display: 'flex',
@@ -24,6 +24,7 @@ export default function SkeletonCard({ viewMode = 'list' }) {
           gap: '20px',
           width: '100%',
           boxSizing: 'border-box',
+          boxShadow: '0 2px 8px rgba(15, 23, 42, 0.04)',
         }}
       >
         {/* Left / Middle: Title, Agency, Tags shimmers */}
@@ -73,8 +74,8 @@ export default function SkeletonCard({ viewMode = 'list' }) {
   return (
     <div
       style={{
-        background: '#0B1728',
-        border: '1px solid rgba(255, 255, 255, 0.08)',
+        background: '#FFFFFF',
+        border: '1px solid #E2E8F0',
         borderRadius: '14px',
         padding: '20px',
         display: 'flex',
@@ -83,6 +84,7 @@ export default function SkeletonCard({ viewMode = 'list' }) {
         height: '100%',
         minHeight: '270px',
         boxSizing: 'border-box',
+        boxShadow: '0 3px 12px rgba(15, 23, 42, 0.04)',
       }}
     >
       <div>
@@ -110,7 +112,8 @@ export default function SkeletonCard({ viewMode = 'list' }) {
             display: 'grid',
             gridTemplateColumns: '1fr 1fr',
             gap: '10px',
-            background: 'rgba(255, 255, 255, 0.03)',
+            background: '#F8FAFC',
+            border: '1px solid #F1F5F9',
             borderRadius: '8px',
             padding: '10px 12px',
             marginBottom: '14px',
@@ -134,7 +137,7 @@ export default function SkeletonCard({ viewMode = 'list' }) {
           alignItems: 'center',
           justifyContent: 'space-between',
           paddingTop: '12px',
-          borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+          borderTop: '1px solid #F1F5F9',
         }}
       >
         <div style={{ ...shimmerStyle, width: '75px', height: '26px', borderRadius: '6px' }} />

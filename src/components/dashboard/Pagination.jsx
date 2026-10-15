@@ -62,36 +62,36 @@ export default function Pagination({
         gap: '16px',
         padding: '24px 0 10px',
         marginTop: '24px',
-        borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+        borderTop: '1px solid #E2E8F0',
       }}
     >
       {/* Left: Summary and Page Size Selector */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
-        <span style={{ fontSize: '13px', color: 'rgba(255, 255, 255, 0.6)', fontWeight: '500' }}>
+        <span style={{ fontSize: '13px', color: '#64748B', fontWeight: '500' }}>
           Showing{' '}
-          <strong style={{ color: '#FFFFFF', fontWeight: '700' }}>
+          <strong style={{ color: 'var(--navy)', fontWeight: '700' }}>
             {startItem.toLocaleString()}–{endItem.toLocaleString()}
           </strong>{' '}
           of{' '}
-          <strong style={{ color: '#FFFFFF', fontWeight: '700' }}>
+          <strong style={{ color: 'var(--navy)', fontWeight: '700' }}>
             {totalItems.toLocaleString()}
           </strong>{' '}
           opportunities
         </span>
 
         {/* Page Size Dropdown */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12.5px', color: 'rgba(255, 255, 255, 0.6)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12.5px', color: '#64748B' }}>
           <span>Show:</span>
           <select
             value={pageSize}
             onChange={(e) => onPageSizeChange(Number(e.target.value))}
             style={{
-              background: '#0B1728',
-              border: '1px solid rgba(255, 255, 255, 0.15)',
+              background: '#FFFFFF',
+              border: '1px solid #CBD5E1',
               borderRadius: '6px',
               padding: '4px 8px',
               fontSize: '12.5px',
-              color: '#FFFFFF',
+              color: 'var(--navy)',
               fontWeight: '600',
               cursor: 'pointer',
               outline: 'none',
@@ -120,9 +120,9 @@ export default function Pagination({
             width: '32px',
             height: '32px',
             borderRadius: '6px',
-            border: '1px solid rgba(255, 255, 255, 0.15)',
-            background: '#0B1728',
-            color: currentPage === 1 ? 'rgba(255, 255, 255, 0.25)' : '#FFFFFF',
+            border: '1px solid #CBD5E1',
+            background: currentPage === 1 ? '#F1F5F9' : '#FFFFFF',
+            color: currentPage === 1 ? '#CBD5E1' : 'var(--navy)',
             cursor: currentPage === 1 ? 'not-allowed' : 'pointer',
             transition: 'all 0.15s ease',
           }}
@@ -143,9 +143,9 @@ export default function Pagination({
             width: '32px',
             height: '32px',
             borderRadius: '6px',
-            border: '1px solid rgba(255, 255, 255, 0.15)',
-            background: '#0B1728',
-            color: currentPage === 1 ? 'rgba(255, 255, 255, 0.25)' : '#FFFFFF',
+            border: '1px solid #CBD5E1',
+            background: currentPage === 1 ? '#F1F5F9' : '#FFFFFF',
+            color: currentPage === 1 ? '#CBD5E1' : 'var(--navy)',
             cursor: currentPage === 1 ? 'not-allowed' : 'pointer',
             transition: 'all 0.15s ease',
           }}
@@ -163,7 +163,7 @@ export default function Pagination({
                 style={{
                   width: '28px',
                   textAlign: 'center',
-                  color: 'rgba(255, 255, 255, 0.4)',
+                  color: '#94A3B8',
                   fontSize: '13px',
                   fontWeight: '600',
                 }}
@@ -187,12 +187,13 @@ export default function Pagination({
                 height: '32px',
                 padding: '0 6px',
                 borderRadius: '6px',
-                border: isActive ? '1px solid var(--brass)' : '1px solid rgba(255, 255, 255, 0.15)',
-                background: isActive ? 'var(--brass)' : '#0B1728',
-                color: '#FFFFFF',
+                border: isActive ? '1px solid var(--brass)' : '1px solid #CBD5E1',
+                background: isActive ? 'var(--brass)' : '#FFFFFF',
+                color: isActive ? '#FFFFFF' : 'var(--navy)',
                 fontSize: '12.5px',
                 fontWeight: isActive ? '700' : '500',
                 cursor: 'pointer',
+                boxShadow: isActive ? '0 2px 6px rgba(149, 128, 100, 0.25)' : 'none',
                 transition: 'all 0.15s ease',
               }}
             >
@@ -213,9 +214,9 @@ export default function Pagination({
             width: '32px',
             height: '32px',
             borderRadius: '6px',
-            border: '1px solid rgba(255, 255, 255, 0.15)',
-            background: '#0B1728',
-            color: currentPage === totalPages ? 'rgba(255, 255, 255, 0.25)' : '#FFFFFF',
+            border: '1px solid #CBD5E1',
+            background: currentPage === totalPages ? '#F1F5F9' : '#FFFFFF',
+            color: currentPage === totalPages ? '#CBD5E1' : 'var(--navy)',
             cursor: currentPage === totalPages ? 'not-allowed' : 'pointer',
             transition: 'all 0.15s ease',
           }}
@@ -236,9 +237,9 @@ export default function Pagination({
             width: '32px',
             height: '32px',
             borderRadius: '6px',
-            border: '1px solid rgba(255, 255, 255, 0.15)',
-            background: '#0B1728',
-            color: currentPage === totalPages ? 'rgba(255, 255, 255, 0.25)' : '#FFFFFF',
+            border: '1px solid #CBD5E1',
+            background: currentPage === totalPages ? '#F1F5F9' : '#FFFFFF',
+            color: currentPage === totalPages ? '#CBD5E1' : 'var(--navy)',
             cursor: currentPage === totalPages ? 'not-allowed' : 'pointer',
             transition: 'all 0.15s ease',
           }}

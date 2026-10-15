@@ -14,33 +14,31 @@ const TIERS = [
     id: 'visitor',
     badge: 'Visitor',
     badgeStyle: {
-      background: 'rgba(255, 255, 255, 0.08)',
-      color: 'rgba(255, 255, 255, 0.7)',
+      background: '#F1F5F9',
+      color: '#475569',
     },
     term: 'No Sign-Up',
-    termColor: 'rgba(255, 255, 255, 0.45)',
+    termColor: '#64748B',
     title: 'No Account',
     description: 'Instant exploration across public funding opportunities with no registration required.',
     isFixedPrice: true,
     fixedPriceText: 'Free',
     priceSubtext: '5 complimentary searches total',
     featured: false,
-    cardBorder: '1px solid rgba(255, 255, 255, 0.12)',
-    cardBg: '#0B1728',
-    cardShadow: '0 4px 20px rgba(0, 0, 0, 0.25)',
+    cardBorder: '1px solid #E2E8F0',
+    cardBg: '#FFFFFF',
+    cardShadow: '0 4px 20px rgba(15, 23, 42, 0.05)',
     ctaText: 'Search Grants Now',
     ctaLink: '/grants',
     ctaStyle: {
-      background: 'rgba(255, 255, 255, 0.08)',
-      border: '1px solid rgba(255, 255, 255, 0.2)',
-      color: '#FFFFFF',
+      background: '#F8FAFC',
+      border: '1px solid #CBD5E1',
+      color: 'var(--navy)',
     },
     features: [
       { text: '5 searches total', included: true },
-      { text: 'Access to public grant databases', included: true },
       { text: 'Top 3 matching results visible', included: true },
       { text: 'Executive solicitation overview', included: true },
-      { text: 'AI Fit Score preview indicator', included: true },
       { text: 'Complete dossiers (CFDA, full requirements)', included: false },
       { text: 'Eligibility & agency filters', included: false },
       { text: 'Grant fit scoring & match breakdown', included: false },
@@ -50,44 +48,43 @@ const TIERS = [
       { text: 'Pipeline dollar value snapshot', included: false },
       { text: 'Analytics dashboard & benchmarking', included: false },
       { text: 'CSV export & monthly PDF reports', included: false },
-      { text: 'Team user seats & support', included: false },
+      { text: 'Email support', included: false },
     ]
   },
   {
     id: 'explorer',
     badge: 'Explorer',
     badgeStyle: {
-      background: 'rgba(26, 86, 219, 0.2)',
-      color: '#93C5FD',
+      background: '#EFF6FF',
+      color: '#1D4ED8',
     },
     term: 'Free Forever',
-    termColor: '#93C5FD',
+    termColor: '#2563EB',
     title: 'Free Account',
     description: 'For non-profits and organizations tracking active grant solicitations.',
     isFixedPrice: true,
     fixedPriceText: '$0',
     priceSubtext: 'Free forever · No credit card required',
     featured: false,
-    cardBorder: '1px solid rgba(26, 86, 219, 0.45)',
-    cardBg: '#0B1728',
-    cardShadow: '0 4px 20px rgba(26, 86, 219, 0.15)',
+    cardBorder: '1px solid #BFDBFE',
+    cardBg: '#FFFFFF',
+    cardShadow: '0 4px 20px rgba(37, 99, 235, 0.05)',
     ctaText: 'Create Free Account',
     ctaLink: '/signup',
     ctaStyle: {
-      background: 'rgba(26, 86, 219, 0.3)',
-      border: '1px solid rgba(26, 86, 219, 0.65)',
-      color: '#BFDBFE',
+      background: '#EFF6FF',
+      border: '1px solid #93C5FD',
+      color: '#1D4ED8',
     },
     features: [
       { text: '10 searches per month', included: true },
-      { text: 'Access to public grant databases', included: true },
       { text: 'Top 5 matching results visible', included: true },
       { text: 'Structured solicitation summary view', included: true },
       { text: 'Basic profile-tailored match indicators', included: true },
       { text: '5 Saved pipeline opportunities', included: true },
       { text: 'Pipeline value snapshot (view only)', included: true },
       { text: '3 AI Funding Advisor questions / month', included: true },
-      { text: '1 User seat · Community support', included: true },
+      { text: 'Community support', included: true },
       { text: 'Complete dossiers (CFDA, full requirements)', included: false },
       { text: 'Eligibility & agency filters', included: false },
       { text: 'Grant fit scoring & match breakdown', included: false },
@@ -128,7 +125,6 @@ const TIERS = [
     },
     features: [
       { text: 'Unlimited searches across all databases', included: true },
-      { text: 'Access to public grant databases', included: true },
       { text: 'Full result set visibility across all matches', included: true },
       { text: 'Complete dossiers (CFDA, requirements, portals)', included: true },
       { text: 'Eligibility & agency filtering controls', included: true },
@@ -140,21 +136,19 @@ const TIERS = [
       { text: '20 AI Funding Advisor queries / month', included: true },
       { text: 'Analytics dashboard', included: true },
       { text: 'CSV export & Monthly Pipeline PDF Report', included: true },
-      { text: '1 User seat · 48h email support', included: true },
+      { text: 'Email support', included: true },
       { text: 'Geographic & state-specific targeting', included: false },
-      { text: 'Real-time SMS alerts', included: false },
-      { text: 'Win rate benchmarking & SAM.gov checker', included: false },
     ]
   },
   {
     id: 'professional',
     badge: 'Professional',
     badgeStyle: {
-      background: 'rgba(201, 146, 30, 0.15)',
-      color: 'var(--brass-light)',
+      background: '#FDF8F0',
+      color: 'var(--brass-text)',
     },
     term: 'Executive Suite',
-    termColor: 'var(--brass-light)',
+    termColor: 'var(--brass-text)',
     title: 'Professional',
     description: 'Complete funding intelligence platform paired with executive reporting and advanced analytics.',
     isFixedPrice: false,
@@ -164,19 +158,18 @@ const TIERS = [
     priceSubtextMonthly: '14-day free trial · Cancel anytime',
     priceSubtextAnnual: 'Billed annually ($4,990/yr · 2 Months Free)',
     featured: false,
-    cardBorder: '1px solid rgba(201, 146, 30, 0.35)',
-    cardBg: '#0B1728',
-    cardShadow: '0 4px 20px rgba(0, 0, 0, 0.25)',
+    cardBorder: '1px solid #E3D8C8',
+    cardBg: '#FFFFFF',
+    cardShadow: '0 4px 20px rgba(15, 23, 42, 0.05)',
     ctaText: 'Start Professional Trial',
     ctaLink: '/signup',
     ctaStyle: {
-      background: 'rgba(255, 255, 255, 0.08)',
-      border: '1px solid rgba(255, 255, 255, 0.2)',
+      background: 'var(--navy)',
+      border: '1px solid var(--navy)',
       color: '#FFFFFF',
     },
     features: [
       { text: 'Unlimited searches across all databases', included: true },
-      { text: 'Access to public grant databases', included: true },
       { text: 'Full result set visibility across all matches', included: true },
       { text: 'Complete dossiers (CFDA, requirements, portals)', included: true },
       { text: 'Eligibility & agency filtering controls', included: true },
@@ -187,14 +180,12 @@ const TIERS = [
       { text: 'Full Pipeline Builder (Unlimited saved grants)', included: true },
       { text: 'Opportunity comparison board (up to 10 grants)', included: true },
       { text: 'Full pipeline dollar value snapshot', included: true },
-      { text: 'Real-time alerts (email + SMS)', included: true },
+      { text: 'Real-time alerts', included: true },
       { text: 'Analytics dashboard', included: true },
-      { text: 'Win rate & award benchmarking intelligence', included: true },
-      { text: 'SAM.gov registration & compliance checker', included: true },
       { text: 'Branded DOCX reports, CSV & auto PDF', included: true },
       { text: 'Advisor-written Quarterly Assessment', included: true },
       { text: 'Preferred consulting access', included: true },
-      { text: '3 Team User Seats · Priority same-day support', included: true },
+      { text: 'Priority same-day support', included: true },
     ]
   }
 ];
@@ -204,11 +195,19 @@ export default function PricingPage() {
   const [billingCycle, setBillingCycle] = useState('monthly'); // 'monthly' | 'annual'
 
   return (
-    <div style={{ background: '#071220', minHeight: '100vh', color: '#FFFFFF', padding: '48px 20px 88px' }}>
-      <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
-
-        {/* 1. Header & Billing Switcher */}
-        <div style={{ textAlign: 'center', marginBottom: '44px' }}>
+    <div style={{ background: '#FAFBFC', minHeight: '100vh', color: 'var(--navy)' }}>
+      {/* 1. Executive Dark Navy Hero Section */}
+      <section
+        style={{
+          background: 'radial-gradient(ellipse at 80% 20%, rgba(20, 45, 76, 0.95) 0%, var(--navy-deep) 100%)',
+          color: '#FFFFFF',
+          padding: '60px 20px 54px',
+          borderBottom: '1px solid rgba(219, 225, 233, 0.12)',
+          textAlign: 'center',
+          position: 'relative',
+        }}
+      >
+        <div style={{ maxWidth: '1240px', margin: '0 auto' }}>
           <div
             style={{
               display: 'inline-flex',
@@ -238,11 +237,12 @@ export default function PricingPage() {
               letterSpacing: '-0.02em',
               lineHeight: '1.2',
               marginBottom: '12px',
+              color: '#FFFFFF',
             }}
           >
             GrantSignal 360° — Tier Comparison
           </h1>
-          <p style={{ fontSize: '15px', color: 'rgba(255, 255, 255, 0.65)', maxWidth: '680px', margin: '0 auto 28px', lineHeight: 1.5 }}>
+          <p style={{ fontSize: '15px', color: 'rgba(255, 255, 255, 0.72)', maxWidth: '680px', margin: '0 auto 28px', lineHeight: 1.5 }}>
             Choose the level of intelligence, search depth, and advisory support tailored to your organization’s grant volume and pursuit strategy.
           </p>
 
@@ -251,8 +251,8 @@ export default function PricingPage() {
             style={{
               display: 'inline-flex',
               alignItems: 'center',
-              background: 'rgba(255, 255, 255, 0.06)',
-              border: '1px solid rgba(255, 255, 255, 0.15)',
+              background: 'rgba(255, 255, 255, 0.08)',
+              border: '1px solid rgba(255, 255, 255, 0.18)',
               borderRadius: '9999px',
               padding: '4px',
               gap: '4px',
@@ -263,7 +263,7 @@ export default function PricingPage() {
               onClick={() => setBillingCycle('monthly')}
               style={{
                 background: billingCycle === 'monthly' ? 'var(--brass)' : 'transparent',
-                color: billingCycle === 'monthly' ? '#FFFFFF' : 'rgba(255, 255, 255, 0.7)',
+                color: billingCycle === 'monthly' ? '#FFFFFF' : 'rgba(255, 255, 255, 0.75)',
                 border: 'none',
                 borderRadius: '9999px',
                 padding: '8px 20px',
@@ -280,7 +280,7 @@ export default function PricingPage() {
               onClick={() => setBillingCycle('annual')}
               style={{
                 background: billingCycle === 'annual' ? 'var(--brass)' : 'transparent',
-                color: billingCycle === 'annual' ? '#FFFFFF' : 'rgba(255, 255, 255, 0.7)',
+                color: billingCycle === 'annual' ? '#FFFFFF' : 'rgba(255, 255, 255, 0.75)',
                 border: 'none',
                 borderRadius: '9999px',
                 padding: '8px 20px',
@@ -309,8 +309,10 @@ export default function PricingPage() {
             </button>
           </div>
         </div>
+      </section>
 
-        {/* 2. Comprehensive Four Executive Tier Cards */}
+      {/* 2. Main High-Contrast Body: Four Executive Tier Cards */}
+      <main style={{ maxWidth: '1360px', margin: '0 auto', padding: '48px 20px 88px' }}>
         <div
           style={{
             display: 'grid',
@@ -394,28 +396,49 @@ export default function PricingPage() {
                     </span>
                   </div>
 
-                  <h3 style={{ fontSize: '22px', fontWeight: '700', color: '#FFFFFF', marginBottom: '6px' }}>
+                  <h3
+                    style={{
+                      fontSize: '22px',
+                      fontWeight: '700',
+                      color: tier.featured ? '#FFFFFF' : 'var(--navy)',
+                      marginBottom: '6px',
+                    }}
+                  >
                     {tier.title}
                   </h3>
-                  <p style={{ fontSize: '12.5px', color: 'rgba(255, 255, 255, 0.6)', minHeight: '38px', lineHeight: 1.45, marginBottom: '18px' }}>
+                  <p
+                    style={{
+                      fontSize: '12.5px',
+                      color: tier.featured ? 'rgba(255, 255, 255, 0.72)' : '#64748B',
+                      minHeight: '38px',
+                      lineHeight: 1.45,
+                      marginBottom: '18px',
+                    }}
+                  >
                     {tier.description}
                   </p>
 
                   {/* Pricing Display */}
-                  <div style={{ marginBottom: '22px', paddingBottom: '16px', borderBottom: '1px solid rgba(255, 255, 255, 0.08)' }}>
+                  <div
+                    style={{
+                      marginBottom: '22px',
+                      paddingBottom: '16px',
+                      borderBottom: tier.featured ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid #F1F5F9',
+                    }}
+                  >
                     <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
                       <span
                         style={{
                           fontSize: '38px',
                           fontWeight: '800',
-                          color: tier.featured ? 'var(--brass-light)' : '#FFFFFF',
+                          color: tier.featured ? 'var(--brass-light)' : 'var(--navy)',
                           lineHeight: 1,
                         }}
                       >
                         {priceDisplay}
                       </span>
                       {tier.priceUnit && (
-                        <span style={{ fontSize: '13px', color: 'rgba(255, 255, 255, 0.5)' }}>
+                        <span style={{ fontSize: '13px', color: tier.featured ? 'rgba(255, 255, 255, 0.6)' : '#64748B' }}>
                           {tier.priceUnit}
                         </span>
                       )}
@@ -423,7 +446,11 @@ export default function PricingPage() {
                     <div
                       style={{
                         fontSize: '12px',
-                        color: tier.featured || tier.id === 'professional' ? '#4ADE80' : 'rgba(255, 255, 255, 0.55)',
+                        color: tier.featured
+                          ? '#4ADE80'
+                          : tier.id === 'professional'
+                          ? '#059669'
+                          : '#64748B',
                         fontWeight: tier.featured || tier.id === 'professional' ? '600' : '400',
                         marginTop: '8px',
                       }}
@@ -459,23 +486,20 @@ export default function PricingPage() {
                         {item.included ? (
                           <Check
                             size={14}
-                            color="#10B981"
+                            color={tier.featured ? '#10B981' : '#059669'}
                             style={{ flexShrink: 0, marginTop: '3px' }}
                           />
                         ) : (
                           <X
                             size={14}
-                            color="rgba(255, 255, 255, 0.28)"
+                            color="#EF4444"
                             style={{ flexShrink: 0, marginTop: '3px' }}
                           />
                         )}
                         <span
                           style={{
-                            color: item.included
-                              ? tier.featured
-                                ? '#FFFFFF'
-                                : 'rgba(255, 255, 255, 0.88)'
-                              : 'rgba(255, 255, 255, 0.36)',
+                            color: tier.featured ? '#FFFFFF' : '#1E293B',
+                            fontWeight: '500',
                           }}
                         >
                           {item.text}
@@ -500,6 +524,18 @@ export default function PricingPage() {
                       transition: 'all 0.15s ease',
                       ...tier.ctaStyle,
                     }}
+                    onMouseOver={(e) => {
+                      if (tier.featured) e.currentTarget.style.background = 'var(--brass-fill)';
+                      else if (tier.id === 'professional') e.currentTarget.style.background = 'var(--navy-deep)';
+                      else if (tier.id === 'explorer') e.currentTarget.style.background = '#DBEAFE';
+                      else e.currentTarget.style.background = '#F1F5F9';
+                    }}
+                    onMouseOut={(e) => {
+                      if (tier.featured) e.currentTarget.style.background = 'var(--brass)';
+                      else if (tier.id === 'professional') e.currentTarget.style.background = 'var(--navy)';
+                      else if (tier.id === 'explorer') e.currentTarget.style.background = '#EFF6FF';
+                      else e.currentTarget.style.background = '#F8FAFC';
+                    }}
                   >
                     {tier.ctaText}
                   </button>
@@ -512,33 +548,33 @@ export default function PricingPage() {
         {/* 3. Enterprise Trust & Confidence Banner */}
         <div
           style={{
-            background: 'rgba(255, 255, 255, 0.03)',
-            border: '1px solid rgba(255, 255, 255, 0.08)',
+            background: '#FFFFFF',
+            border: '1px solid #E2E8F0',
             borderRadius: '12px',
-            padding: '18px 24px',
+            padding: '20px 24px',
             display: 'flex',
             justifyContent: 'space-around',
             alignItems: 'center',
             flexWrap: 'wrap',
             gap: '20px',
             textAlign: 'center',
+            boxShadow: '0 2px 10px rgba(15, 23, 42, 0.04)',
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'rgba(255, 255, 255, 0.8)', fontSize: '13px' }}>
-            <ShieldCheck size={18} color="#10B981" />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#334155', fontSize: '13px', fontWeight: '500' }}>
+            <ShieldCheck size={18} color="#059669" />
             <span>14-Day Risk-Free Trial</span>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'rgba(255, 255, 255, 0.8)', fontSize: '13px' }}>
-            <Clock size={18} color="#60A5FA" />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#334155', fontSize: '13px', fontWeight: '500' }}>
+            <Clock size={18} color="#2563EB" />
             <span>Cancel or Switch Tiers Anytime</span>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'rgba(255, 255, 255, 0.8)', fontSize: '13px' }}>
-            <CheckCircle2 size={18} color="#A78BFA" />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#334155', fontSize: '13px', fontWeight: '500' }}>
+            <CheckCircle2 size={18} color="#7C3AED" />
             <span>No Credit Card Required for Free Tiers</span>
           </div>
         </div>
-
-      </div>
+      </main>
     </div>
   );
 }

@@ -29,8 +29,8 @@ export default function GrantDetailModal({
         right: 0,
         bottom: 0,
         zIndex: 9990,
-        background: 'rgba(10, 25, 47, 0.82)',
-        backdropFilter: 'blur(8px)',
+        background: 'rgba(12, 29, 51, 0.72)',
+        backdropFilter: 'blur(6px)',
         display: 'grid',
         placeItems: 'center',
         padding: '20px',
@@ -46,13 +46,13 @@ export default function GrantDetailModal({
           maxWidth: '720px',
           maxHeight: '90vh',
           overflowY: 'auto',
-          background: '#0B1728',
-          border: '1px solid rgba(196, 162, 101, 0.35)',
+          background: '#FFFFFF',
+          border: '1px solid #E2E8F0',
           borderRadius: '16px',
-          boxShadow: '0 24px 64px rgba(0, 0, 0, 0.75)',
+          boxShadow: '0 24px 64px rgba(12, 29, 51, 0.25)',
           padding: '30px',
           position: 'relative',
-          color: '#FFFFFF',
+          color: 'var(--navy)',
         }}
       >
         {/* Close Button */}
@@ -63,15 +63,24 @@ export default function GrantDetailModal({
             position: 'absolute',
             top: '20px',
             right: '20px',
-            background: 'rgba(255, 255, 255, 0.08)',
+            background: '#F1F5F9',
             border: 'none',
             borderRadius: '50%',
             width: '32px',
             height: '32px',
             display: 'grid',
             placeItems: 'center',
-            color: 'rgba(255, 255, 255, 0.7)',
+            color: '#64748B',
             cursor: 'pointer',
+            transition: 'all 0.15s ease',
+          }}
+          onMouseOver={(e) => {
+            e.currentTarget.style.background = '#E2E8F0';
+            e.currentTarget.style.color = 'var(--navy)';
+          }}
+          onMouseOut={(e) => {
+            e.currentTarget.style.background = '#F1F5F9';
+            e.currentTarget.style.color = '#64748B';
           }}
         >
           <X size={16} />
@@ -82,9 +91,9 @@ export default function GrantDetailModal({
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', flexWrap: 'wrap' }}>
             <span
               style={{
-                background: 'rgba(196, 162, 101, 0.18)',
-                border: '1px solid rgba(196, 162, 101, 0.4)',
-                color: 'var(--brass-light)',
+                background: 'rgba(149, 128, 100, 0.12)',
+                border: '1px solid var(--line-brass)',
+                color: 'var(--brass-text)',
                 borderRadius: '4px',
                 padding: '2px 8px',
                 fontSize: '11px',
@@ -96,18 +105,18 @@ export default function GrantDetailModal({
               {grant.source === 'california' ? 'California State Portal' : 'Grants.gov Official'}
             </span>
             {oppNumber && (
-              <span style={{ fontSize: '12px', fontFamily: 'monospace', color: 'rgba(255, 255, 255, 0.5)' }}>
+              <span style={{ fontSize: '12px', fontFamily: 'monospace', color: '#94A3B8' }}>
                 #{oppNumber}
               </span>
             )}
           </div>
 
-          <h2 style={{ fontSize: '20px', fontWeight: '700', color: '#FFFFFF', lineHeight: '1.35', margin: 0 }}>
+          <h2 style={{ fontSize: '20px', fontWeight: '700', color: 'var(--navy)', lineHeight: '1.35', margin: 0 }}>
             {title}
           </h2>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '8px', color: 'rgba(255, 255, 255, 0.7)', fontSize: '13.5px' }}>
-            <Building2 size={15} style={{ color: 'var(--brass-light)' }} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '8px', color: '#64748B', fontSize: '13.5px' }}>
+            <Building2 size={15} style={{ color: 'var(--brass)' }} />
             <span>{agency}</span>
           </div>
         </div>
@@ -118,36 +127,36 @@ export default function GrantDetailModal({
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
             gap: '12px',
-            background: 'rgba(255, 255, 255, 0.04)',
-            border: '1px solid rgba(255, 255, 255, 0.08)',
+            background: '#F8FAFC',
+            border: '1px solid #E2E8F0',
             borderRadius: '10px',
             padding: '14px',
             marginBottom: '20px',
           }}
         >
           <div>
-            <div style={{ fontSize: '11px', color: 'rgba(255, 255, 255, 0.45)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '3px' }}>
+            <div style={{ fontSize: '11px', color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '3px' }}>
               Status
             </div>
-            <div style={{ fontSize: '13px', fontWeight: '600', color: '#34D399', textTransform: 'capitalize' }}>
+            <div style={{ fontSize: '13px', fontWeight: '600', color: '#059669', textTransform: 'capitalize' }}>
               {grant.opp_status || 'Posted'}
             </div>
           </div>
 
           <div>
-            <div style={{ fontSize: '11px', color: 'rgba(255, 255, 255, 0.45)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '3px' }}>
+            <div style={{ fontSize: '11px', color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '3px' }}>
               Due Date
             </div>
-            <div style={{ fontSize: '13px', fontWeight: '600', color: dueInfo.color }}>
+            <div style={{ fontSize: '13px', fontWeight: '600', color: dueInfo.color || 'var(--navy)' }}>
               {dueInfo.label}
             </div>
           </div>
 
           <div>
-            <div style={{ fontSize: '11px', color: 'rgba(255, 255, 255, 0.45)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '3px' }}>
+            <div style={{ fontSize: '11px', color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '3px' }}>
               Estimated Award
             </div>
-            <div style={{ fontSize: '13px', fontWeight: '600', color: awardAmount ? '#FFFFFF' : 'rgba(255, 255, 255, 0.5)' }}>
+            <div style={{ fontSize: '13px', fontWeight: '600', color: 'var(--navy)' }}>
               {awardAmount || 'See Guidelines'}
             </div>
           </div>
@@ -155,10 +164,10 @@ export default function GrantDetailModal({
 
         {/* Synopsis / Description */}
         <div style={{ marginBottom: '22px' }}>
-          <h4 style={{ fontSize: '13px', fontWeight: '700', color: 'rgba(255, 255, 255, 0.8)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '8px' }}>
+          <h4 style={{ fontSize: '13px', fontWeight: '700', color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '8px' }}>
             Opportunity Overview
           </h4>
-          <p style={{ fontSize: '13.5px', color: 'rgba(255, 255, 255, 0.75)', lineHeight: '1.6', margin: 0 }}>
+          <p style={{ fontSize: '13.5px', color: '#334155', lineHeight: '1.6', margin: 0 }}>
             {description}
           </p>
         </div>
@@ -170,7 +179,7 @@ export default function GrantDetailModal({
             <div
               style={{
                 filter: 'blur(5.5px)',
-                opacity: 0.4,
+                opacity: 0.35,
                 userSelect: 'none',
                 pointerEvents: 'none',
                 display: 'flex',
@@ -179,28 +188,28 @@ export default function GrantDetailModal({
               }}
             >
               <div>
-                <h4 style={{ fontSize: '13px', fontWeight: '700', color: 'var(--brass-light)' }}>
-                  Eligible Applicant Types & Tax Exempt Status
+                <h4 style={{ fontSize: '13px', fontWeight: '700', color: 'var(--brass-text)' }}>
+                  Eligible Applicant Types &amp; Tax Exempt Status
                 </h4>
-                <p style={{ fontSize: '13px', color: '#FFFFFF' }}>
+                <p style={{ fontSize: '13px', color: '#334155' }}>
                   Nonprofits with 501(c)(3) status, community development corporations, institutions of higher education, local and tribal government agencies.
                 </p>
               </div>
 
               <div>
-                <h4 style={{ fontSize: '13px', fontWeight: '700', color: 'var(--brass-light)' }}>
-                  Federal CFDA Catalog & Funding Instrument
+                <h4 style={{ fontSize: '13px', fontWeight: '700', color: 'var(--brass-text)' }}>
+                  Federal CFDA Catalog &amp; Funding Instrument
                 </h4>
-                <p style={{ fontSize: '13px', color: '#FFFFFF' }}>
+                <p style={{ fontSize: '13px', color: '#334155' }}>
                   Assistance Listing: 93.137 — Health Resources and Services Administration. Cooperative Agreement.
                 </p>
               </div>
 
               <div>
-                <h4 style={{ fontSize: '13px', fontWeight: '700', color: 'var(--brass-light)' }}>
-                  Official Electronic Submission Links & Application Package
+                <h4 style={{ fontSize: '13px', fontWeight: '700', color: 'var(--brass-text)' }}>
+                  Official Electronic Submission Links &amp; Application Package
                 </h4>
-                <p style={{ fontSize: '13px', color: '#FFFFFF' }}>
+                <p style={{ fontSize: '13px', color: '#334155' }}>
                   https://www.grants.gov/search-results-detail/package/download-solicitation-package-direct
                 </p>
               </div>
@@ -218,12 +227,12 @@ export default function GrantDetailModal({
                 flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
-                background: 'rgba(10, 25, 47, 0.75)',
-                border: '1px solid rgba(196, 162, 101, 0.4)',
+                background: 'rgba(255, 255, 255, 0.92)',
+                border: '1px dashed rgba(149, 128, 100, 0.55)',
                 borderRadius: '12px',
                 padding: '24px 20px',
                 textAlign: 'center',
-                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.5)',
+                boxShadow: '0 8px 32px rgba(12, 29, 51, 0.12)',
               }}
             >
               <div
@@ -231,22 +240,22 @@ export default function GrantDetailModal({
                   width: '40px',
                   height: '40px',
                   borderRadius: '50%',
-                  background: 'rgba(201, 146, 30, 0.2)',
-                  border: '1px solid rgba(201, 146, 30, 0.4)',
+                  background: 'var(--navy-deep)',
                   display: 'grid',
                   placeItems: 'center',
-                  color: '#E8A82A',
+                  color: 'var(--brass-light)',
                   marginBottom: '10px',
+                  boxShadow: '0 4px 12px rgba(12, 29, 51, 0.25)',
                 }}
               >
                 <Lock size={18} />
               </div>
 
-              <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#FFFFFF', marginBottom: '6px' }}>
+              <h3 style={{ fontSize: '16px', fontWeight: '700', color: 'var(--navy)', marginBottom: '6px' }}>
                 Full Solicitation Details Gated for Visitors
               </h3>
 
-              <p style={{ fontSize: '13px', color: 'rgba(255, 255, 255, 0.7)', maxWidth: '440px', marginBottom: '16px', lineHeight: '1.5' }}>
+              <p style={{ fontSize: '13px', color: '#64748B', maxWidth: '440px', marginBottom: '16px', lineHeight: '1.5' }}>
                 CFDA taxonomies, complete eligibility guidelines, award ceilings, and direct portal application links require a free Explorer account.
               </p>
 
@@ -257,8 +266,8 @@ export default function GrantDetailModal({
                   onGuestSignupPrompt('detail_tease', grant.title);
                 }}
                 style={{
-                  background: 'linear-gradient(135deg, #C4A265 0%, #D4AF37 100%)',
-                  color: '#0A192F',
+                  background: 'var(--brass)',
+                  color: '#FFFFFF',
                   border: 'none',
                   borderRadius: '8px',
                   padding: '10px 20px',
@@ -268,8 +277,11 @@ export default function GrantDetailModal({
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '6px',
-                  boxShadow: '0 4px 14px rgba(196, 162, 101, 0.35)',
+                  boxShadow: '0 4px 14px rgba(149, 128, 100, 0.3)',
+                  transition: 'background 0.15s ease',
                 }}
+                onMouseOver={(e) => (e.currentTarget.style.background = 'var(--brass-fill)')}
+                onMouseOut={(e) => (e.currentTarget.style.background = 'var(--brass)')}
               >
                 <span>Create Free Account to Unlock</span>
                 <ArrowRight size={15} />
@@ -281,17 +293,17 @@ export default function GrantDetailModal({
           <div style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {grant.cfda_list && (
               <div>
-                <h4 style={{ fontSize: '13px', fontWeight: '700', color: 'var(--brass-light)', marginBottom: '4px' }}>
+                <h4 style={{ fontSize: '13px', fontWeight: '700', color: 'var(--brass-text)', marginBottom: '4px' }}>
                   Assistance Listing / CFDA
                 </h4>
-                <p style={{ fontSize: '13.5px', color: '#FFFFFF', margin: 0 }}>
+                <p style={{ fontSize: '13.5px', color: 'var(--navy)', margin: 0 }}>
                   {grant.cfda_list}
                 </p>
               </div>
             )}
 
             <div>
-              <h4 style={{ fontSize: '13px', fontWeight: '700', color: 'var(--brass-light)', marginBottom: '8px' }}>
+              <h4 style={{ fontSize: '13px', fontWeight: '700', color: 'var(--brass-text)', marginBottom: '8px' }}>
                 Official Opportunity Action
               </h4>
               <a
@@ -309,7 +321,10 @@ export default function GrantDetailModal({
                   fontSize: '13.5px',
                   fontWeight: '600',
                   textDecoration: 'none',
+                  boxShadow: '0 2px 8px rgba(149, 128, 100, 0.25)',
                 }}
+                onMouseOver={(e) => (e.currentTarget.style.background = 'var(--brass-fill)')}
+                onMouseOut={(e) => (e.currentTarget.style.background = 'var(--brass)')}
               >
                 <span>Open Official Application Portal</span>
                 <ExternalLink size={14} />
