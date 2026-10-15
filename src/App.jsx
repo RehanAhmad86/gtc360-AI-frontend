@@ -46,6 +46,12 @@ export default function App() {
     return () => window.removeEventListener('gtc360_auth_change', handleAuthChange);
   }, []);
 
+  // Synchronize current user plan state in cookies & localStorage
+  // Since paid tiers are not yet implemented on the backend, only 'explorer' (Free Account) or 'visitor' (No Account) exist.
+  useEffect(() => {
+    authAPI.syncPlanStorage(user);
+  }, [user]);
+
   const fetchMatches = useCallback(async (customPrefs = null) => {
     setLoading(true);
     try {
@@ -208,7 +214,7 @@ export default function App() {
             />
           }
         />
-        <Route path="/pricing" element={<PricingPage />} />
+        <Route path="/pricing" element={<PricingPage user={user} />} />
       </Routes>
 
       <Footer />

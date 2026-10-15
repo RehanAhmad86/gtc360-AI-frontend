@@ -136,6 +136,30 @@ If you wish to keep specific improvements (e.g. bugfixes, copy changes) while re
 
 ---
 
+### 4. Active Plan Tracking & Tier Status (Current Implementation)
+
+Since backend payment processing is pending implementation, user plans are strictly categorized into two operational tiers:
+- **No Account** (`visitor`): Unauthenticated guest browsing public grant listings.
+- **Free Account** (`explorer`): Authenticated user logged into GrantSignal 360°.
+
+#### Storage & Cookie Persistence:
+- **LocalStorage Keys**:
+  - `gtc360_current_plan`: `'visitor'` | `'explorer'`
+  - `gtc360_current_plan_name`: `'No Account'` | `'Free Account'`
+- **Cookie Keys** (1-year lifespan, `SameSite=Lax`, `path=/`):
+  - `gtc360_current_plan`
+  - `gtc360_current_plan_name`
+- **Pricing Card Action Button Behavior**:
+  - **Signed-in Free Account User**:
+    - **No Account Card**: Action button is removed and replaced with a clean `Included with your Account` indicator.
+    - **Free Account Card**: "Create Free Account" button is removed and replaced with `Current Plan Active`.
+    - **Advanced & Professional Cards**: Show upgrade buttons that trigger an informational upgrade dialog.
+  - **Guest Visitor**:
+    - **No Account Card**: Marked with `Current Plan Active` indicator.
+    - **Free Account Card**: Shows `Create Free Account` (links to `/signup`).
+
+---
+
 ## 🚀 Running the Project Locally
 
 ```bash
@@ -148,3 +172,4 @@ npm run dev
 # Build for production
 npm run build
 ```
+

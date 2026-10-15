@@ -36,7 +36,7 @@ export default function Navbar({
     ? (user.name || user.email?.split('@')[0] || 'Account')
     : '';
   const displayRole = user
-    ? (user.organizationType || 'Standard Plan')
+    ? (user.organizationType ? `${user.organizationType} · Free Account` : 'Free Account')
     : '';
 
   return (

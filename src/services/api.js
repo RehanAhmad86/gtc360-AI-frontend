@@ -36,6 +36,7 @@ apiClient.interceptors.response.use(
       // Clear token if expired or invalid
       localStorage.removeItem('gtc360_token');
       localStorage.removeItem('gtc360_user');
+      authAPI.syncPlanStorage(null);
       window.dispatchEvent(new Event('gtc360_auth_change'));
     }
     return Promise.reject(error);
@@ -48,6 +49,7 @@ export const authAPI = {
     if (res.data.token) {
       localStorage.setItem('gtc360_token', res.data.token);
       localStorage.setItem('gtc360_user', JSON.stringify(res.data.user));
+      authAPI.syncPlanStorage(res.data.user);
       window.dispatchEvent(new Event('gtc360_auth_change'));
     }
     return res.data;
@@ -58,6 +60,7 @@ export const authAPI = {
     if (res.data.token) {
       localStorage.setItem('gtc360_token', res.data.token);
       localStorage.setItem('gtc360_user', JSON.stringify(res.data.user));
+      authAPI.syncPlanStorage(res.data.user);
       window.dispatchEvent(new Event('gtc360_auth_change'));
     }
     return res.data;
@@ -66,6 +69,7 @@ export const authAPI = {
   logout: () => {
     localStorage.removeItem('gtc360_token');
     localStorage.removeItem('gtc360_user');
+    authAPI.syncPlanStorage(null);
     window.dispatchEvent(new Event('gtc360_auth_change'));
   },
 
@@ -75,6 +79,31 @@ export const authAPI = {
       return u ? JSON.parse(u) : null;
     } catch {
       return null;
+    }
+  },
+
+  getCurrentPlan: () => {
+    const user = authAPI.getCurrentUser();
+    return user ? 'explorer' : 'visitor';
+  },
+
+  getCurrentPlanName: () => {
+    const user = authAPI.getCurrentUser();
+    return user ? 'Free Account' : 'No Account';
+  },
+
+  syncPlanStorage: (explicitUser = undefined) => {
+    try {
+      const user = explicitUser !== undefined ? explicitUser : authAPI.getCurrentUser();
+      const planId = user ? 'explorer' : 'visitor';
+      const planName = user ? 'Free Account' : 'No Account';
+      localStorage.setItem('gtc360_current_plan', planId);
+      localStorage.setItem('gtc360_current_plan_name', planName);
+      document.cookie = `gtc360_current_plan=${planId}; path=/; max-age=31536000; SameSite=Lax`;
+      document.cookie = `gtc360_current_plan_name=${encodeURIComponent(planName)}; path=/; max-age=31536000; SameSite=Lax`;
+      return { planId, planName };
+    } catch {
+      return { planId: 'visitor', planName: 'No Account' };
     }
   },
 
