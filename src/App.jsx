@@ -8,6 +8,7 @@ import SearchHistoryPage from './pages/SearchHistoryPage';
 import PreferencesPage from './pages/PreferencesPage';
 import DashboardPage from './pages/DashboardPage';
 import HomePage from './pages/HomePage';
+import PricingPage from './pages/PricingPage';
 import ScrollToTop from './components/common/ScrollToTop';
 import { authAPI, matchingAPI, systemAPI } from './services/api';
 
@@ -207,6 +208,7 @@ export default function App() {
             />
           }
         />
+        <Route path="/pricing" element={<PricingPage />} />
       </Routes>
 
       <Footer />

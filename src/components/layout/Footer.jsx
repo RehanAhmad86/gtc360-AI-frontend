@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { ArrowUpRight } from 'lucide-react';
 
 export default function Footer() {
@@ -90,7 +91,11 @@ export default function Footer() {
             <span>&copy; {new Date().getFullYear()} GrantSignal 360° · GTC 360° Advisors LLC. All rights reserved.</span>
           </div>
           <div style={{ display: 'flex', gap: '16px' }}>
-            <a href="https://gtc360.com" target="_blank" rel="noopener noreferrer" style={{ color: 'rgba(255,255,255,0.7)' }}>
+            <Link to="/pricing" style={{ color: 'var(--brass-light)', textDecoration: 'none' }}>
+              Tier Pricing
+            </Link>
+            <span>·</span>
+            <a href="https://gtc360.com" target="_blank" rel="noopener noreferrer" style={{ color: 'rgba(255,255,255,0.7)', textDecoration: 'none' }}>
               Main Portal
             </a>
             <span>·</span>

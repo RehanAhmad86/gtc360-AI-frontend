@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Sliders, User, LogOut, Lock, History, Compass, Layers } from 'lucide-react';
+import { Sliders, User, LogOut, Lock, History, Compass, Layers, Sparkles } from 'lucide-react';
 import { authAPI } from '../../services/api';
 
 export default function Navbar({
@@ -120,6 +120,30 @@ export default function Navbar({
             >
               <Compass size={14} style={{ color: 'var(--brass-light)' }} />
               <span>Grants</span>
+            </button>
+
+            {/* Pricing Page Link */}
+            <button
+              type="button"
+              onClick={() => navigate('/pricing')}
+              title="View intelligence tiers & pricing"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                background: location.pathname === '/pricing' ? 'rgba(255, 255, 255, 0.18)' : 'rgba(255, 255, 255, 0.08)',
+                border: location.pathname === '/pricing' ? '1px solid var(--brass-light)' : '1px solid rgba(255, 255, 255, 0.15)',
+                color: '#FFFFFF',
+                borderRadius: '6px',
+                padding: '7px 12px',
+                fontSize: '12.5px',
+                fontWeight: '500',
+                cursor: 'pointer',
+                transition: 'all 0.15s ease',
+              }}
+            >
+              <Sparkles size={13} style={{ color: 'var(--brass-light)' }} />
+              <span>Pricing</span>
             </button>
 
             {/* Compare Bar Button */}

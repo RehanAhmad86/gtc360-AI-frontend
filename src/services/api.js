@@ -140,3 +140,24 @@ export const notificationsAPI = {
     return res.data;
   },
 };
+
+export const guestAPI = {
+  getQuota: async () => {
+    try {
+      const res = await apiClient.get('/guest/quota');
+      return res.data;
+    } catch (err) {
+      return null;
+    }
+  },
+
+  recordSearch: async () => {
+    try {
+      const res = await apiClient.post('/guest/record-search');
+      return res.data;
+    } catch (err) {
+      return null;
+    }
+  },
+};
+

@@ -1,94 +1,126 @@
-// Daily search quota and search history manager (Granted AI style)
+// Search quota and search history manager
+import { guestAPI } from './api';
 
-const QUOTA_STORAGE_KEY = 'gtc360_daily_search_quota';
+const GUEST_QUOTA_KEY = 'gtc360_guest_search_quota';
 const HISTORY_STORAGE_KEY = 'gtc360_search_history';
-export const MAX_DAILY_SEARCHES = 3;
+export const MAX_GUEST_SEARCHES = 5;
 
 /**
- * Get current date string formatted as YYYY-MM-DD
+ * Get current search quota for guest or authenticated user
  */
-function getTodayDateString() {
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = String(now.getMonth() + 1).padStart(2, '0');
-  const day = String(now.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-}
-
-/**
- * Get current daily search usage
- */
-export function getSearchQuota() {
-  const today = getTodayDateString();
+export function getLocalGuestQuota() {
   try {
-    const raw = localStorage.getItem(QUOTA_STORAGE_KEY);
+    const raw = localStorage.getItem(GUEST_QUOTA_KEY);
     if (raw) {
       const data = JSON.parse(raw);
-      if (data.date === today) {
-        return {
-          used: Number(data.used) || 0,
-          max: MAX_DAILY_SEARCHES,
-          remaining: Math.max(0, MAX_DAILY_SEARCHES - (Number(data.used) || 0)),
-          date: today,
-        };
-      }
+      const used = Number(data.used) || 0;
+      return {
+        used,
+        max: MAX_GUEST_SEARCHES,
+        remaining: Math.max(0, MAX_GUEST_SEARCHES - used),
+        isLimitReached: used >= MAX_GUEST_SEARCHES,
+      };
     }
   } catch (err) {
-    console.error('Error reading search quota:', err);
+    console.error('Error reading guest quota from storage:', err);
   }
 
-  // Initialize new quota for today
   const initial = {
     used: 0,
-    max: MAX_DAILY_SEARCHES,
-    remaining: MAX_DAILY_SEARCHES,
-    date: today,
+    max: MAX_GUEST_SEARCHES,
+    remaining: MAX_GUEST_SEARCHES,
+    isLimitReached: false,
   };
   try {
-    localStorage.setItem(QUOTA_STORAGE_KEY, JSON.stringify(initial));
+    localStorage.setItem(GUEST_QUOTA_KEY, JSON.stringify(initial));
   } catch {}
   return initial;
 }
 
+export const getSearchQuota = getLocalGuestQuota;
+
 /**
- * Check if the user is allowed to perform an AI search
+ * Fetch live IP-tracked guest quota from backend with local fallback
  */
-export function canPerformSearch() {
-  const quota = getSearchQuota();
+export async function syncGuestQuota() {
+  try {
+    const remote = await guestAPI.getQuota();
+    if (remote && typeof remote.used === 'number') {
+      const current = getLocalGuestQuota();
+      // Use max between remote and local to prevent bypass
+      const effectiveUsed = Math.max(current.used, remote.used);
+      const updated = {
+        used: effectiveUsed,
+        max: MAX_GUEST_SEARCHES,
+        remaining: Math.max(0, MAX_GUEST_SEARCHES - effectiveUsed),
+        isLimitReached: effectiveUsed >= MAX_GUEST_SEARCHES,
+        ip: remote.ip,
+      };
+      localStorage.setItem(GUEST_QUOTA_KEY, JSON.stringify(updated));
+      window.dispatchEvent(new Event('gtc360_quota_change'));
+      return updated;
+    }
+  } catch (err) {
+    console.warn('IP quota sync notice: using local tracker', err);
+  }
+  return getLocalGuestQuota();
+}
+
+/**
+ * Check if the user is allowed to perform a search
+ */
+export function canPerformSearch(isUserAuthenticated = false) {
+  if (isUserAuthenticated) return true;
+  const quota = getLocalGuestQuota();
   return quota.remaining > 0;
 }
 
 /**
- * Consume one search credit and record in search history
+ * Record a search query and consume a credit if guest
  */
-export function recordSearch(query, resultCount = 0) {
+export async function recordSearch(query, resultCount = 0, isUserAuthenticated = false) {
   if (!query || !query.trim()) return;
 
   const cleanQuery = query.trim();
-  const quota = getSearchQuota();
-  const today = getTodayDateString();
 
-  // Increment usage count
+  // If user is authenticated, they have unlimited/extended quota; only record history
+  if (isUserAuthenticated) {
+    recordHistoryItem(cleanQuery, resultCount);
+    return {
+      allowed: true,
+      used: 0,
+      max: 999999,
+      remaining: 999999,
+      isLimitReached: false,
+    };
+  }
+
+  // Guest user (5 searches tracked by IP + localStorage)
+  const quota = getLocalGuestQuota();
   const newUsed = quota.used + 1;
   const updatedQuota = {
     used: newUsed,
-    max: MAX_DAILY_SEARCHES,
-    remaining: Math.max(0, MAX_DAILY_SEARCHES - newUsed),
-    date: today,
+    max: MAX_GUEST_SEARCHES,
+    remaining: Math.max(0, MAX_GUEST_SEARCHES - newUsed),
+    isLimitReached: newUsed >= MAX_GUEST_SEARCHES,
   };
 
   try {
-    localStorage.setItem(QUOTA_STORAGE_KEY, JSON.stringify(updatedQuota));
+    localStorage.setItem(GUEST_QUOTA_KEY, JSON.stringify(updatedQuota));
   } catch {}
 
-  // Record in Search History
+  // Record history
   recordHistoryItem(cleanQuery, resultCount);
 
   // Notify listeners across app
   window.dispatchEvent(new Event('gtc360_quota_change'));
 
+  // Asynchronously record on backend IP tracker
+  guestAPI.recordSearch().catch(() => {});
+
   return updatedQuota;
 }
+
 
 /**
  * Record an item to search history

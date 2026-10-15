@@ -10,6 +10,9 @@ import GrantMatchCard from '../components/dashboard/GrantMatchCard';
 import ComparisonDrawer from '../components/dashboard/ComparisonDrawer';
 import SkeletonCard from '../components/dashboard/SkeletonCard';
 import Pagination from '../components/dashboard/Pagination';
+import GuestSignupModal from '../components/common/GuestSignupModal';
+import GrantDetailModal from '../components/dashboard/GrantDetailModal';
+import { getLocalGuestQuota, syncGuestQuota, recordSearch } from '../services/searchQuota';
 
 import {
   categoriesList,
@@ -81,6 +84,45 @@ export default function DashboardPage({
   const [isStatusOpen, setIsStatusOpen] = useState(false);
   const [isAwardOpen, setIsAwardOpen] = useState(false);
 
+  const isUserAuthenticated = Boolean(user && (user._id || user.id || user.email));
+
+  // Guest search quota state (5 searches tracked by IP + localStorage)
+  const [guestQuota, setGuestQuota] = useState(() => getLocalGuestQuota());
+  const [isGuestModalOpen, setIsGuestModalOpen] = useState(false);
+  const [guestModalReason, setGuestModalReason] = useState('timed'); // 'timed' | 'limit_reached' | 'blurred_result' | 'locked_feature' | 'detail_tease'
+  const [guestModalGrantTitle, setGuestModalGrantTitle] = useState('');
+  const [selectedDetailGrant, setSelectedDetailGrant] = useState(null);
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+
+  // Sync guest search quota on mount and upon quota change events
+  useEffect(() => {
+    if (!isUserAuthenticated) {
+      syncGuestQuota().then((q) => {
+        if (q) setGuestQuota(q);
+      });
+    }
+    const handleQuotaChange = () => {
+      setGuestQuota(getLocalGuestQuota());
+    };
+    window.addEventListener('gtc360_quota_change', handleQuotaChange);
+    return () => window.removeEventListener('gtc360_quota_change', handleQuotaChange);
+  }, [isUserAuthenticated]);
+
+  // Timed signup popup for unauthenticated visitors: fires after 6 seconds (client: 5 to 7 seconds)
+  useEffect(() => {
+    if (isUserAuthenticated) return;
+    const hasShownTimed = sessionStorage.getItem('gtc360_timed_popup_shown');
+    if (hasShownTimed) return;
+
+    const timer = setTimeout(() => {
+      setGuestModalReason('timed');
+      setIsGuestModalOpen(true);
+      sessionStorage.setItem('gtc360_timed_popup_shown', 'true');
+    }, 6000);
+
+    return () => clearTimeout(timer);
+  }, [isUserAuthenticated]);
+
   // Saved / Bookmarked Grants from localStorage
   const [savedGrantIds, setSavedGrantIds] = useState(() => {
     try {
@@ -138,6 +180,17 @@ export default function DashboardPage({
   const handleSearchSubmit = (e) => {
     if (e) e.preventDefault();
     const cleanKw = keywordInput.trim();
+
+    // If guest user has exhausted 5 searches, block search and open popup
+    if (!isUserAuthenticated) {
+      const currentQuota = getLocalGuestQuota();
+      if (currentQuota.isLimitReached) {
+        setGuestModalReason('limit_reached');
+        setIsGuestModalOpen(true);
+        return;
+      }
+    }
+
     setActiveKeyword(cleanKw);
     if (setCurrentPage) setCurrentPage(1);
     updateUrlParams({
@@ -149,6 +202,17 @@ export default function DashboardPage({
       award: selectedAward,
       sort: selectedSort,
       page: 1,
+    });
+
+    // Record search credit for guest (tracked by IP in backend)
+    recordSearch(cleanKw, 0, isUserAuthenticated).then((updated) => {
+      if (updated && !isUserAuthenticated) {
+        setGuestQuota(updated);
+        if (updated.isLimitReached) {
+          setGuestModalReason('limit_reached');
+          setIsGuestModalOpen(true);
+        }
+      }
     });
   };
 
@@ -982,7 +1046,15 @@ export default function DashboardPage({
             {/* 6. AI Smart Match Focus Toggle Button */}
             <button
               type="button"
-              onClick={() => setIsFocusInputOpen(!isFocusInputOpen)}
+              onClick={() => {
+                if (!isUserAuthenticated) {
+                  setGuestModalReason('locked_feature');
+                  setGuestModalGrantTitle('AI Real-time Focus Match');
+                  setIsGuestModalOpen(true);
+                  return;
+                }
+                setIsFocusInputOpen(!isFocusInputOpen);
+              }}
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -1054,6 +1126,72 @@ export default function DashboardPage({
 
       {/* 2. MAIN RESULTS AREA */}
       <main style={{ maxWidth: '1240px', margin: '0 auto', padding: '24px 20px 60px' }} id="grants-results-top">
+        {/* Guest Visitor Quota Banner */}
+        {!isUserAuthenticated && (
+          <div
+            style={{
+              background: 'linear-gradient(90deg, rgba(201, 146, 30, 0.12) 0%, rgba(13, 138, 109, 0.12) 100%)',
+              border: '1px solid rgba(201, 146, 30, 0.3)',
+              borderRadius: '10px',
+              padding: '12px 18px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              flexWrap: 'wrap',
+              gap: '12px',
+              marginBottom: '20px',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <div
+                style={{
+                  background: 'var(--brass)',
+                  color: '#FFFFFF',
+                  borderRadius: '50%',
+                  width: '24px',
+                  height: '24px',
+                  display: 'grid',
+                  placeItems: 'center',
+                  fontSize: '11px',
+                  fontWeight: '700',
+                  flexShrink: 0,
+                }}
+              >
+                {guestQuota.remaining}
+              </div>
+              <div>
+                <div style={{ fontSize: '13px', fontWeight: '600', color: '#FFFFFF' }}>
+                  Visitor Access: {guestQuota.remaining} of 5 free searches remaining (tracked by IP)
+                </div>
+                <div style={{ fontSize: '11.5px', color: 'rgba(255, 255, 255, 0.65)' }}>
+                  Top 3 opportunities are shown in full. Results 4+ and AI Match Scores are blurred for guests.
+                </div>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                setGuestModalReason('blurred_result');
+                setIsGuestModalOpen(true);
+              }}
+              style={{
+                background: 'var(--brass)',
+                color: '#FFFFFF',
+                border: 'none',
+                borderRadius: '9999px',
+                padding: '6px 14px',
+                fontSize: '12px',
+                fontWeight: '600',
+                cursor: 'pointer',
+                whiteSpace: 'nowrap',
+                boxShadow: '0 2px 8px rgba(149, 128, 100, 0.3)',
+              }}
+            >
+              Sign Up Free to Unlock All
+            </button>
+          </div>
+        )}
+
         {/* Top Controls: Tabs + Sort + View Mode Switcher */}
         <div
           style={{
@@ -1093,6 +1231,12 @@ export default function DashboardPage({
             <button
               type="button"
               onClick={() => {
+                if (!isUserAuthenticated) {
+                  setGuestModalReason('locked_feature');
+                  setGuestModalGrantTitle('AI Recommended Solicitations');
+                  setIsGuestModalOpen(true);
+                  return;
+                }
                 setActiveTab('recommended');
                 if (setCurrentPage) setCurrentPage(1);
               }}
@@ -1118,6 +1262,12 @@ export default function DashboardPage({
             <button
               type="button"
               onClick={() => {
+                if (!isUserAuthenticated) {
+                  setGuestModalReason('locked_feature');
+                  setGuestModalGrantTitle('Saved Grant Pipeline');
+                  setIsGuestModalOpen(true);
+                  return;
+                }
                 setActiveTab('saved');
                 if (setCurrentPage) setCurrentPage(1);
               }}
@@ -1487,8 +1637,12 @@ export default function DashboardPage({
                 gap: viewMode === 'grid' ? '18px' : '10px',
               }}
             >
-              {paginatedGrants.map((grant) => {
+              {paginatedGrants.map((grant, index) => {
                 const isCompared = comparedGrants.some((g) => g.grant_id === grant.grant_id);
+                const isGuest = !isUserAuthenticated;
+                // Client rule: Each search shows top 3 results in full. Results 4+ are blurred with a sign-up prompt.
+                const isBlurred = isGuest && ((currentPage || 1) > 1 || index >= 3);
+
                 return (
                   <GrantMatchCard
                     key={grant.grant_id}
@@ -1499,6 +1653,17 @@ export default function DashboardPage({
                     hasActiveCriteria={hasSavedPreferences}
                     activeFocus={customAIFocus || activeKeyword || activeCategoryObj?.label || ''}
                     showAIMatch={activeTab === 'recommended' || Boolean(customAIFocus)}
+                    isGuest={isGuest}
+                    isBlurred={isBlurred}
+                    onGuestPrompt={(reason, title) => {
+                      setGuestModalReason(reason || 'blurred_result');
+                      setGuestModalGrantTitle(title || grant.title || '');
+                      setIsGuestModalOpen(true);
+                    }}
+                    onViewGrant={(g) => {
+                      setSelectedDetailGrant(g);
+                      setIsDetailModalOpen(true);
+                    }}
                   />
                 );
               })}
@@ -1590,6 +1755,31 @@ export default function DashboardPage({
         onRemoveGrant={handleRemoveCompare}
         onClearAll={handleClearAllCompare}
         hasActiveCriteria={hasSavedPreferences}
+      />
+
+      {/* Guest Signup Modal */}
+      <GuestSignupModal
+        isOpen={isGuestModalOpen}
+        onClose={() => setIsGuestModalOpen(false)}
+        reason={guestModalReason}
+        grantTitle={guestModalGrantTitle}
+      />
+
+      {/* Grant Detail Tease Modal for Guests */}
+      <GrantDetailModal
+        grant={selectedDetailGrant}
+        isOpen={isDetailModalOpen}
+        onClose={() => {
+          setIsDetailModalOpen(false);
+          setSelectedDetailGrant(null);
+        }}
+        isGuest={!isUserAuthenticated}
+        onGuestSignupPrompt={(reason, title) => {
+          setIsDetailModalOpen(false);
+          setGuestModalReason(reason || 'detail_tease');
+          setGuestModalGrantTitle(title || '');
+          setIsGuestModalOpen(true);
+        }}
       />
     </div>
   );
