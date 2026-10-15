@@ -35,9 +35,7 @@ export default function Navbar({
   const displayName = user
     ? (user.name || user.email?.split('@')[0] || 'Account')
     : '';
-  const displayRole = user
-    ? (user.organizationType ? `${user.organizationType} · Free Account` : 'Free Account')
-    : '';
+
 
   return (
     <header style={{
@@ -53,12 +51,14 @@ export default function Navbar({
         style={{
           maxWidth: '1440px',
           margin: '0 auto',
-          padding: '0 24px',
+          padding: '0 20px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           height: '86px',
-          gap: '16px',
+          gap: '12px',
+          boxSizing: 'border-box',
+          width: '100%',
         }}
       >
         {/* Brand Logo & Tagline (UNTOUCHED as requested) */}
@@ -316,30 +316,31 @@ export default function Navbar({
 
             {/* User Auth Section */}
             {user ? (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
                 {/* User Pill with Avatar */}
                 <div
                   style={{
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '9px',
+                    gap: '8px',
                     background: 'rgba(255, 255, 255, 0.08)',
-                    border: '1px solid rgba(255, 255, 255, 0.12)',
-                    padding: '5px 12px 5px 6px',
+                    border: '1px solid rgba(255, 255, 255, 0.14)',
+                    padding: '4px 12px 4px 5px',
                     borderRadius: '9999px',
-                    maxWidth: '220px',
+                    maxWidth: '180px',
                   }}
+                  title={user?.email || displayName}
                 >
                   <div
                     style={{
-                      width: '28px',
-                      height: '28px',
+                      width: '26px',
+                      height: '26px',
                       borderRadius: '50%',
                       background: 'linear-gradient(135deg, var(--brass), #4A3E31)',
                       color: '#FFFFFF',
                       display: 'grid',
                       placeItems: 'center',
-                      fontSize: '12px',
+                      fontSize: '11.5px',
                       fontWeight: '700',
                       flexShrink: 0,
                       border: '1px solid rgba(196, 162, 101, 0.4)',
@@ -347,27 +348,18 @@ export default function Navbar({
                   >
                     {userInitial}
                   </div>
-                  <div style={{ textAlign: 'left', lineHeight: 1.25, minWidth: 0, overflow: 'hidden' }}>
-                    <div style={{
+                  <span
+                    style={{
                       fontSize: '12.5px',
                       fontWeight: '600',
                       color: '#FFFFFF',
                       whiteSpace: 'nowrap',
                       overflow: 'hidden',
                       textOverflow: 'ellipsis',
-                    }}>
-                      {displayName}
-                    </div>
-                    <div style={{
-                      fontSize: '10.5px',
-                      color: 'var(--brass-light)',
-                      whiteSpace: 'nowrap',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                    }}>
-                      {displayRole}
-                    </div>
-                  </div>
+                    }}
+                  >
+                    {displayName}
+                  </span>
                 </div>
 
                 {/* Logout Button */}

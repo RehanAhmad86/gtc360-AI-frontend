@@ -159,21 +159,21 @@ button {
   transform: scale(1.02);
 }
 
-@media (max-width: 880px) {
+@media (max-width: 1280px) {
   .brand-tagline {
+    display: none !important;
+  }
+}
+
+@media (max-width: 1080px) {
+  .brand-divider,
+  .brand-text-block {
     display: none !important;
   }
 }
 
 @media (max-width: 600px) {
   .brand-badge {
-    display: none !important;
-  }
-}
-
-@media (max-width: 480px) {
-  .brand-divider,
-  .brand-text-block {
     display: none !important;
   }
 }
