@@ -6,7 +6,6 @@ import {
   Lock,
   Sparkles,
   Eye,
-  Copy,
   CheckCircle2,
   ArrowRight,
   ShieldCheck,
@@ -14,177 +13,17 @@ import {
   Users,
   Compass,
   Layers,
-  FileSpreadsheet,
-  FileText
+  Search,
+  Bookmark,
+  FileText,
+  Mail,
+  Zap,
+  PhoneCall
 } from 'lucide-react';
 
 export default function PricingPage() {
   const navigate = useNavigate();
   const [billingCycle, setBillingCycle] = useState('monthly'); // 'monthly' | 'annual'
-  const [copiedType, setCopiedType] = useState(null);
-
-  const MD_CONTENT = `| Feature | No Account | Explorer (Free) | Advanced ($299/mo) | Professional ($499/mo) |
-|---|---|---|---|---|
-| **BASICS** | | | | |
-| Free trial | — | — | 14 days free | 14 days free |
-| Billing | — | Free forever | Monthly or annual | Monthly or annual |
-| Annual pricing | — | — | $2,990/yr (2 mo free) | $4,990/yr (2 mo free) |
-| **SEARCH** | | | | |
-| Searches available | 5 total (IP-tracked) | 10 / month | Unlimited | Unlimited |
-| Databases searched | All 24 | All 24 | All 24 | All 24 |
-| Results per search | Top 3 (rest blurred) | Top 5 (rest blurred) | All results | All results |
-| Grant detail page | 🔒 Blurred tease | Summary only | ✓ Full details | ✓ Full details |
-| AI match scoring | — | — | ✓ | ✓ |
-| Eligibility filtering | — | — | ✓ | ✓ |
-| Geographic filtering | — | — | — | ✓ |
-| **PROFILE & PERSONALIZATION** | | | | |
-| Organization profile | — | ✓ 1 profile | ✓ 3 profiles | ✓ Unlimited |
-| Profile-tailored results | — | ✓ | ✓ Enhanced | ✓ Enhanced |
-| Keyword alerts | — | — | ✓ | ✓ |
-| **INBOX DELIVERY** | | | | |
-| Results to inbox | — | ✓ Basic | ✓ Tailored | ✓ Tailored |
-| Weekly digest | — | — | ✓ | ✓ |
-| Real-time alerts (email + SMS) | — | — | — | ✓ |
-| **PIPELINE BUILDER** | | | | |
-| Pipeline builder | — | — | ✓ | ✓ |
-| Saved opportunities | — | 5 | 50 | Unlimited |
-| Comparison board | — | — | Up to 5 | Up to 10 |
-| Pipeline value snapshot | — | View only | ✓ Full access | ✓ Full access |
-| **INTELLIGENCE & ANALYTICS** | | | | |
-| Analytics dashboard | — | — | ✓ | ✓ |
-| Win rate + benchmarking | — | — | — | ✓ |
-| SAM.gov registration checker | — | — | — | ✓ |
-| **AI TOOLS** | | | | |
-| AI Funding Advisor | — | 3 / month | 20 / month | Unlimited |
-| AI Application Assistant | — | — | — | ✓ |
-| **REPORTS & EXPORT** | | | | |
-| CSV export | — | — | ✓ | ✓ |
-| Monthly Pipeline Report (PDF) | — | — | ✓ | ✓ |
-| DOCX branded reports | — | — | — | ✓ |
-| Quarterly Pipeline Assessment | — | — | — | ✓ advisor-written |
-| **EXPERT ACCESS** | | | | |
-| Monthly advisor call (30 min) | — | — | — | ✓ |
-| Preferred consulting access | — | — | — | ✓ |
-| **TEAM & SUPPORT** | | | | |
-| User seats | — | 1 | 1 | 3 seats |
-| Support | — | Community | Email (48h) | Priority (same day) |`;
-
-  const PLAIN_TEXT_CONTENT = `GrantSignal 360° — Tier Comparison (Updated Oct 2026)
-Advanced: $299/mo ($2,990/yr) · Professional: $499/mo ($4,990/yr)
-
-FEATURE                              NO ACCOUNT        EXPLORER (Free)      ADVANCED ($299/mo)      PROFESSIONAL ($499/mo)
-───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-BASICS
-Free trial                           —                 —                    14 days free            14 days free
-Billing                              —                 Free forever          Monthly or annual        Monthly or annual
-Annual pricing                       —                 —                    $2,990/yr (2 mo free)   $4,990/yr (2 mo free)
-Cancel anytime                       —                 ✓                    ✓                       ✓
-
-SEARCH
-Searches available                   5 total (IP)      10 / month           Unlimited               Unlimited
-Federal databases searched           All 24            All 24               All 24                  All 24
-Results shown per search             Top 3 (rest blur) Top 5 (rest blur)    All results             All results
-Grant detail page                    🔒 Blurred        Summary only         ✓ Full details          ✓ Full details
-AI match scoring                     —                 —                    ✓                       ✓
-Eligibility filtering                —                 —                    ✓                       ✓
-Geographic filtering                 —                 —                    —                       ✓
-
-PROFILE & PERSONALIZATION
-Organization profile                 —                 ✓ 1 profile          ✓ 3 profiles            ✓ Unlimited
-Profile-tailored results             —                 ✓                    ✓ Enhanced              ✓ Enhanced
-Keyword alerts                       —                 —                    ✓                       ✓
-
-INBOX DELIVERY
-Results to inbox                     —                 ✓ Basic              ✓ Tailored to profile   ✓ Tailored to profile
-Weekly digest                        —                 —                    ✓                       ✓
-Real-time alerts (email + SMS)       —                 —                    —                       ✓
-
-PIPELINE BUILDER
-Pipeline builder                     —                 —                    ✓                       ✓
-Saved opportunities                  —                 5                    50                      Unlimited
-Opportunity comparison board         —                 —                    Up to 5                 Up to 10
-Pipeline value snapshot              —                 View only            ✓ Full access           ✓ Full access
-
-INTELLIGENCE & ANALYTICS
-Analytics dashboard                  —                 —                    ✓                       ✓
-Win rate + award benchmarking        —                 —                    —                       ✓
-SAM.gov registration checker         —                 —                    —                       ✓
-
-AI TOOLS
-AI Funding Advisor                   —                 3 questions/month    20 questions/month      Unlimited
-AI Application Assistant             —                 —                    —                       ✓
-
-REPORTS & EXPORT
-CSV export                           —                 —                    ✓                       ✓
-Monthly Pipeline Report (auto PDF)   —                 —                    ✓                       ✓
-DOCX branded reports                 —                 —                    —                       ✓
-Quarterly Pipeline Assessment        —                 —                    —                       ✓ Advisor-written
-
-EXPERT ACCESS
-Monthly advisor call (30 min)        —                 —                    —                       ✓
-Preferred consulting access          —                 —                    —                       ✓
-
-TEAM & SUPPORT
-User seats                           —                 1                    1                       3 seats
-Support                              —                 Community            Email (48h)             Priority (same day)
-
-─── GUEST TEASE MECHANIC ────────────────────────────────────────────────────────────────────────────────────────────────
-5 total searches tracked by IP · Top 3 results visible · Results 4+ blurred · Grant detail page blurred on click
-CTA after 5 searches: "Create a free account to continue — no card required"`;
-
-  const TSV_CONTENT = [
-    ['Feature', 'No Account', 'Explorer (Free)', 'Advanced ($299/mo)', 'Professional ($499/mo)'],
-    ['--- BASICS ---', '', '', '', ''],
-    ['Free trial', '—', '—', '14 days free', '14 days free'],
-    ['Billing', '—', 'Free forever', 'Monthly or annual', 'Monthly or annual'],
-    ['Annual pricing', '—', '—', '$2,990/yr (2 mo free)', '$4,990/yr (2 mo free)'],
-    ['--- SEARCH ---', '', '', '', ''],
-    ['Searches available', '5 total (IP-tracked)', '10 / month', 'Unlimited', 'Unlimited'],
-    ['Databases searched', 'All 24', 'All 24', 'All 24', 'All 24'],
-    ['Results per search', 'Top 3 (rest blurred)', 'Top 5 (rest blurred)', 'All results', 'All results'],
-    ['Grant detail page', 'Blurred tease', 'Summary only', 'Full details', 'Full details'],
-    ['AI match scoring', '—', '—', '✓', '✓'],
-    ['Eligibility filtering', '—', '—', '✓', '✓'],
-    ['Geographic filtering', '—', '—', '—', '✓'],
-    ['--- PROFILE & PERSONALIZATION ---', '', '', '', ''],
-    ['Organization profile', '—', '1 profile', '3 profiles', 'Unlimited'],
-    ['Profile-tailored results', '—', '✓', 'Enhanced', 'Enhanced'],
-    ['Keyword alerts', '—', '—', '✓', '✓'],
-    ['--- INBOX DELIVERY ---', '', '', '', ''],
-    ['Results to inbox', '—', 'Basic', 'Tailored to profile', 'Tailored to profile'],
-    ['Weekly digest', '—', '—', '✓', '✓'],
-    ['Real-time alerts (email + SMS)', '—', '—', '—', '✓'],
-    ['--- PIPELINE BUILDER ---', '', '', '', ''],
-    ['Pipeline builder', '—', '—', '✓', '✓'],
-    ['Saved opportunities', '—', '5', '50', 'Unlimited'],
-    ['Comparison board', '—', '—', 'Up to 5', 'Up to 10'],
-    ['Pipeline value snapshot', '—', 'View only', 'Full access', 'Full access'],
-    ['--- INTELLIGENCE & ANALYTICS ---', '', '', '', ''],
-    ['Analytics dashboard', '—', '—', '✓', '✓'],
-    ['Win rate + benchmarking', '—', '—', '—', '✓'],
-    ['SAM.gov registration checker', '—', '—', '—', '✓'],
-    ['--- AI TOOLS ---', '', '', '', ''],
-    ['AI Funding Advisor', '—', '3/month', '20/month', 'Unlimited'],
-    ['AI Application Assistant', '—', '—', '—', '✓'],
-    ['--- REPORTS & EXPORT ---', '', '', '', ''],
-    ['CSV export', '—', '—', '✓', '✓'],
-    ['Monthly Pipeline Report (PDF)', '—', '—', '✓', '✓'],
-    ['DOCX branded reports', '—', '—', '—', '✓'],
-    ['Quarterly Pipeline Assessment', '—', '—', '—', 'Advisor-written'],
-    ['--- EXPERT ACCESS ---', '', '', '', ''],
-    ['Monthly advisor call (30 min)', '—', '—', '—', '✓'],
-    ['Preferred consulting access', '—', '—', '—', '✓'],
-    ['--- TEAM & SUPPORT ---', '', '', '', ''],
-    ['User seats', '—', '1', '1', '3 seats'],
-    ['Support level', '—', 'Community', 'Email (48h)', 'Priority (same day)'],
-  ].map((r) => r.join('\t')).join('\n');
-
-  const copyToClipboard = (text, type) => {
-    navigator.clipboard.writeText(text).then(() => {
-      setCopiedType(type);
-      setTimeout(() => setCopiedType(null), 2200);
-    });
-  };
 
   return (
     <div style={{ background: '#071220', minHeight: '100vh', color: '#FFFFFF', padding: '40px 20px 80px' }}>
@@ -304,7 +143,7 @@ CTA after 5 searches: "Create a free account to continue — no card required"`;
             display: 'flex',
             alignItems: 'flex-start',
             gap: '16px',
-            marginBottom: '32px',
+            marginBottom: '36px',
           }}
         >
           <div
@@ -348,82 +187,14 @@ CTA after 5 searches: "Create a free account to continue — no card required"`;
           </div>
         </div>
 
-        {/* 3. Fast Copy Row */}
-        <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', marginBottom: '32px', flexWrap: 'wrap' }}>
-          <button
-            type="button"
-            onClick={() => copyToClipboard(MD_CONTENT, 'md')}
-            style={{
-              background: copiedType === 'md' ? '#059669' : 'rgba(255, 255, 255, 0.08)',
-              border: '1px solid rgba(255, 255, 255, 0.18)',
-              color: '#FFFFFF',
-              borderRadius: '8px',
-              padding: '7px 14px',
-              fontSize: '12.5px',
-              fontWeight: '600',
-              cursor: 'pointer',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px',
-              transition: 'all 0.15s ease',
-            }}
-          >
-            {copiedType === 'md' ? <Check size={14} /> : <FileText size={14} />}
-            <span>{copiedType === 'md' ? '✓ Copied Markdown' : 'Copy as Markdown'}</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => copyToClipboard(PLAIN_TEXT_CONTENT, 'pt')}
-            style={{
-              background: copiedType === 'pt' ? '#059669' : 'rgba(255, 255, 255, 0.08)',
-              border: '1px solid rgba(255, 255, 255, 0.18)',
-              color: '#FFFFFF',
-              borderRadius: '8px',
-              padding: '7px 14px',
-              fontSize: '12.5px',
-              fontWeight: '600',
-              cursor: 'pointer',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px',
-              transition: 'all 0.15s ease',
-            }}
-          >
-            {copiedType === 'pt' ? <Check size={14} /> : <Copy size={14} />}
-            <span>{copiedType === 'pt' ? '✓ Copied Plain Text' : 'Copy as Plain Text'}</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => copyToClipboard(TSV_CONTENT, 'tsv')}
-            style={{
-              background: copiedType === 'tsv' ? '#059669' : 'rgba(255, 255, 255, 0.08)',
-              border: '1px solid rgba(255, 255, 255, 0.18)',
-              color: '#FFFFFF',
-              borderRadius: '8px',
-              padding: '7px 14px',
-              fontSize: '12.5px',
-              fontWeight: '600',
-              cursor: 'pointer',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px',
-              transition: 'all 0.15s ease',
-            }}
-          >
-            {copiedType === 'tsv' ? <Check size={14} /> : <FileSpreadsheet size={14} />}
-            <span>{copiedType === 'tsv' ? '✓ Copied for Sheets' : 'Copy for Excel / Sheets'}</span>
-          </button>
-        </div>
-
-        {/* 4. Four Tier Cards Grid */}
+        {/* 3. Four Comprehensive Executive Tier Cards */}
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-            gap: '20px',
-            marginBottom: '40px',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(270px, 1fr))',
+            gap: '22px',
+            marginBottom: '48px',
+            alignItems: 'stretch',
           }}
         >
           {/* Tier 1: Visitor (No Account) */}
@@ -431,44 +202,84 @@ CTA after 5 searches: "Create a free account to continue — no card required"`;
             style={{
               background: '#0B1728',
               border: '1px solid rgba(255, 255, 255, 0.12)',
-              borderRadius: '14px',
-              padding: '24px',
+              borderRadius: '16px',
+              padding: '28px 24px',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between',
+              boxShadow: '0 4px 20px rgba(0, 0, 0, 0.25)',
             }}
           >
             <div>
-              <span
-                style={{
-                  fontSize: '10px',
-                  fontWeight: '700',
-                  letterSpacing: '0.08em',
-                  textTransform: 'uppercase',
-                  background: 'rgba(255, 255, 255, 0.08)',
-                  color: 'rgba(255, 255, 255, 0.6)',
-                  padding: '3px 8px',
-                  borderRadius: '4px',
-                  display: 'inline-block',
-                  marginBottom: '10px',
-                }}
-              >
-                Visitor
-              </span>
-              <h3 style={{ fontSize: '18px', fontWeight: '700', color: '#FFFFFF', marginBottom: '4px' }}>No Account</h3>
-              <div style={{ fontSize: '28px', fontWeight: '800', color: 'rgba(255, 255, 255, 0.85)', marginBottom: '4px' }}>
-                Free
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                <span
+                  style={{
+                    fontSize: '10.5px',
+                    fontWeight: '700',
+                    letterSpacing: '0.08em',
+                    textTransform: 'uppercase',
+                    background: 'rgba(255, 255, 255, 0.08)',
+                    color: 'rgba(255, 255, 255, 0.65)',
+                    padding: '3px 9px',
+                    borderRadius: '4px',
+                  }}
+                >
+                  Visitor
+                </span>
+                <span style={{ fontSize: '11px', color: 'rgba(255, 255, 255, 0.4)' }}>No Sign-Up</span>
               </div>
-              <p style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.5)', marginBottom: '18px' }}>
-                5 free searches total · IP-tracked
+
+              <h3 style={{ fontSize: '20px', fontWeight: '700', color: '#FFFFFF', marginBottom: '6px' }}>No Account</h3>
+              <p style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.55)', minHeight: '34px', lineHeight: 1.4, marginBottom: '16px' }}>
+                Quick exploratory search without creating an account or providing card details.
               </p>
-              <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 24px', display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '12.5px', color: 'rgba(255, 255, 255, 0.7)' }}>
-                <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Check size={14} color="#10B981" /> 5 free queries across all 24 databases</li>
-                <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Check size={14} color="#10B981" /> Top 3 results shown in full</li>
-                <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Lock size={14} color="var(--brass-light)" /> Results 4+ blurred with sign-up prompt</li>
-                <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Lock size={14} color="var(--brass-light)" /> Detail view teased with blur overlay</li>
-              </ul>
+
+              <div style={{ marginBottom: '18px', paddingBottom: '16px', borderBottom: '1px solid rgba(255, 255, 255, 0.08)' }}>
+                <div style={{ fontSize: '32px', fontWeight: '800', color: 'rgba(255, 255, 255, 0.9)', lineHeight: 1 }}>
+                  Free
+                </div>
+                <div style={{ fontSize: '11.5px', color: 'rgba(255, 255, 255, 0.45)', marginTop: '4px' }}>
+                  5 searches total · Tracked by IP address
+                </div>
+              </div>
+
+              <div style={{ marginBottom: '24px' }}>
+                <div style={{ fontSize: '11px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.06em', color: 'rgba(255, 255, 255, 0.4)', marginBottom: '10px' }}>
+                  What&apos;s Included:
+                </div>
+                <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '9px', fontSize: '12.5px', color: 'rgba(255, 255, 255, 0.75)' }}>
+                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                    <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                    <span><strong>5 total free searches</strong> (tracked by IP)</span>
+                  </li>
+                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                    <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                    <span><strong>Top 3 results in full</strong> per query</span>
+                  </li>
+                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                    <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                    <span>Search across all <strong>24 federal databases</strong></span>
+                  </li>
+                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                    <Lock size={14} color="var(--brass-light)" style={{ flexShrink: 0, marginTop: '2px' }} />
+                    <span><strong>Results 4+ blurred</strong> with signup prompt</span>
+                  </li>
+                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                    <Lock size={14} color="var(--brass-light)" style={{ flexShrink: 0, marginTop: '2px' }} />
+                    <span><strong>Grant detail tease</strong> with frosted overlay</span>
+                  </li>
+                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                    <Lock size={14} color="var(--brass-light)" style={{ flexShrink: 0, marginTop: '2px' }} />
+                    <span><strong>AI Match Score teased</strong> (🔒 92% Fit badge)</span>
+                  </li>
+                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                    <X size={14} color="rgba(255, 255, 255, 0.25)" style={{ flexShrink: 0, marginTop: '2px' }} />
+                    <span style={{ color: 'rgba(255, 255, 255, 0.4)' }}>No saved pipeline or email alerts</span>
+                  </li>
+                </ul>
+              </div>
             </div>
+
             <button
               type="button"
               onClick={() => navigate('/grants')}
@@ -478,10 +289,11 @@ CTA after 5 searches: "Create a free account to continue — no card required"`;
                 border: '1px solid rgba(255, 255, 255, 0.2)',
                 color: '#FFFFFF',
                 borderRadius: '8px',
-                padding: '10px',
+                padding: '11px',
                 fontSize: '13px',
                 fontWeight: '600',
                 cursor: 'pointer',
+                transition: 'all 0.15s ease',
               }}
             >
               Explore Free as Guest
@@ -492,133 +304,220 @@ CTA after 5 searches: "Create a free account to continue — no card required"`;
           <div
             style={{
               background: '#0B1728',
-              border: '1px solid rgba(26, 86, 219, 0.35)',
-              borderRadius: '14px',
-              padding: '24px',
+              border: '1px solid rgba(26, 86, 219, 0.45)',
+              borderRadius: '16px',
+              padding: '28px 24px',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between',
+              boxShadow: '0 4px 20px rgba(26, 86, 219, 0.15)',
             }}
           >
             <div>
-              <span
-                style={{
-                  fontSize: '10px',
-                  fontWeight: '700',
-                  letterSpacing: '0.08em',
-                  textTransform: 'uppercase',
-                  background: 'rgba(26, 86, 219, 0.2)',
-                  color: '#60A5FA',
-                  padding: '3px 8px',
-                  borderRadius: '4px',
-                  display: 'inline-block',
-                  marginBottom: '10px',
-                }}
-              >
-                Explorer
-              </span>
-              <h3 style={{ fontSize: '18px', fontWeight: '700', color: '#FFFFFF', marginBottom: '4px' }}>Free Account</h3>
-              <div style={{ fontSize: '28px', fontWeight: '800', color: '#FFFFFF', marginBottom: '4px' }}>
-                $0
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                <span
+                  style={{
+                    fontSize: '10.5px',
+                    fontWeight: '700',
+                    letterSpacing: '0.08em',
+                    textTransform: 'uppercase',
+                    background: 'rgba(26, 86, 219, 0.2)',
+                    color: '#93C5FD',
+                    padding: '3px 9px',
+                    borderRadius: '4px',
+                  }}
+                >
+                  Explorer
+                </span>
+                <span style={{ fontSize: '11px', color: '#93C5FD' }}>Free Registration</span>
               </div>
-              <p style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.5)', marginBottom: '18px' }}>
-                Forever · No credit card required
+
+              <h3 style={{ fontSize: '20px', fontWeight: '700', color: '#FFFFFF', marginBottom: '6px' }}>Free Account</h3>
+              <p style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.55)', minHeight: '34px', lineHeight: 1.4, marginBottom: '16px' }}>
+                For non-profits and teams getting started with ongoing federal and state funding tracking.
               </p>
-              <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 24px', display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '12.5px', color: 'rgba(255, 255, 255, 0.7)' }}>
-                <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Check size={14} color="#10B981" /> 10 searches per month</li>
-                <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Check size={14} color="#10B981" /> Top 5 results shown</li>
-                <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Check size={14} color="#10B981" /> 1 organization funding profile</li>
-                <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Check size={14} color="#10B981" /> 5 saved grant pipeline slots</li>
-                <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Check size={14} color="#10B981" /> 3 AI funding advisor queries / mo</li>
-              </ul>
+
+              <div style={{ marginBottom: '18px', paddingBottom: '16px', borderBottom: '1px solid rgba(255, 255, 255, 0.08)' }}>
+                <div style={{ fontSize: '32px', fontWeight: '800', color: '#FFFFFF', lineHeight: 1 }}>
+                  $0
+                </div>
+                <div style={{ fontSize: '11.5px', color: 'rgba(255, 255, 255, 0.45)', marginTop: '4px' }}>
+                  Free forever · No credit card required
+                </div>
+              </div>
+
+              <div style={{ marginBottom: '24px' }}>
+                <div style={{ fontSize: '11px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.06em', color: 'rgba(255, 255, 255, 0.4)', marginBottom: '10px' }}>
+                  What&apos;s Included:
+                </div>
+                <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '9px', fontSize: '12.5px', color: 'rgba(255, 255, 255, 0.75)' }}>
+                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                    <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                    <span><strong>10 searches per month</strong> across all databases</span>
+                  </li>
+                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                    <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                    <span><strong>Top 5 results visible</strong> per search query</span>
+                  </li>
+                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                    <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                    <span><strong>1 Organization Funding Profile</strong> setup</span>
+                  </li>
+                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                    <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                    <span><strong>5 Saved Grant Pipeline slots</strong> to bookmark</span>
+                  </li>
+                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                    <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                    <span><strong>Weekly email digest</strong> of matching solicitations</span>
+                  </li>
+                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                    <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                    <span><strong>3 AI Funding Advisor questions</strong> / month</span>
+                  </li>
+                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                    <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                    <span>View-only pipeline value estimate summary</span>
+                  </li>
+                </ul>
+              </div>
             </div>
+
             <button
               type="button"
               onClick={() => navigate('/signup')}
               style={{
                 width: '100%',
-                background: 'rgba(26, 86, 219, 0.25)',
-                border: '1px solid rgba(26, 86, 219, 0.6)',
-                color: '#93C5FD',
+                background: 'rgba(26, 86, 219, 0.3)',
+                border: '1px solid rgba(26, 86, 219, 0.65)',
+                color: '#BFDBFE',
                 borderRadius: '8px',
-                padding: '10px',
+                padding: '11px',
                 fontSize: '13px',
                 fontWeight: '600',
                 cursor: 'pointer',
+                transition: 'all 0.15s ease',
               }}
             >
               Create Free Account
             </button>
           </div>
 
-          {/* Tier 3: Advanced (Convert Target) */}
+          {/* Tier 3: Advanced (Convert Target) - Featured & Highlighted */}
           <div
             style={{
-              background: 'linear-gradient(180deg, #132238 0%, #0B1728 100%)',
+              background: 'linear-gradient(180deg, #13243C 0%, #0B1728 100%)',
               border: '2px solid var(--brass)',
-              borderRadius: '14px',
-              padding: '24px',
+              borderRadius: '16px',
+              padding: '28px 24px',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between',
               position: 'relative',
-              boxShadow: '0 12px 36px rgba(201, 146, 30, 0.25)',
+              boxShadow: '0 16px 48px rgba(201, 146, 30, 0.28)',
+              transform: 'scale(1.02)',
             }}
           >
             <div
               style={{
                 position: 'absolute',
-                top: '-12px',
-                right: '18px',
+                top: '-13px',
+                right: '20px',
                 background: 'var(--brass)',
                 color: '#FFFFFF',
                 borderRadius: '9999px',
-                padding: '2px 10px',
+                padding: '3px 12px',
                 fontSize: '10.5px',
                 fontWeight: '800',
-                letterSpacing: '0.04em',
+                letterSpacing: '0.05em',
                 textTransform: 'uppercase',
+                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.4)',
               }}
             >
-              ✦ Convert Target
+              ✦ Convert Target · Most Popular
             </div>
+
             <div>
-              <span
-                style={{
-                  fontSize: '10px',
-                  fontWeight: '700',
-                  letterSpacing: '0.08em',
-                  textTransform: 'uppercase',
-                  background: 'rgba(201, 146, 30, 0.2)',
-                  color: 'var(--brass-light)',
-                  padding: '3px 8px',
-                  borderRadius: '4px',
-                  display: 'inline-block',
-                  marginBottom: '10px',
-                }}
-              >
-                Advanced
-              </span>
-              <h3 style={{ fontSize: '18px', fontWeight: '700', color: '#FFFFFF', marginBottom: '4px' }}>Advanced Tier</h3>
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px', marginBottom: '4px' }}>
-                <span style={{ fontSize: '32px', fontWeight: '800', color: 'var(--brass-light)' }}>
-                  {billingCycle === 'annual' ? '$249' : '$299'}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                <span
+                  style={{
+                    fontSize: '10.5px',
+                    fontWeight: '700',
+                    letterSpacing: '0.08em',
+                    textTransform: 'uppercase',
+                    background: 'rgba(201, 146, 30, 0.22)',
+                    color: 'var(--brass-light)',
+                    padding: '3px 9px',
+                    borderRadius: '4px',
+                  }}
+                >
+                  Advanced
                 </span>
-                <span style={{ fontSize: '13px', color: 'rgba(255, 255, 255, 0.5)' }}>/ month</span>
+                <span style={{ fontSize: '11px', color: '#4ADE80', fontWeight: '600' }}>14-Day Free Trial</span>
               </div>
-              <p style={{ fontSize: '12px', color: '#34D399', fontWeight: '600', marginBottom: '18px' }}>
-                {billingCycle === 'annual' ? 'Billed annually ($2,990/yr · 2 mo free)' : '14-day free trial · Cancel anytime'}
+
+              <h3 style={{ fontSize: '20px', fontWeight: '700', color: '#FFFFFF', marginBottom: '6px' }}>Advanced Tier</h3>
+              <p style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.65)', minHeight: '34px', lineHeight: 1.4, marginBottom: '16px' }}>
+                Full-scale AI funding intelligence, custom fit scoring, and pipeline tools for active grant seekers.
               </p>
-              <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 24px', display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '12.5px', color: 'rgba(255, 255, 255, 0.85)' }}>
-                <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Check size={14} color="#10B981" /> <strong>Unlimited searches &amp; results</strong></li>
-                <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Check size={14} color="#10B981" /> <strong>Full AI Match Score (0–100%)</strong></li>
-                <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Check size={14} color="#10B981" /> Full grant solicitation dossiers</li>
-                <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Check size={14} color="#10B981" /> 3 organization funding profiles</li>
-                <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Check size={14} color="#10B981" /> 50 saved pipeline grants + 5 comparison slots</li>
-                <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Check size={14} color="#10B981" /> 20 AI Funding Advisor queries / mo</li>
-                <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Check size={14} color="#10B981" /> CSV &amp; Monthly PDF Pipeline Report</li>
-              </ul>
+
+              <div style={{ marginBottom: '18px', paddingBottom: '16px', borderBottom: '1px solid rgba(255, 255, 255, 0.12)' }}>
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
+                  <span style={{ fontSize: '36px', fontWeight: '800', color: 'var(--brass-light)', lineHeight: 1 }}>
+                    {billingCycle === 'annual' ? '$249' : '$299'}
+                  </span>
+                  <span style={{ fontSize: '13px', color: 'rgba(255, 255, 255, 0.5)' }}>/ month</span>
+                </div>
+                <div style={{ fontSize: '11.5px', color: '#4ADE80', fontWeight: '600', marginTop: '6px' }}>
+                  {billingCycle === 'annual' ? 'Billed annually ($2,990/yr · 2 Months Free)' : '14-day free trial · Cancel anytime'}
+                </div>
+              </div>
+
+              <div style={{ marginBottom: '24px' }}>
+                <div style={{ fontSize: '11px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--brass-light)', marginBottom: '10px' }}>
+                  Everything in Explorer, plus:
+                </div>
+                <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '9px', fontSize: '12.5px', color: '#FFFFFF' }}>
+                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                    <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                    <span><strong>Unlimited searches</strong> across all 24 databases</span>
+                  </li>
+                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                    <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                    <span><strong>100% visible results</strong> (zero blurred records)</span>
+                  </li>
+                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                    <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                    <span><strong>0–100% AI Fit Scoring</strong> with match explanations</span>
+                  </li>
+                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                    <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                    <span><strong>Full Grant Dossiers</strong> (CFDA, deadlines, application links)</span>
+                  </li>
+                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                    <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                    <span><strong>3 Organization Funding Profiles</strong></span>
+                  </li>
+                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                    <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                    <span><strong>50 Saved Pipeline Grants</strong> + 5 comparison slots</span>
+                  </li>
+                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                    <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                    <span><strong>CSV Data Export</strong> &amp; Monthly PDF Pipeline Report</span>
+                  </li>
+                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                    <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                    <span><strong>20 AI Funding Advisor questions</strong> / month</span>
+                  </li>
+                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                    <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                    <span>Weekly digest + tailored keyword alert emails</span>
+                  </li>
+                </ul>
+              </div>
             </div>
+
             <button
               type="button"
               onClick={() => navigate('/signup')}
@@ -628,11 +527,12 @@ CTA after 5 searches: "Create a free account to continue — no card required"`;
                 border: 'none',
                 color: '#FFFFFF',
                 borderRadius: '8px',
-                padding: '11px',
+                padding: '12px',
                 fontSize: '13.5px',
                 fontWeight: '700',
                 cursor: 'pointer',
-                boxShadow: '0 4px 14px rgba(201, 146, 30, 0.35)',
+                boxShadow: '0 4px 14px rgba(201, 146, 30, 0.4)',
+                transition: 'all 0.15s ease',
               }}
             >
               Start 14-Day Free Trial
@@ -643,50 +543,96 @@ CTA after 5 searches: "Create a free account to continue — no card required"`;
           <div
             style={{
               background: '#0B1728',
-              border: '1px solid rgba(201, 146, 30, 0.3)',
-              borderRadius: '14px',
-              padding: '24px',
+              border: '1px solid rgba(201, 146, 30, 0.35)',
+              borderRadius: '16px',
+              padding: '28px 24px',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between',
+              boxShadow: '0 4px 20px rgba(0, 0, 0, 0.25)',
             }}
           >
             <div>
-              <span
-                style={{
-                  fontSize: '10px',
-                  fontWeight: '700',
-                  letterSpacing: '0.08em',
-                  textTransform: 'uppercase',
-                  background: 'rgba(201, 146, 30, 0.15)',
-                  color: 'var(--brass-light)',
-                  padding: '3px 8px',
-                  borderRadius: '4px',
-                  display: 'inline-block',
-                  marginBottom: '10px',
-                }}
-              >
-                Professional
-              </span>
-              <h3 style={{ fontSize: '18px', fontWeight: '700', color: '#FFFFFF', marginBottom: '4px' }}>Professional</h3>
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px', marginBottom: '4px' }}>
-                <span style={{ fontSize: '32px', fontWeight: '800', color: '#FFFFFF' }}>
-                  {billingCycle === 'annual' ? '$415' : '$499'}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                <span
+                  style={{
+                    fontSize: '10.5px',
+                    fontWeight: '700',
+                    letterSpacing: '0.08em',
+                    textTransform: 'uppercase',
+                    background: 'rgba(201, 146, 30, 0.15)',
+                    color: 'var(--brass-light)',
+                    padding: '3px 9px',
+                    borderRadius: '4px',
+                  }}
+                >
+                  Professional
                 </span>
-                <span style={{ fontSize: '13px', color: 'rgba(255, 255, 255, 0.5)' }}>/ month</span>
+                <span style={{ fontSize: '11px', color: 'var(--brass-light)' }}>Includes Advisory</span>
               </div>
-              <p style={{ fontSize: '12px', color: '#34D399', fontWeight: '600', marginBottom: '18px' }}>
-                {billingCycle === 'annual' ? 'Billed annually ($4,990/yr · 2 mo free)' : '14-day free trial · Includes Advisory'}
+
+              <h3 style={{ fontSize: '20px', fontWeight: '700', color: '#FFFFFF', marginBottom: '6px' }}>Professional</h3>
+              <p style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.55)', minHeight: '34px', lineHeight: 1.4, marginBottom: '16px' }}>
+                Full software intelligence plus dedicated human strategy reviews and narrative assistance.
               </p>
-              <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 24px', display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '12.5px', color: 'rgba(255, 255, 255, 0.7)' }}>
-                <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Check size={14} color="#10B981" /> Everything in Advanced</li>
-                <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Check size={14} color="#10B981" /> <strong>Monthly 30-min strategy call with advisor</strong></li>
-                <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Check size={14} color="#10B981" /> AI Application Assistant (draft narrative)</li>
-                <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Check size={14} color="#10B981" /> Unlimited AI Funding Advisor queries</li>
-                <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Check size={14} color="#10B981" /> 3 team seats included</li>
-                <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Check size={14} color="#10B981" /> Advisor-written Quarterly Assessment</li>
-              </ul>
+
+              <div style={{ marginBottom: '18px', paddingBottom: '16px', borderBottom: '1px solid rgba(255, 255, 255, 0.08)' }}>
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
+                  <span style={{ fontSize: '36px', fontWeight: '800', color: '#FFFFFF', lineHeight: 1 }}>
+                    {billingCycle === 'annual' ? '$415' : '$499'}
+                  </span>
+                  <span style={{ fontSize: '13px', color: 'rgba(255, 255, 255, 0.5)' }}>/ month</span>
+                </div>
+                <div style={{ fontSize: '11.5px', color: '#4ADE80', fontWeight: '600', marginTop: '6px' }}>
+                  {billingCycle === 'annual' ? 'Billed annually ($4,990/yr · 2 Months Free)' : '14-day free trial · Includes Advisory'}
+                </div>
+              </div>
+
+              <div style={{ marginBottom: '24px' }}>
+                <div style={{ fontSize: '11px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.06em', color: 'rgba(255, 255, 255, 0.4)', marginBottom: '10px' }}>
+                  Everything in Advanced, plus:
+                </div>
+                <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '9px', fontSize: '12.5px', color: 'rgba(255, 255, 255, 0.85)' }}>
+                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                    <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                    <span><strong>Monthly 30-min strategy call</strong> with funding expert</span>
+                  </li>
+                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                    <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                    <span><strong>AI Application Assistant</strong> (drafts initial narratives)</span>
+                  </li>
+                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                    <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                    <span><strong>Unlimited AI Funding Advisor</strong> questions</span>
+                  </li>
+                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                    <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                    <span><strong>3 Team User Seats</strong> included for collaboration</span>
+                  </li>
+                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                    <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                    <span><strong>Unlimited Saved Grants</strong> + 10 comparison slots</span>
+                  </li>
+                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                    <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                    <span><strong>Advisor-written Quarterly Assessment</strong></span>
+                  </li>
+                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                    <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                    <span><strong>Win rate &amp; award benchmarking</strong> intelligence</span>
+                  </li>
+                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                    <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                    <span><strong>SAM.gov compliance</strong> &amp; registration checker</span>
+                  </li>
+                  <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                    <Check size={14} color="#10B981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                    <span>DOCX branded proposal reports + Priority support</span>
+                  </li>
+                </ul>
+              </div>
             </div>
+
             <button
               type="button"
               onClick={() => navigate('/signup')}
@@ -696,10 +642,11 @@ CTA after 5 searches: "Create a free account to continue — no card required"`;
                 border: '1px solid rgba(255, 255, 255, 0.2)',
                 color: '#FFFFFF',
                 borderRadius: '8px',
-                padding: '10px',
+                padding: '11px',
                 fontSize: '13px',
                 fontWeight: '600',
                 cursor: 'pointer',
+                transition: 'all 0.15s ease',
               }}
             >
               Start Professional Trial
@@ -707,13 +654,13 @@ CTA after 5 searches: "Create a free account to continue — no card required"`;
           </div>
         </div>
 
-        {/* 5. Full Visual Comparison Table */}
+        {/* 4. Full Visual Comparison Table */}
         <div style={{ marginBottom: '40px', overflowX: 'auto', background: '#0B1728', borderRadius: '14px', border: '1px solid rgba(255, 255, 255, 0.12)' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', textAlign: 'left' }}>
             <thead>
               <tr style={{ borderBottom: '2px solid rgba(255, 255, 255, 0.12)' }}>
                 <th style={{ padding: '16px 20px', color: 'rgba(255, 255, 255, 0.5)', textTransform: 'uppercase', fontSize: '11px', letterSpacing: '0.08em', width: '32%' }}>
-                  Feature
+                  Feature Comparison
                 </th>
                 <th style={{ padding: '16px 14px', width: '16%', background: 'rgba(255, 255, 255, 0.02)' }}>
                   <div style={{ fontSize: '13px', fontWeight: '700', color: 'rgba(255, 255, 255, 0.7)' }}>Visitor</div>
@@ -729,7 +676,7 @@ CTA after 5 searches: "Create a free account to continue — no card required"`;
                 </th>
                 <th style={{ padding: '16px 14px', width: '18%' }}>
                   <div style={{ fontSize: '13px', fontWeight: '700', color: '#FFFFFF' }}>Professional</div>
-                  <div style={{ fontSize: '11px', color: 'rgba(255, 255, 255, 0.4)' }}>$499/mo</div>
+                  <div style={{ fontSize: '11px', color: 'rgba(255, 255, 255, 0.4)' }}>$499/mo (Full Advisory)</div>
                 </th>
               </tr>
             </thead>
@@ -832,7 +779,7 @@ CTA after 5 searches: "Create a free account to continue — no card required"`;
                 <td style={{ padding: '10px 14px', color: '#4ADE80', fontWeight: '600' }}>Up to 10 grants</td>
               </tr>
 
-              {/* SECTION: AI TOOLS & EXPORT */}
+              {/* SECTION: AI TOOLS & ADVISORY */}
               <tr style={{ background: 'rgba(255, 255, 255, 0.04)', borderTop: '1px solid rgba(255, 255, 255, 0.1)' }}>
                 <td colSpan={5} style={{ padding: '8px 20px', fontSize: '11px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--brass-light)' }}>
                   AI Tools &amp; Advisory
@@ -861,55 +808,6 @@ CTA after 5 searches: "Create a free account to continue — no card required"`;
               </tr>
             </tbody>
           </table>
-        </div>
-
-        {/* 7. Plain Text Display Block */}
-        <div style={{ background: '#0B1728', borderRadius: '14px', border: '1px solid rgba(255, 255, 255, 0.12)', overflow: 'hidden' }}>
-          <div
-            style={{
-              background: 'rgba(255, 255, 255, 0.04)',
-              padding: '12px 18px',
-              borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}
-          >
-            <span style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.65)', fontWeight: '600' }}>
-              Plain text — click to select all, then copy or use buttons above
-            </span>
-            <button
-              type="button"
-              onClick={() => copyToClipboard(PLAIN_TEXT_CONTENT, 'pt-bottom')}
-              style={{
-                background: copiedType === 'pt-bottom' ? '#059669' : 'rgba(255, 255, 255, 0.08)',
-                border: '1px solid rgba(255, 255, 255, 0.2)',
-                color: '#FFFFFF',
-                borderRadius: '6px',
-                padding: '4px 10px',
-                fontSize: '11px',
-                fontWeight: '600',
-                cursor: 'pointer',
-              }}
-            >
-              {copiedType === 'pt-bottom' ? '✓ Copied' : 'Copy'}
-            </button>
-          </div>
-          <pre
-            style={{
-              padding: '18px',
-              margin: 0,
-              fontFamily: 'monospace',
-              fontSize: '11.5px',
-              lineHeight: '1.6',
-              color: 'rgba(255, 255, 255, 0.8)',
-              overflowX: 'auto',
-              whiteSpace: 'pre',
-              background: '#071220',
-            }}
-          >
-            {PLAIN_TEXT_CONTENT}
-          </pre>
         </div>
 
       </div>
