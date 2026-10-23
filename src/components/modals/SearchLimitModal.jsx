@@ -11,10 +11,12 @@ export default function SearchLimitModal({ isOpen, onClose, onUpgrade }) {
         inset: 0,
         background: 'rgba(12, 29, 51, 0.7)',
         backdropFilter: 'blur(6px)',
-        display: 'grid',
-        placeItems: 'center',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
         zIndex: 300,
-        padding: '20px',
+        padding: '16px',
+        overflowY: 'auto',
       }}
       onClick={onClose}
     >
@@ -24,10 +26,12 @@ export default function SearchLimitModal({ isOpen, onClose, onUpgrade }) {
           background: '#FFFFFF',
           width: '100%',
           maxWidth: '520px',
+          maxHeight: 'min(92vh, 540px)',
           borderRadius: '16px',
           border: '1px solid var(--line)',
           boxShadow: '0 24px 48px rgba(20,45,76,0.22)',
-          overflow: 'hidden',
+          overflowY: 'auto',
+          boxSizing: 'border-box',
         }}
         onClick={(e) => e.stopPropagation()}
       >

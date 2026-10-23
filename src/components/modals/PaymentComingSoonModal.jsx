@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Sparkles, X, ShieldAlert, CheckCircle2, ArrowRight, CreditCard, Lock } from 'lucide-react';
+import { X, CheckCircle2, ArrowRight, CreditCard, Lock } from 'lucide-react';
 
 export default function PaymentComingSoonModal({
   isOpen = false,
@@ -38,11 +38,14 @@ export default function PaymentComingSoonModal({
         position: 'fixed',
         inset: 0,
         zIndex: 9999,
-        background: 'rgba(12, 29, 51, 0.75)',
-        backdropFilter: 'blur(6px)',
-        display: 'grid',
-        placeItems: 'center',
-        padding: '20px',
+        background: 'rgba(12, 29, 51, 0.72)',
+        backdropFilter: 'blur(5px)',
+        WebkitBackdropFilter: 'blur(5px)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '16px',
+        overflowY: 'auto',
         animation: 'fadeIn 0.2s ease-out',
       }}
       onClick={(e) => {
@@ -52,15 +55,20 @@ export default function PaymentComingSoonModal({
       <div
         style={{
           width: '100%',
-          maxWidth: '520px',
+          maxWidth: '450px',
+          maxHeight: 'min(90vh, 520px)',
           background: '#FFFFFF',
-          border: '1px solid var(--line-brass)',
-          borderRadius: '16px',
-          boxShadow: '0 24px 64px rgba(12, 29, 51, 0.28), 0 4px 20px rgba(149, 128, 100, 0.1)',
-          padding: '30px 32px 28px',
+          border: '1px solid rgba(201, 146, 30, 0.35)',
+          borderRadius: '14px',
+          boxShadow: '0 20px 48px rgba(12, 29, 51, 0.25), 0 2px 10px rgba(149, 128, 100, 0.08)',
+          padding: '20px 22px 18px',
           position: 'relative',
           color: 'var(--navy)',
           textAlign: 'center',
+          boxSizing: 'border-box',
+          overflowY: 'auto',
+          display: 'flex',
+          flexDirection: 'column',
         }}
         onClick={(e) => e.stopPropagation()}
       >
@@ -68,15 +76,16 @@ export default function PaymentComingSoonModal({
         <button
           type="button"
           onClick={onClose}
+          aria-label="Close dialog"
           style={{
             position: 'absolute',
-            top: '18px',
-            right: '18px',
+            top: '12px',
+            right: '12px',
             background: '#F1F5F9',
             border: 'none',
             borderRadius: '50%',
-            width: '32px',
-            height: '32px',
+            width: '28px',
+            height: '28px',
             display: 'grid',
             placeItems: 'center',
             color: '#64748B',
@@ -92,24 +101,25 @@ export default function PaymentComingSoonModal({
             e.currentTarget.style.color = '#64748B';
           }}
         >
-          <X size={16} />
+          <X size={15} />
         </button>
 
         {/* Top Icon Badge */}
         <div
           style={{
-            width: '52px',
-            height: '52px',
-            borderRadius: '16px',
-            background: 'rgba(201, 146, 30, 0.14)',
-            border: '1px solid rgba(201, 146, 30, 0.35)',
+            width: '40px',
+            height: '40px',
+            borderRadius: '11px',
+            background: 'rgba(201, 146, 30, 0.12)',
+            border: '1px solid rgba(201, 146, 30, 0.3)',
             display: 'grid',
             placeItems: 'center',
-            margin: '0 auto 16px',
+            margin: '0 auto 8px',
             color: 'var(--brass)',
+            flexShrink: 0,
           }}
         >
-          <CreditCard size={26} />
+          <CreditCard size={20} />
         </div>
 
         {/* Status Badge */}
@@ -117,32 +127,34 @@ export default function PaymentComingSoonModal({
           style={{
             display: 'inline-flex',
             alignItems: 'center',
-            gap: '6px',
+            gap: '5px',
             background: '#FEF3C7',
             border: '1px solid #FDE68A',
-            color: '#B45309',
+            color: '#92400E',
             borderRadius: '9999px',
-            padding: '4px 12px',
-            fontSize: '11px',
+            padding: '3px 10px',
+            fontSize: '10.5px',
             fontWeight: '700',
-            letterSpacing: '0.06em',
+            letterSpacing: '0.04em',
             textTransform: 'uppercase',
-            marginBottom: '12px',
+            margin: '0 auto 8px',
+            flexShrink: 0,
           }}
         >
-          <Lock size={11} />
+          <Lock size={10} />
           <span>Payment Gateway In Integration</span>
         </div>
 
         {/* Main Headline */}
         <h3
           style={{
-            fontSize: '22px',
+            fontSize: '17px',
             fontWeight: '700',
             color: 'var(--navy)',
-            lineHeight: '1.3',
-            marginBottom: '10px',
+            lineHeight: '1.25',
+            margin: '0 0 6px',
             letterSpacing: '-0.01em',
+            flexShrink: 0,
           }}
         >
           {planTitle} — Subscriptions Coming Soon
@@ -151,22 +163,20 @@ export default function PaymentComingSoonModal({
         {/* Descriptive Body Text */}
         <p
           style={{
-            fontSize: '14px',
+            fontSize: '12.5px',
             color: '#475569',
-            lineHeight: '1.6',
-            marginBottom: '20px',
-            padding: '0 6px',
+            lineHeight: '1.45',
+            margin: '0 0 12px',
+            padding: '0 4px',
+            flexShrink: 0,
           }}
         >
           {featureName ? (
             <>
-              Access to <strong>{featureName}</strong> is reserved for the <strong>{planTitle}</strong> plan.
-              <br />
+              Access to <strong>{featureName}</strong> is reserved for the <strong>{planTitle}</strong> plan.{' '}
             </>
           ) : null}
-          Online subscription checkout is currently in active development. When released, users can acquire the{' '}
-          <strong>Advanced Tier</strong> or <strong>Professional</strong> plan online. In the meantime, you can explore
-          all opportunities and pipeline tools on the <strong>Free Account</strong>.
+          Online subscription checkout is currently in active development. In the meantime, you can explore all opportunities and pipeline tools on the <strong>Free Account</strong>.
         </p>
 
         {/* Free Plan Perks Callout */}
@@ -174,36 +184,37 @@ export default function PaymentComingSoonModal({
           style={{
             background: '#F8FAFC',
             border: '1px solid #E2E8F0',
-            borderRadius: '12px',
-            padding: '14px 16px',
+            borderRadius: '10px',
+            padding: '10px 13px',
             textAlign: 'left',
-            marginBottom: '24px',
-            fontSize: '12.5px',
+            margin: '0 0 14px',
+            fontSize: '12px',
             color: '#334155',
             display: 'flex',
             flexDirection: 'column',
-            gap: '8px',
+            gap: '6px',
+            flexShrink: 0,
           }}
         >
-          <div style={{ fontWeight: '700', color: 'var(--navy)', fontSize: '13px', marginBottom: '2px' }}>
+          <div style={{ fontWeight: '700', color: 'var(--navy)', fontSize: '12px', marginBottom: '1px' }}>
             What you can do right now with a Free Account:
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <CheckCircle2 size={14} style={{ color: '#059669', flexShrink: 0 }} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
+            <CheckCircle2 size={13} style={{ color: '#059669', flexShrink: 0 }} />
             <span>Search thousands of federal &amp; California state grants</span>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <CheckCircle2 size={14} style={{ color: '#059669', flexShrink: 0 }} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
+            <CheckCircle2 size={13} style={{ color: '#059669', flexShrink: 0 }} />
             <span>Top matching grant opportunities with full synopsis</span>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <CheckCircle2 size={14} style={{ color: '#059669', flexShrink: 0 }} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
+            <CheckCircle2 size={13} style={{ color: '#059669', flexShrink: 0 }} />
             <span>Save up to 5 opportunities to your tracked pipeline</span>
           </div>
         </div>
 
         {/* Action Buttons */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', flexShrink: 0 }}>
           {!isUserAuthenticated ? (
             <button
               type="button"
@@ -214,20 +225,22 @@ export default function PaymentComingSoonModal({
                 color: '#FFFFFF',
                 border: 'none',
                 borderRadius: '8px',
-                padding: '12px',
-                fontSize: '14px',
+                padding: '9px 14px',
+                fontSize: '13px',
                 fontWeight: '700',
                 cursor: 'pointer',
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: '8px',
-                boxShadow: '0 4px 14px rgba(201, 146, 30, 0.35)',
+                gap: '6px',
+                boxShadow: '0 2px 10px rgba(201, 146, 30, 0.3)',
                 transition: 'all 0.15s ease',
               }}
+              onMouseOver={(e) => (e.currentTarget.style.filter = 'brightness(1.06)')}
+              onMouseOut={(e) => (e.currentTarget.style.filter = 'none')}
             >
               <span>Create Free Account to Continue</span>
-              <ArrowRight size={15} />
+              <ArrowRight size={14} />
             </button>
           ) : (
             <button
@@ -239,17 +252,19 @@ export default function PaymentComingSoonModal({
                 color: '#FFFFFF',
                 border: 'none',
                 borderRadius: '8px',
-                padding: '12px',
-                fontSize: '14px',
+                padding: '9px 14px',
+                fontSize: '13px',
                 fontWeight: '700',
                 cursor: 'pointer',
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: '8px',
-                boxShadow: '0 4px 14px rgba(12, 29, 51, 0.25)',
+                gap: '6px',
+                boxShadow: '0 2px 10px rgba(12, 29, 51, 0.2)',
                 transition: 'all 0.15s ease',
               }}
+              onMouseOver={(e) => (e.currentTarget.style.filter = 'brightness(1.1)')}
+              onMouseOut={(e) => (e.currentTarget.style.filter = 'none')}
             >
               <span>Continue with Free Account</span>
             </button>
@@ -260,14 +275,23 @@ export default function PaymentComingSoonModal({
             onClick={onClose}
             style={{
               width: '100%',
-              background: '#FFFFFF',
+              background: 'transparent',
               color: '#64748B',
-              border: '1px solid #CBD5E1',
-              borderRadius: '8px',
-              padding: '10px',
-              fontSize: '13px',
+              border: 'none',
+              borderRadius: '6px',
+              padding: '6px 10px',
+              fontSize: '12px',
               fontWeight: '600',
               cursor: 'pointer',
+              transition: 'all 0.15s ease',
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.color = 'var(--navy)';
+              e.currentTarget.style.background = '#F8FAFC';
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.color = '#64748B';
+              e.currentTarget.style.background = 'transparent';
             }}
           >
             Dismiss
