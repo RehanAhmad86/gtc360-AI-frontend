@@ -4,7 +4,7 @@ import {
   Search, ArrowRight, ArrowUpRight, CheckCircle2, Sliders, Calendar,
   Building2, GraduationCap, Briefcase, HeartHandshake, Leaf, Landmark,
   Shield, Sparkles, Clock, Compass, Layers, FileText, ChevronDown, MapPin, X, Tag,
-  Users, Bell, Edit3, BarChart3, Target, Award, FileSpreadsheet, TrendingUp, AlertCircle
+  Users, Bell, Edit3, BarChart3, Target, Award, FileSpreadsheet, TrendingUp, AlertCircle, Lock
 } from 'lucide-react';
 import GuestSignupModal from '../components/common/GuestSignupModal';
 import PaymentComingSoonModal from '../components/modals/PaymentComingSoonModal';
@@ -713,10 +713,39 @@ export default function HomePage({ user, matches = [], onApplySearch }) {
                           style={{
                             position: 'absolute',
                             inset: 0,
-                            cursor: 'pointer',
                             zIndex: 10,
+                            background: 'rgba(14, 31, 53, 0.55)',
+                            backdropFilter: 'blur(1px)',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            padding: '16px',
+                            cursor: 'pointer',
+                            textAlign: 'center',
                           }}
-                        />
+                        >
+                          <div
+                            style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '6px',
+                              background: 'var(--brass)',
+                              color: '#FFFFFF',
+                              borderRadius: '9999px',
+                              padding: '6px 14px',
+                              fontSize: '11.5px',
+                              fontWeight: '700',
+                              boxShadow: '0 4px 14px rgba(0, 0, 0, 0.4)',
+                            }}
+                          >
+                            <Lock size={12} />
+                            <span>Sign In to Filter</span>
+                          </div>
+                          <span style={{ fontSize: '11px', color: 'rgba(255, 255, 255, 0.8)', marginTop: '8px', lineHeight: 1.3 }}>
+                            Unlock all eligibility filters
+                          </span>
+                        </div>
                       )}
                     </div>
                   )}
@@ -829,10 +858,39 @@ export default function HomePage({ user, matches = [], onApplySearch }) {
                           style={{
                             position: 'absolute',
                             inset: 0,
-                            cursor: 'pointer',
                             zIndex: 10,
+                            background: 'rgba(14, 31, 53, 0.55)',
+                            backdropFilter: 'blur(1px)',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            padding: '16px',
+                            cursor: 'pointer',
+                            textAlign: 'center',
                           }}
-                        />
+                        >
+                          <div
+                            style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '6px',
+                              background: 'var(--brass)',
+                              color: '#FFFFFF',
+                              borderRadius: '9999px',
+                              padding: '6px 14px',
+                              fontSize: '11.5px',
+                              fontWeight: '700',
+                              boxShadow: '0 4px 14px rgba(0, 0, 0, 0.4)',
+                            }}
+                          >
+                            <Lock size={12} />
+                            <span>Sign In to Filter</span>
+                          </div>
+                          <span style={{ fontSize: '11px', color: 'rgba(255, 255, 255, 0.8)', marginTop: '8px', lineHeight: 1.3 }}>
+                            Unlock all agency filters
+                          </span>
+                        </div>
                       )}
                     </div>
                   )}
@@ -945,10 +1003,39 @@ export default function HomePage({ user, matches = [], onApplySearch }) {
                           style={{
                             position: 'absolute',
                             inset: 0,
-                            cursor: 'pointer',
                             zIndex: 10,
+                            background: 'rgba(14, 31, 53, 0.55)',
+                            backdropFilter: 'blur(1px)',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            padding: '16px',
+                            cursor: 'pointer',
+                            textAlign: 'center',
                           }}
-                        />
+                        >
+                          <div
+                            style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '6px',
+                              background: 'var(--brass)',
+                              color: '#FFFFFF',
+                              borderRadius: '9999px',
+                              padding: '6px 14px',
+                              fontSize: '11.5px',
+                              fontWeight: '700',
+                              boxShadow: '0 4px 14px rgba(0, 0, 0, 0.4)',
+                            }}
+                          >
+                            <Lock size={12} />
+                            <span>Sign In to Filter</span>
+                          </div>
+                          <span style={{ fontSize: '11px', color: 'rgba(255, 255, 255, 0.8)', marginTop: '8px', lineHeight: 1.3 }}>
+                            Unlock all status filters
+                          </span>
+                        </div>
                       )}
                     </div>
                   )}
