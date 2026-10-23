@@ -13,7 +13,7 @@ import Pagination from '../components/dashboard/Pagination';
 import GuestSignupModal from '../components/common/GuestSignupModal';
 import GrantDetailModal from '../components/dashboard/GrantDetailModal';
 import PaymentComingSoonModal from '../components/modals/PaymentComingSoonModal';
-import { getLocalGuestQuota, syncGuestQuota, recordSearch, getFreeMonthlySearchQuota } from '../services/searchQuota';
+import { getLocalGuestQuota, syncGuestQuota, recordSearch, getFreeMonthlySearchQuota, canPerformSearch } from '../services/searchQuota';
 import { getPlanPermissions, getUserPlanId, formatPlanName } from '../utils/planPermissions';
 
 import {
@@ -44,13 +44,21 @@ export default function DashboardPage({
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // 1. Sync State with URL Query Parameters
-  const initialKeyword = searchParams.get('grant_keyword') || searchParams.get('search') || '';
-  const initialCategory = searchParams.get('grant_category') || '';
-  const initialEligibility = searchParams.get('grant_eligibility') || '';
-  const initialAgency = searchParams.get('grant_agency') || '';
-  const initialStatus = searchParams.get('grant_status') || '';
-  const initialAward = searchParams.get('grant_award') || '';
+  const isUserAuthenticated = Boolean(user && (user._id || user.id || user.email));
+  const permissions = useMemo(() => getPlanPermissions(user), [user]);
+  const currentPlanId = useMemo(() => getUserPlanId(user), [user]);
+  const userCanSearch = canPerformSearch(user);
+
+  // Free Account monthly search quota state
+  const [freeMonthlyQuota, setFreeMonthlyQuota] = useState(() => getFreeMonthlySearchQuota());
+
+  // 1. Sync State with URL Query Parameters (Strictly blocked if quota reached)
+  const initialKeyword = userCanSearch ? (searchParams.get('grant_keyword') || searchParams.get('search') || '') : '';
+  const initialCategory = userCanSearch ? (searchParams.get('grant_category') || '') : '';
+  const initialEligibility = userCanSearch ? (searchParams.get('grant_eligibility') || '') : '';
+  const initialAgency = userCanSearch ? (searchParams.get('grant_agency') || '') : '';
+  const initialStatus = userCanSearch ? (searchParams.get('grant_status') || '') : '';
+  const initialAward = userCanSearch ? (searchParams.get('grant_award') || '') : '';
   const initialSort = searchParams.get('grant_sort') || 'posted-desc';
 
   const [keywordInput, setKeywordInput] = useState(initialKeyword);
@@ -86,9 +94,6 @@ export default function DashboardPage({
   const [isStatusOpen, setIsStatusOpen] = useState(false);
   const [isAwardOpen, setIsAwardOpen] = useState(false);
 
-  const isUserAuthenticated = Boolean(user && (user._id || user.id || user.email));
-  const permissions = useMemo(() => getPlanPermissions(user), [user]);
-  const currentPlanId = useMemo(() => getUserPlanId(user), [user]);
 
   // Payment coming soon upgrade modal state
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
@@ -112,10 +117,45 @@ export default function DashboardPage({
     }
     const handleQuotaChange = () => {
       setGuestQuota(getLocalGuestQuota());
+      setFreeMonthlyQuota(getFreeMonthlySearchQuota());
     };
     window.addEventListener('gtc360_quota_change', handleQuotaChange);
     return () => window.removeEventListener('gtc360_quota_change', handleQuotaChange);
   }, [isUserAuthenticated]);
+
+  // URL Protection: If visitor or free user enters search/filter terms directly into URL while quota is exhausted, strip params and block
+  useEffect(() => {
+    if (!canPerformSearch(user)) {
+      const hasSearchFilters = Boolean(
+        searchParams.get('grant_keyword') ||
+        searchParams.get('search') ||
+        searchParams.get('grant_category') ||
+        searchParams.get('grant_eligibility') ||
+        searchParams.get('grant_agency') ||
+        searchParams.get('grant_status') ||
+        searchParams.get('grant_award')
+      );
+      if (hasSearchFilters) {
+        setSearchParams(new URLSearchParams(), { replace: true });
+        setActiveKeyword('');
+        setKeywordInput('');
+        setSelectedCategory('');
+        setSelectedEligibility('');
+        setSelectedAgency('');
+        setSelectedStatus('');
+        setSelectedAward('');
+        if (!isUserAuthenticated) {
+          setGuestModalReason('limit_reached');
+          setGuestModalGrantTitle('Public Opportunity Search');
+          setIsGuestModalOpen(true);
+        } else if (currentPlanId === 'explorer') {
+          setPaymentModalTargetTier('Advanced Tier');
+          setPaymentModalFeature('Monthly Search Limit (10 Searches / Month)');
+          setIsPaymentModalOpen(true);
+        }
+      }
+    }
+  }, [searchParams, user, isUserAuthenticated, currentPlanId]);
 
   // Timed signup popup for unauthenticated visitors: fires after 6 seconds (client: 5 to 7 seconds)
   useEffect(() => {
@@ -190,25 +230,18 @@ export default function DashboardPage({
     if (e) e.preventDefault();
     const cleanKw = keywordInput.trim();
 
-    // If guest user has exhausted 5 searches, block search and open popup
-    if (!isUserAuthenticated) {
-      const currentQuota = getLocalGuestQuota();
-      if (currentQuota.isLimitReached) {
+    // If search quota is exhausted, block search and trigger limit modal immediately
+    if (!canPerformSearch(user)) {
+      if (!isUserAuthenticated) {
         setGuestModalReason('limit_reached');
+        setGuestModalGrantTitle('Public Opportunity Search');
         setIsGuestModalOpen(true);
-        return;
-      }
-    }
-
-    // If Free Account (Explorer) has exhausted 10 monthly searches, prompt upgrade to Advanced/Pro
-    if (isUserAuthenticated && currentPlanId === 'explorer') {
-      const freeQuota = getFreeMonthlySearchQuota();
-      if (freeQuota.isLimitReached) {
+      } else if (currentPlanId === 'explorer') {
         setPaymentModalTargetTier('Advanced Tier');
         setPaymentModalFeature('Monthly Search Limit (10 Searches / Month)');
         setIsPaymentModalOpen(true);
-        return;
       }
+      return;
     }
 
     setActiveKeyword(cleanKw);
@@ -225,7 +258,7 @@ export default function DashboardPage({
     });
 
     // Record search credit based on user plan
-    recordSearch(cleanKw, 0, user).then((updated) => {
+    recordSearch(cleanKw || selectedCategory || 'search', 0, user).then((updated) => {
       if (updated && !isUserAuthenticated) {
         setGuestQuota(updated);
         if (updated.isLimitReached) {
@@ -233,6 +266,7 @@ export default function DashboardPage({
           setIsGuestModalOpen(true);
         }
       } else if (updated && isUserAuthenticated && currentPlanId === 'explorer') {
+        setFreeMonthlyQuota(getFreeMonthlySearchQuota());
         if (updated.isLimitReached) {
           setPaymentModalTargetTier('Advanced Tier');
           setPaymentModalFeature('Monthly Search Limit (10 Searches / Month)');
@@ -348,10 +382,15 @@ export default function DashboardPage({
     return matches.filter((g) => typeof g.score === 'number' && g.score >= 35 && isGrantActiveOrUpcoming(g)).length;
   }, [matches]);
 
-  // Spot-on Filter and Score execution
+  // Spot-on Filter and Score execution (Guarded by quota status)
   const processedGrants = useMemo(() => {
-    // If custom AI focus is typed, we fold it into the scoring keyword
-    const effectiveKeyword = customAIFocus.trim() ? `${activeKeyword} ${customAIFocus}`.trim() : activeKeyword;
+    const hasSearchQuota = canPerformSearch(user);
+    const safeKeyword = hasSearchQuota ? (customAIFocus.trim() ? `${activeKeyword} ${customAIFocus}`.trim() : activeKeyword) : '';
+    const safeCategory = hasSearchQuota ? selectedCategory : '';
+    const safeEligibility = hasSearchQuota ? selectedEligibility : '';
+    const safeAgency = hasSearchQuota ? selectedAgency : '';
+    const safeStatus = hasSearchQuota ? selectedStatus : '';
+    const safeAward = hasSearchQuota ? selectedAward : '';
 
     let baseList = matches;
 
@@ -360,7 +399,7 @@ export default function DashboardPage({
       baseList = matches.filter((g) => savedGrantIds.includes(g.grant_id));
     } else if (activeTab === 'recommended') {
       baseList = matches.filter((g) => typeof g.score === 'number' && g.score >= 35 && isGrantActiveOrUpcoming(g));
-    } else if (customAIFocus.trim()) {
+    } else if (customAIFocus.trim() && hasSearchQuota) {
       // In matched focus mode, only show opportunities that are active, upcoming, or forecasted (not older than today)
       baseList = matches.filter((g) => isGrantActiveOrUpcoming(g));
     }
@@ -370,12 +409,12 @@ export default function DashboardPage({
       : selectedSort;
 
     return filterAndScoreGrants(baseList, {
-      keyword: effectiveKeyword,
-      category: selectedCategory,
-      eligibility: selectedEligibility,
-      agency: selectedAgency,
-      status: selectedStatus,
-      award: selectedAward,
+      keyword: safeKeyword,
+      category: safeCategory,
+      eligibility: safeEligibility,
+      agency: safeAgency,
+      status: safeStatus,
+      award: safeAward,
       sort: effectiveSort,
     });
   }, [
@@ -390,6 +429,7 @@ export default function DashboardPage({
     activeTab,
     savedGrantIds,
     customAIFocus,
+    user,
   ]);
 
   // Paginated View
@@ -677,6 +717,21 @@ export default function DashboardPage({
                     <div
                       key={cat.label}
                       onClick={() => {
+                        // Check search quota: if limit reached, block and trigger modal
+                        if (!canPerformSearch(user)) {
+                          setIsCategoryOpen(false);
+                          if (!isUserAuthenticated) {
+                            setGuestModalReason('limit_reached');
+                            setGuestModalGrantTitle('Category Filter Search');
+                            setIsGuestModalOpen(true);
+                          } else if (currentPlanId === 'explorer') {
+                            setPaymentModalTargetTier('Advanced Tier');
+                            setPaymentModalFeature('Monthly Search Limit (10 Searches / Month)');
+                            setIsPaymentModalOpen(true);
+                          }
+                          return;
+                        }
+
                         setSelectedCategory(cat.value);
                         setIsCategoryOpen(false);
                         if (setCurrentPage) setCurrentPage(1);
@@ -690,6 +745,25 @@ export default function DashboardPage({
                           sort: selectedSort,
                           page: 1,
                         });
+
+                        if (cat.value) {
+                          recordSearch(cat.label, 0, user).then((updated) => {
+                            if (updated && !isUserAuthenticated) {
+                              setGuestQuota(updated);
+                              if (updated.isLimitReached) {
+                                setGuestModalReason('limit_reached');
+                                setIsGuestModalOpen(true);
+                              }
+                            } else if (updated && isUserAuthenticated && currentPlanId === 'explorer') {
+                              setFreeMonthlyQuota(getFreeMonthlySearchQuota());
+                              if (updated.isLimitReached) {
+                                setPaymentModalTargetTier('Advanced Tier');
+                                setPaymentModalFeature('Monthly Search Limit (10 Searches / Month)');
+                                setIsPaymentModalOpen(true);
+                              }
+                            }
+                          });
+                        }
                       }}
                       style={{
                         padding: '6px 12px',
@@ -1462,6 +1536,81 @@ export default function DashboardPage({
               onMouseOut={(e) => (e.currentTarget.style.background = 'var(--brass)')}
             >
               Sign Up Free to Unlock All
+            </button>
+          </div>
+        )}
+
+        {/* Free Account Monthly Search Limit Banner */}
+        {isUserAuthenticated && currentPlanId === 'explorer' && (
+          <div
+            style={{
+              background: '#FFFFFF',
+              border: '1px solid #E2E8F0',
+              borderRadius: '12px',
+              padding: '14px 20px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              flexWrap: 'wrap',
+              gap: '14px',
+              marginBottom: '24px',
+              boxShadow: '0 2px 10px rgba(15, 23, 42, 0.04)',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <div
+                style={{
+                  background: freeMonthlyQuota.remaining > 0 ? 'var(--navy)' : '#EF4444',
+                  color: '#FFFFFF',
+                  borderRadius: '50%',
+                  width: '28px',
+                  height: '28px',
+                  display: 'grid',
+                  placeItems: 'center',
+                  fontSize: '12px',
+                  fontWeight: '700',
+                  flexShrink: 0,
+                }}
+              >
+                {freeMonthlyQuota.remaining}
+              </div>
+              <div>
+                <div style={{ fontSize: '13.5px', fontWeight: '700', color: 'var(--navy)' }}>
+                  {freeMonthlyQuota.remaining > 0
+                    ? `Free Account: ${freeMonthlyQuota.remaining} of 10 monthly searches remaining`
+                    : 'Monthly Search Limit Reached (0 of 10 searches remaining)'}
+                </div>
+                <div style={{ fontSize: '12px', color: '#64748B' }}>
+                  {freeMonthlyQuota.remaining > 0
+                    ? 'Upgrade to Advanced Tier or Professional for unmetered opportunity matching & comparisons.'
+                    : 'Your monthly search quota has been reached. Upgrade to Advanced Tier for unlimited searches.'}
+                </div>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                setPaymentModalTargetTier('Advanced Tier');
+                setPaymentModalFeature('Unlimited Searches & Funding Intelligence');
+                setIsPaymentModalOpen(true);
+              }}
+              style={{
+                background: 'var(--brass)',
+                color: '#FFFFFF',
+                border: 'none',
+                borderRadius: '9999px',
+                padding: '7px 18px',
+                fontSize: '12.5px',
+                fontWeight: '600',
+                cursor: 'pointer',
+                whiteSpace: 'nowrap',
+                boxShadow: '0 2px 8px rgba(149, 128, 100, 0.25)',
+                transition: 'background 0.15s ease',
+              }}
+              onMouseOver={(e) => (e.currentTarget.style.background = 'var(--brass-fill)')}
+              onMouseOut={(e) => (e.currentTarget.style.background = 'var(--brass)')}
+            >
+              Upgrade for Unlimited
             </button>
           </div>
         )}

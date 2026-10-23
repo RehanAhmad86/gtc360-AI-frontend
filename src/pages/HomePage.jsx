@@ -8,7 +8,7 @@ import {
 } from 'lucide-react';
 import GuestSignupModal from '../components/common/GuestSignupModal';
 import PaymentComingSoonModal from '../components/modals/PaymentComingSoonModal';
-import { getLocalGuestQuota, recordSearch, getFreeMonthlySearchQuota } from '../services/searchQuota';
+import { getLocalGuestQuota, recordSearch, getFreeMonthlySearchQuota, canPerformSearch } from '../services/searchQuota';
 import { getUserPlanId, getPlanPermissions } from '../utils/planPermissions';
 
 export default function HomePage({ user, matches = [], onApplySearch }) {
@@ -176,26 +176,18 @@ export default function HomePage({ user, matches = [], onApplySearch }) {
     e.preventDefault();
     const query = searchInput.trim();
 
-    // If guest user has exhausted 5 searches, block search and open popup
-    if (!isUserAuthenticated) {
-      const currentQuota = getLocalGuestQuota();
-      if (currentQuota.isLimitReached) {
+    // Check search quota: if exhausted, block search and open popup
+    if (!canPerformSearch(user)) {
+      if (!isUserAuthenticated) {
         setGuestModalReason('limit_reached');
         setGuestModalGrantTitle('Public Opportunity Search');
         setIsGuestModalOpen(true);
-        return;
-      }
-    }
-
-    // If Free Account (Explorer) has exhausted 10 monthly searches, prompt upgrade to Advanced/Pro
-    if (isUserAuthenticated && currentPlanId === 'explorer') {
-      const freeQuota = getFreeMonthlySearchQuota();
-      if (freeQuota.isLimitReached) {
+      } else if (currentPlanId === 'explorer') {
         setPaymentModalTargetTier('Advanced Tier');
         setPaymentModalFeature('Monthly Search Limit (10 Searches / Month)');
         setIsPaymentModalOpen(true);
-        return;
       }
+      return;
     }
 
     const params = new URLSearchParams();
@@ -228,26 +220,18 @@ export default function HomePage({ user, matches = [], onApplySearch }) {
   };
 
   const handleFilterSearch = ({ categoryVal, eligibilityVal, agencyVal, statusVal }) => {
-    // If guest user has exhausted 5 searches, block search and open popup
-    if (!isUserAuthenticated) {
-      const currentQuota = getLocalGuestQuota();
-      if (currentQuota.isLimitReached) {
+    // Check search quota: if exhausted, block search and open popup
+    if (!canPerformSearch(user)) {
+      if (!isUserAuthenticated) {
         setGuestModalReason('limit_reached');
         setGuestModalGrantTitle('Filtered Opportunity Search');
         setIsGuestModalOpen(true);
-        return;
-      }
-    }
-
-    // If Free Account (Explorer) has exhausted 10 monthly searches, prompt upgrade to Advanced/Pro
-    if (isUserAuthenticated && currentPlanId === 'explorer') {
-      const freeQuota = getFreeMonthlySearchQuota();
-      if (freeQuota.isLimitReached) {
+      } else if (currentPlanId === 'explorer') {
         setPaymentModalTargetTier('Advanced Tier');
         setPaymentModalFeature('Monthly Search Limit (10 Searches / Month)');
         setIsPaymentModalOpen(true);
-        return;
       }
+      return;
     }
 
     const params = new URLSearchParams();
@@ -584,9 +568,25 @@ export default function HomePage({ user, matches = [], onApplySearch }) {
                         <div
                           key={cat.label}
                           onClick={() => {
+                            if (!canPerformSearch(user)) {
+                              setIsCategoryOpen(false);
+                              if (!isUserAuthenticated) {
+                                setGuestModalReason('limit_reached');
+                                setGuestModalGrantTitle('Category Filter Search');
+                                setIsGuestModalOpen(true);
+                              } else if (currentPlanId === 'explorer') {
+                                setPaymentModalTargetTier('Advanced Tier');
+                                setPaymentModalFeature('Monthly Search Limit (10 Searches / Month)');
+                                setIsPaymentModalOpen(true);
+                              }
+                              return;
+                            }
                             setSelectedCategory(cat.label);
                             setIsCategoryOpen(false);
-                            if (cat.value) handleFilterSearch(cat.keyword || cat.label);
+                            if (cat.value) {
+                              recordSearch(cat.label, 0, user).catch(() => {});
+                              navigate(`/grants?grant_category=${encodeURIComponent(cat.value)}`);
+                            }
                           }}
                           style={{
                             padding: '6px 12px',
