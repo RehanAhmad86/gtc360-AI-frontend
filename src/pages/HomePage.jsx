@@ -6,11 +6,28 @@ import {
   Shield, Sparkles, Clock, Compass, Layers, FileText, ChevronDown, MapPin, X, Tag,
   Users, Bell, Edit3, BarChart3, Target, Award, FileSpreadsheet, TrendingUp, AlertCircle
 } from 'lucide-react';
+import GuestSignupModal from '../components/common/GuestSignupModal';
+import PaymentComingSoonModal from '../components/modals/PaymentComingSoonModal';
+import { getLocalGuestQuota, recordSearch, getFreeMonthlySearchQuota } from '../services/searchQuota';
+import { getUserPlanId, getPlanPermissions } from '../utils/planPermissions';
 
-export default function HomePage({ matches = [], onApplySearch }) {
+export default function HomePage({ user, matches = [], onApplySearch }) {
   const navigate = useNavigate();
   const [searchInput, setSearchInput] = useState('');
   const [activeFeatureTab, setActiveFeatureTab] = useState('match');
+
+  // Plan & Auth resolution
+  const isUserAuthenticated = Boolean(user && (user._id || user.id || user.email));
+  const currentPlanId = getUserPlanId(user);
+
+  // Modal states for plan authority & limits
+  const [isGuestModalOpen, setIsGuestModalOpen] = useState(false);
+  const [guestModalReason, setGuestModalReason] = useState('timed');
+  const [guestModalGrantTitle, setGuestModalGrantTitle] = useState('');
+
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+  const [paymentModalTargetTier, setPaymentModalTargetTier] = useState('Advanced Tier');
+  const [paymentModalFeature, setPaymentModalFeature] = useState('');
 
   // 4 Core Filters matching user's database & PHP engine:
   const [selectedCategory, setSelectedCategory] = useState('All categories');
@@ -158,6 +175,29 @@ export default function HomePage({ matches = [], onApplySearch }) {
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     const query = searchInput.trim();
+
+    // If guest user has exhausted 5 searches, block search and open popup
+    if (!isUserAuthenticated) {
+      const currentQuota = getLocalGuestQuota();
+      if (currentQuota.isLimitReached) {
+        setGuestModalReason('limit_reached');
+        setGuestModalGrantTitle('Public Opportunity Search');
+        setIsGuestModalOpen(true);
+        return;
+      }
+    }
+
+    // If Free Account (Explorer) has exhausted 10 monthly searches, prompt upgrade to Advanced/Pro
+    if (isUserAuthenticated && currentPlanId === 'explorer') {
+      const freeQuota = getFreeMonthlySearchQuota();
+      if (freeQuota.isLimitReached) {
+        setPaymentModalTargetTier('Advanced Tier');
+        setPaymentModalFeature('Monthly Search Limit (10 Searches / Month)');
+        setIsPaymentModalOpen(true);
+        return;
+      }
+    }
+
     const params = new URLSearchParams();
     if (query) {
       params.set('grant_keyword', query);
@@ -183,10 +223,33 @@ export default function HomePage({ matches = [], onApplySearch }) {
     if (onApplySearch) {
       onApplySearch(query);
     }
+    recordSearch(query, 0, user).catch(() => {});
     navigate(`/grants?${params.toString()}`);
   };
 
   const handleFilterSearch = ({ categoryVal, eligibilityVal, agencyVal, statusVal }) => {
+    // If guest user has exhausted 5 searches, block search and open popup
+    if (!isUserAuthenticated) {
+      const currentQuota = getLocalGuestQuota();
+      if (currentQuota.isLimitReached) {
+        setGuestModalReason('limit_reached');
+        setGuestModalGrantTitle('Filtered Opportunity Search');
+        setIsGuestModalOpen(true);
+        return;
+      }
+    }
+
+    // If Free Account (Explorer) has exhausted 10 monthly searches, prompt upgrade to Advanced/Pro
+    if (isUserAuthenticated && currentPlanId === 'explorer') {
+      const freeQuota = getFreeMonthlySearchQuota();
+      if (freeQuota.isLimitReached) {
+        setPaymentModalTargetTier('Advanced Tier');
+        setPaymentModalFeature('Monthly Search Limit (10 Searches / Month)');
+        setIsPaymentModalOpen(true);
+        return;
+      }
+    }
+
     const params = new URLSearchParams();
     if (searchInput.trim()) {
       params.set('grant_keyword', searchInput.trim());
@@ -197,6 +260,7 @@ export default function HomePage({ matches = [], onApplySearch }) {
     if (agencyVal) params.set('grant_agency', agencyVal);
     if (statusVal) params.set('grant_status', statusVal);
 
+    recordSearch(searchInput.trim(), 0, user).catch(() => {});
     navigate(`/grants?${params.toString()}`);
   };
 
@@ -602,31 +666,58 @@ export default function HomePage({ matches = [], onApplySearch }) {
                         padding: '6px',
                         minWidth: '250px',
                         maxHeight: '280px',
-                        overflowY: 'auto',
+                        overflowY: isUserAuthenticated ? 'auto' : 'hidden',
+                        overflowX: 'hidden',
                       }}
                     >
-                      {eligibilitiesList.map((el) => (
+                      <div
+                        style={{
+                          filter: !isUserAuthenticated ? 'blur(3.5px)' : 'none',
+                          opacity: !isUserAuthenticated ? 0.65 : 1,
+                          pointerEvents: !isUserAuthenticated ? 'none' : 'auto',
+                          userSelect: !isUserAuthenticated ? 'none' : 'auto',
+                        }}
+                      >
+                        {eligibilitiesList.map((el) => (
+                          <div
+                            key={el.label}
+                            onClick={() => {
+                              setSelectedEligibility(el.label);
+                              setIsEligibilityOpen(false);
+                              if (el.value) handleFilterSearch({ eligibilityVal: el.value });
+                            }}
+                            style={{
+                              padding: '6px 12px',
+                              fontSize: '12.5px',
+                              color: selectedEligibility === el.label ? 'var(--brass-light)' : '#FFFFFF',
+                              fontWeight: selectedEligibility === el.label ? '600' : '400',
+                              cursor: 'pointer',
+                              borderRadius: '4px',
+                            }}
+                            onMouseOver={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.1)')}
+                            onMouseOut={(e) => (e.currentTarget.style.background = 'transparent')}
+                          >
+                            {el.label}
+                          </div>
+                        ))}
+                      </div>
+
+                      {!isUserAuthenticated && (
                         <div
-                          key={el.label}
                           onClick={() => {
-                            setSelectedEligibility(el.label);
                             setIsEligibilityOpen(false);
-                            if (el.value) handleFilterSearch(el.keyword || el.label);
+                            setGuestModalReason('locked_filter');
+                            setGuestModalGrantTitle('Eligibility Filters');
+                            setIsGuestModalOpen(true);
                           }}
                           style={{
-                            padding: '6px 12px',
-                            fontSize: '12.5px',
-                            color: selectedEligibility === el.label ? 'var(--brass-light)' : '#FFFFFF',
-                            fontWeight: selectedEligibility === el.label ? '600' : '400',
+                            position: 'absolute',
+                            inset: 0,
                             cursor: 'pointer',
-                            borderRadius: '4px',
+                            zIndex: 10,
                           }}
-                          onMouseOver={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.1)')}
-                          onMouseOut={(e) => (e.currentTarget.style.background = 'transparent')}
-                        >
-                          {el.label}
-                        </div>
-                      ))}
+                        />
+                      )}
                     </div>
                   )}
                 </div>
@@ -691,31 +782,58 @@ export default function HomePage({ matches = [], onApplySearch }) {
                         padding: '6px',
                         minWidth: '260px',
                         maxHeight: '280px',
-                        overflowY: 'auto',
+                        overflowY: isUserAuthenticated ? 'auto' : 'hidden',
+                        overflowX: 'hidden',
                       }}
                     >
-                      {agenciesList.map((ag) => (
+                      <div
+                        style={{
+                          filter: !isUserAuthenticated ? 'blur(3.5px)' : 'none',
+                          opacity: !isUserAuthenticated ? 0.65 : 1,
+                          pointerEvents: !isUserAuthenticated ? 'none' : 'auto',
+                          userSelect: !isUserAuthenticated ? 'none' : 'auto',
+                        }}
+                      >
+                        {agenciesList.map((ag) => (
+                          <div
+                            key={ag.label}
+                            onClick={() => {
+                              setSelectedAgency(ag.label);
+                              setIsAgencyOpen(false);
+                              if (ag.value) handleFilterSearch({ agencyVal: ag.value });
+                            }}
+                            style={{
+                              padding: '6px 12px',
+                              fontSize: '12.5px',
+                              color: selectedAgency === ag.label ? 'var(--brass-light)' : '#FFFFFF',
+                              fontWeight: selectedAgency === ag.label ? '600' : '400',
+                              cursor: 'pointer',
+                              borderRadius: '4px',
+                            }}
+                            onMouseOver={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.1)')}
+                            onMouseOut={(e) => (e.currentTarget.style.background = 'transparent')}
+                          >
+                            {ag.label}
+                          </div>
+                        ))}
+                      </div>
+
+                      {!isUserAuthenticated && (
                         <div
-                          key={ag.label}
                           onClick={() => {
-                            setSelectedAgency(ag.label);
                             setIsAgencyOpen(false);
-                            if (ag.value) handleFilterSearch(ag.keyword || ag.label);
+                            setGuestModalReason('locked_filter');
+                            setGuestModalGrantTitle('Agency Filters');
+                            setIsGuestModalOpen(true);
                           }}
                           style={{
-                            padding: '6px 12px',
-                            fontSize: '12.5px',
-                            color: selectedAgency === ag.label ? 'var(--brass-light)' : '#FFFFFF',
-                            fontWeight: selectedAgency === ag.label ? '600' : '400',
+                            position: 'absolute',
+                            inset: 0,
                             cursor: 'pointer',
-                            borderRadius: '4px',
+                            zIndex: 10,
                           }}
-                          onMouseOver={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.1)')}
-                          onMouseOut={(e) => (e.currentTarget.style.background = 'transparent')}
-                        >
-                          {ag.label}
-                        </div>
-                      ))}
+                        />
+                      )}
                     </div>
                   )}
                 </div>
@@ -780,31 +898,58 @@ export default function HomePage({ matches = [], onApplySearch }) {
                         padding: '6px',
                         minWidth: '190px',
                         maxHeight: '280px',
-                        overflowY: 'auto',
+                        overflowY: isUserAuthenticated ? 'auto' : 'hidden',
+                        overflowX: 'hidden',
                       }}
                     >
-                      {statusesList.map((st) => (
+                      <div
+                        style={{
+                          filter: !isUserAuthenticated ? 'blur(3.5px)' : 'none',
+                          opacity: !isUserAuthenticated ? 0.65 : 1,
+                          pointerEvents: !isUserAuthenticated ? 'none' : 'auto',
+                          userSelect: !isUserAuthenticated ? 'none' : 'auto',
+                        }}
+                      >
+                        {statusesList.map((st) => (
+                          <div
+                            key={st.label}
+                            onClick={() => {
+                              setSelectedStatus(st.label);
+                              setIsStatusOpen(false);
+                              if (st.value) handleFilterSearch({ statusVal: st.value });
+                            }}
+                            style={{
+                              padding: '6px 12px',
+                              fontSize: '12.5px',
+                              color: selectedStatus === st.label ? 'var(--brass-light)' : '#FFFFFF',
+                              fontWeight: selectedStatus === st.label ? '600' : '400',
+                              cursor: 'pointer',
+                              borderRadius: '4px',
+                            }}
+                            onMouseOver={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.1)')}
+                            onMouseOut={(e) => (e.currentTarget.style.background = 'transparent')}
+                          >
+                            {st.label}
+                          </div>
+                        ))}
+                      </div>
+
+                      {!isUserAuthenticated && (
                         <div
-                          key={st.label}
                           onClick={() => {
-                            setSelectedStatus(st.label);
                             setIsStatusOpen(false);
-                            if (st.value) handleFilterSearch(st.keyword || st.label);
+                            setGuestModalReason('locked_filter');
+                            setGuestModalGrantTitle('Status Filters');
+                            setIsGuestModalOpen(true);
                           }}
                           style={{
-                            padding: '6px 12px',
-                            fontSize: '12.5px',
-                            color: selectedStatus === st.label ? 'var(--brass-light)' : '#FFFFFF',
-                            fontWeight: selectedStatus === st.label ? '600' : '400',
+                            position: 'absolute',
+                            inset: 0,
                             cursor: 'pointer',
-                            borderRadius: '4px',
+                            zIndex: 10,
                           }}
-                          onMouseOver={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.1)')}
-                          onMouseOut={(e) => (e.currentTarget.style.background = 'transparent')}
-                        >
-                          {st.label}
-                        </div>
-                      ))}
+                        />
+                      )}
                     </div>
                   )}
                 </div>
@@ -2521,6 +2666,21 @@ export default function HomePage({ matches = [], onApplySearch }) {
         </div>
       </section>
 
-          </div>
+      {/* Guest Signup Prompt Modal */}
+      <GuestSignupModal
+        isOpen={isGuestModalOpen}
+        onClose={() => setIsGuestModalOpen(false)}
+        reason={guestModalReason}
+        targetGrantTitle={guestModalGrantTitle}
+      />
+
+      {/* Payment Coming Soon Executive Notice Modal */}
+      <PaymentComingSoonModal
+        isOpen={isPaymentModalOpen}
+        onClose={() => setIsPaymentModalOpen(false)}
+        targetPlan={paymentModalTargetTier}
+        featureName={paymentModalFeature}
+      />
+    </div>
   );
 }

@@ -142,6 +142,7 @@ export default function App() {
           path="/"
           element={
             <HomePage
+              user={user}
               matches={matches}
               onApplySearch={(q) => setSearchQuery(q)}
             />
