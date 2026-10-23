@@ -12,7 +12,9 @@ import SkeletonCard from '../components/dashboard/SkeletonCard';
 import Pagination from '../components/dashboard/Pagination';
 import GuestSignupModal from '../components/common/GuestSignupModal';
 import GrantDetailModal from '../components/dashboard/GrantDetailModal';
-import { getLocalGuestQuota, syncGuestQuota, recordSearch } from '../services/searchQuota';
+import PaymentComingSoonModal from '../components/modals/PaymentComingSoonModal';
+import { getLocalGuestQuota, syncGuestQuota, recordSearch, getFreeMonthlySearchQuota } from '../services/searchQuota';
+import { getPlanPermissions, getUserPlanId, formatPlanName } from '../utils/planPermissions';
 
 import {
   categoriesList,
@@ -85,6 +87,13 @@ export default function DashboardPage({
   const [isAwardOpen, setIsAwardOpen] = useState(false);
 
   const isUserAuthenticated = Boolean(user && (user._id || user.id || user.email));
+  const permissions = useMemo(() => getPlanPermissions(user), [user]);
+  const currentPlanId = useMemo(() => getUserPlanId(user), [user]);
+
+  // Payment coming soon upgrade modal state
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+  const [paymentModalTargetTier, setPaymentModalTargetTier] = useState('Advanced Tier');
+  const [paymentModalFeature, setPaymentModalFeature] = useState('');
 
   // Guest search quota state (5 searches tracked by IP + localStorage)
   const [guestQuota, setGuestQuota] = useState(() => getLocalGuestQuota());
@@ -191,6 +200,17 @@ export default function DashboardPage({
       }
     }
 
+    // If Free Account (Explorer) has exhausted 10 monthly searches, prompt upgrade to Advanced/Pro
+    if (isUserAuthenticated && currentPlanId === 'explorer') {
+      const freeQuota = getFreeMonthlySearchQuota();
+      if (freeQuota.isLimitReached) {
+        setPaymentModalTargetTier('Advanced Tier');
+        setPaymentModalFeature('Monthly Search Limit (10 Searches / Month)');
+        setIsPaymentModalOpen(true);
+        return;
+      }
+    }
+
     setActiveKeyword(cleanKw);
     if (setCurrentPage) setCurrentPage(1);
     updateUrlParams({
@@ -204,13 +224,19 @@ export default function DashboardPage({
       page: 1,
     });
 
-    // Record search credit for guest (tracked by IP in backend)
-    recordSearch(cleanKw, 0, isUserAuthenticated).then((updated) => {
+    // Record search credit based on user plan
+    recordSearch(cleanKw, 0, user).then((updated) => {
       if (updated && !isUserAuthenticated) {
         setGuestQuota(updated);
         if (updated.isLimitReached) {
           setGuestModalReason('limit_reached');
           setIsGuestModalOpen(true);
+        }
+      } else if (updated && isUserAuthenticated && currentPlanId === 'explorer') {
+        if (updated.isLimitReached) {
+          setPaymentModalTargetTier('Advanced Tier');
+          setPaymentModalFeature('Monthly Search Limit (10 Searches / Month)');
+          setIsPaymentModalOpen(true);
         }
       }
     });
@@ -375,12 +401,30 @@ export default function DashboardPage({
   // Comparison Handlers
   const handleToggleCompare = (grant) => {
     if (!setComparedGrants) return;
+
+    if (!isUserAuthenticated) {
+      setGuestModalReason('locked_feature');
+      setGuestModalGrantTitle('Opportunity Comparison Board');
+      setIsGuestModalOpen(true);
+      return;
+    }
+
+    if (!permissions.canCompareGrants) {
+      setPaymentModalTargetTier('Advanced Tier');
+      setPaymentModalFeature('Opportunity Comparison Board');
+      setIsPaymentModalOpen(true);
+      return;
+    }
+
     const exists = comparedGrants.some((g) => g.grant_id === grant.grant_id);
     if (exists) {
       setComparedGrants(comparedGrants.filter((g) => g.grant_id !== grant.grant_id));
     } else {
-      if (comparedGrants.length >= 6) {
-        alert('You can compare up to 6 opportunities at a time.');
+      const maxAllowed = permissions.maxCompareGrants || 5;
+      if (comparedGrants.length >= maxAllowed) {
+        setPaymentModalTargetTier(currentPlanId === 'advanced' ? 'Professional' : 'Advanced Tier');
+        setPaymentModalFeature(`Comparing more than ${maxAllowed} opportunities`);
+        setIsPaymentModalOpen(true);
         return;
       }
       setComparedGrants([...comparedGrants, grant]);
@@ -1884,8 +1928,8 @@ export default function DashboardPage({
               {paginatedGrants.map((grant, index) => {
                 const isCompared = comparedGrants.some((g) => g.grant_id === grant.grant_id);
                 const isGuest = !isUserAuthenticated;
-                // Client rule: Each search shows top 3 results in full. Results 4+ are blurred with a sign-up prompt.
-                const isBlurred = isGuest && ((currentPage || 1) > 1 || index >= 3);
+                const maxVisible = permissions.maxVisibleResults; // 3 for visitor, 5 for explorer, Infinity for advanced/pro
+                const isBlurred = maxVisible !== Infinity && ((currentPage || 1) > 1 || index >= maxVisible);
 
                 return (
                   <GrantMatchCard
@@ -1899,10 +1943,22 @@ export default function DashboardPage({
                     showAIMatch={activeTab === 'recommended' || Boolean(customAIFocus)}
                     isGuest={isGuest}
                     isBlurred={isBlurred}
+                    maxSavedAllowed={permissions.maxSavedGrants}
+                    onPlanLimitReached={(info) => {
+                      setPaymentModalTargetTier(info?.targetPlan || 'Advanced Tier');
+                      setPaymentModalFeature(info?.feature || 'Saved Pipeline Limit');
+                      setIsPaymentModalOpen(true);
+                    }}
                     onGuestPrompt={(reason, title) => {
-                      setGuestModalReason(reason || 'blurred_result');
-                      setGuestModalGrantTitle(title || grant.title || '');
-                      setIsGuestModalOpen(true);
+                      if (!isUserAuthenticated) {
+                        setGuestModalReason(reason || 'blurred_result');
+                        setGuestModalGrantTitle(title || grant.title || '');
+                        setIsGuestModalOpen(true);
+                      } else {
+                        setPaymentModalTargetTier('Advanced Tier');
+                        setPaymentModalFeature('Full Results Visibility Across All Solicitations');
+                        setIsPaymentModalOpen(true);
+                      }
                     }}
                     onViewGrant={(g) => {
                       setSelectedDetailGrant(g);
@@ -2033,6 +2089,15 @@ export default function DashboardPage({
           setGuestModalGrantTitle(title || '');
           setIsGuestModalOpen(true);
         }}
+      />
+
+      {/* Payment Gateway Coming Soon Modal */}
+      <PaymentComingSoonModal
+        isOpen={isPaymentModalOpen}
+        onClose={() => setIsPaymentModalOpen(false)}
+        targetPlan={paymentModalTargetTier}
+        featureName={paymentModalFeature}
+        user={user}
       />
     </div>
   );

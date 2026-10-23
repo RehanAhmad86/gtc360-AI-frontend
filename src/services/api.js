@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getUserPlanId, formatPlanName } from '../utils/planPermissions';
 
 const rawUrl =
   import.meta.env.VITE_PYTHON_AI_URL ||
@@ -84,19 +85,20 @@ export const authAPI = {
 
   getCurrentPlan: () => {
     const user = authAPI.getCurrentUser();
-    return user ? 'explorer' : 'visitor';
+    return getUserPlanId(user);
   },
 
   getCurrentPlanName: () => {
     const user = authAPI.getCurrentUser();
-    return user ? 'Free Account' : 'No Account';
+    const planId = getUserPlanId(user);
+    return formatPlanName(planId);
   },
 
   syncPlanStorage: (explicitUser = undefined) => {
     try {
       const user = explicitUser !== undefined ? explicitUser : authAPI.getCurrentUser();
-      const planId = user ? 'explorer' : 'visitor';
-      const planName = user ? 'Free Account' : 'No Account';
+      const planId = getUserPlanId(user);
+      const planName = formatPlanName(planId);
       localStorage.setItem('gtc360_current_plan', planId);
       localStorage.setItem('gtc360_current_plan_name', planName);
       document.cookie = `gtc360_current_plan=${planId}; path=/; max-age=31536000; SameSite=Lax`;
@@ -115,6 +117,7 @@ export const userAPI = {
     const res = await apiClient.get('/user/profile');
     if (res.data.user) {
       localStorage.setItem('gtc360_user', JSON.stringify(res.data.user));
+      authAPI.syncPlanStorage(res.data.user);
     }
     return res.data.user;
   },
@@ -127,7 +130,23 @@ export const userAPI = {
     }
     return res.data.user;
   },
+
+  updatePlan: async (plan) => {
+    const res = await apiClient.put('/user/plan', { plan });
+    if (res.data.user) {
+      localStorage.setItem('gtc360_user', JSON.stringify(res.data.user));
+      authAPI.syncPlanStorage(res.data.user);
+      window.dispatchEvent(new Event('gtc360_auth_change'));
+    }
+    return res.data.user;
+  },
+
+  toggleSavedGrant: async (grantId) => {
+    const res = await apiClient.post('/user/saved-grants', { grant_id: grantId });
+    return res.data;
+  },
 };
+
 
 export const matchingAPI = {
   getMatches: async (params = {}) => {

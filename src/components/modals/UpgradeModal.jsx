@@ -1,8 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Sparkles, Check, X, Zap, Shield, FileText, Bell } from 'lucide-react';
+import PaymentComingSoonModal from './PaymentComingSoonModal';
 
 export default function UpgradeModal({ isOpen, onClose }) {
+  const navigate = useNavigate();
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+
   if (!isOpen) return null;
+
+  if (isPaymentModalOpen) {
+    return (
+      <PaymentComingSoonModal
+        isOpen={true}
+        onClose={() => {
+          setIsPaymentModalOpen(false);
+          onClose();
+        }}
+        targetPlan="Advanced Tier"
+        featureName="Unlimited Searches & Pipeline Intelligence"
+      />
+    );
+  }
 
   return (
     <div
@@ -170,10 +189,7 @@ export default function UpgradeModal({ isOpen, onClose }) {
             </button>
             <button
               type="button"
-              onClick={() => {
-                alert('Thank you for your interest! Pro billing integration will be available shortly.');
-                onClose();
-              }}
+              onClick={() => setIsPaymentModalOpen(true)}
               style={{
                 background: 'var(--navy)',
                 color: '#FFFFFF',

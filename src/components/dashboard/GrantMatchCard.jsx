@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Bookmark, Sparkles, Plus, Check, ArrowRight, Lock } from 'lucide-react';
 import { getGrantDestinationUrl, formatDueDate, extractAwardAmount } from '../../utils/grantFilters';
+import { userAPI } from '../../services/api';
 
 export default function GrantMatchCard({
   grant,
@@ -14,6 +15,8 @@ export default function GrantMatchCard({
   isBlurred = false,
   onGuestPrompt = () => {},
   onViewGrant = null,
+  maxSavedAllowed = 5,
+  onPlanLimitReached = () => {},
 }) {
   const [isBookmarked, setIsBookmarked] = useState(() => {
     try {
@@ -40,11 +43,21 @@ export default function GrantMatchCard({
         updated = saved.filter((id) => id !== grant.grant_id);
         setIsBookmarked(false);
       } else {
+        if (maxSavedAllowed !== Infinity && saved.length >= maxSavedAllowed) {
+          onPlanLimitReached({
+            feature: `Saved Pipeline (${maxSavedAllowed} Opportunity Limit)`,
+            targetPlan: 'Advanced Tier',
+          });
+          return;
+        }
         updated = [...saved, grant.grant_id];
         setIsBookmarked(true);
       }
       localStorage.setItem('gtc360_saved_grants', JSON.stringify(updated));
       window.dispatchEvent(new Event('gtc360_saved_change'));
+
+      // Sync with backend DB if authenticated
+      userAPI.toggleSavedGrant(grant.grant_id).catch(() => {});
     } catch (err) {
       console.error(err);
     }
@@ -53,10 +66,6 @@ export default function GrantMatchCard({
   const handleCompareClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    if (isGuest) {
-      onGuestPrompt('locked_feature', 'Comparison Board');
-      return;
-    }
     if (onToggleCompare) onToggleCompare();
   };
 

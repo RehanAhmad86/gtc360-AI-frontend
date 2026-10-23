@@ -105,11 +105,11 @@ export default function App() {
   );
 
   useEffect(() => {
-    if (!user || !hasSavedPreferences) {
+    if (!user) {
       setComparedGrants([]);
       setIsCompareOpen(false);
     }
-  }, [user, hasSavedPreferences]);
+  }, [user]);
 
   const handleAuthSuccess = (newUser) => {
     setUser(newUser);

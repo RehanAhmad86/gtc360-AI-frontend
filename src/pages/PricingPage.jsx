@@ -9,6 +9,8 @@ import {
   CheckCircle2
 } from 'lucide-react';
 import { authAPI } from '../services/api';
+import { getUserPlanId, formatPlanName } from '../utils/planPermissions';
+import PaymentComingSoonModal from '../components/modals/PaymentComingSoonModal';
 
 const TIERS = [
   {
@@ -213,11 +215,10 @@ export default function PricingPage({ user: propUser }) {
     return () => window.removeEventListener('gtc360_auth_change', handleAuthChange);
   }, [propUser]);
 
-  // Determine current plan: strictly 'explorer' (if authenticated) or 'visitor' (if guest).
-  // The advanced and professional tiers are not yet implemented on backend, so neither will ever be marked as active.
+  // Determine current plan dynamically across all tiers: visitor, explorer, advanced, professional
   const isUserAuthenticated = Boolean(user && (user._id || user.id || user.email));
-  const currentPlanId = isUserAuthenticated ? 'explorer' : 'visitor';
-  const currentPlanName = isUserAuthenticated ? 'Free Account' : 'No Account';
+  const currentPlanId = getUserPlanId(user);
+  const currentPlanName = formatPlanName(currentPlanId);
 
   // Persist current plan in cookies & localStorage
   useEffect(() => {
@@ -232,12 +233,25 @@ export default function PricingPage({ user: propUser }) {
   }, [currentPlanId, currentPlanName]);
 
   const handleCtaClick = (tier) => {
-    if (isUserAuthenticated) {
-      if (tier.id === 'advanced' || tier.id === 'professional') {
-        setUpgradeNoticeTier(tier);
-        return;
-      }
+    if (tier.id === currentPlanId) return;
+
+    // Both Advanced Tier and Professional trigger the Payment Coming Soon modal
+    if (tier.id === 'advanced' || tier.id === 'professional') {
+      setUpgradeNoticeTier(tier);
+      return;
     }
+
+    if (tier.id === 'explorer') {
+      if (isUserAuthenticated) return;
+      navigate('/signup');
+      return;
+    }
+
+    if (tier.id === 'visitor') {
+      navigate('/grants');
+      return;
+    }
+
     navigate(tier.ctaLink);
   };
 
@@ -601,32 +615,8 @@ export default function PricingPage({ user: propUser }) {
 
                 {/* Call to Action Button: Conditioned on Current User Plan */}
                 <div style={{ marginTop: 'auto' }}>
-                  {isUserAuthenticated && tier.id === 'visitor' ? (
-                    // Signed-in Free Account user: No Account button is removed, marked as included
-                    <div
-                      style={{
-                        width: '100%',
-                        borderRadius: '8px',
-                        padding: '11px',
-                        fontSize: '12.5px',
-                        fontWeight: '600',
-                        textAlign: 'center',
-                        background: '#F8FAFC',
-                        color: '#475569',
-                        border: '1px dashed #CBD5E1',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: '6px',
-                        minHeight: '44px',
-                        boxSizing: 'border-box',
-                      }}
-                    >
-                      <Check size={14} color="#059669" />
-                      <span>Included with your Account</span>
-                    </div>
-                  ) : isUserAuthenticated && tier.id === 'explorer' ? (
-                    // Signed-in Free Account user: Free Account button is removed, marked as active plan
+                  {tier.id === currentPlanId ? (
+                    // Current active plan badge for any plan (visitor, explorer, advanced, professional)
                     <div
                       style={{
                         width: '100%',
@@ -650,19 +640,19 @@ export default function PricingPage({ user: propUser }) {
                       <CheckCircle2 size={15} color="#059669" />
                       <span>Current Plan Active</span>
                     </div>
-                  ) : !isUserAuthenticated && tier.id === 'visitor' ? (
-                    // Guest user: Visitor card is the current plan
+                  ) : isUserAuthenticated && (tier.id === 'visitor' || (tier.id === 'explorer' && (currentPlanId === 'advanced' || currentPlanId === 'professional'))) ? (
+                    // Lower tiers are marked as included with current account
                     <div
                       style={{
                         width: '100%',
                         borderRadius: '8px',
                         padding: '11px',
-                        fontSize: '13px',
-                        fontWeight: '700',
+                        fontSize: '12.5px',
+                        fontWeight: '600',
                         textAlign: 'center',
-                        background: '#F1F5F9',
-                        color: 'var(--navy)',
-                        border: '1px solid #CBD5E1',
+                        background: '#F8FAFC',
+                        color: '#475569',
+                        border: '1px dashed #CBD5E1',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -671,8 +661,8 @@ export default function PricingPage({ user: propUser }) {
                         boxSizing: 'border-box',
                       }}
                     >
-                      <CheckCircle2 size={15} color="var(--brass)" />
-                      <span>Current Plan Active</span>
+                      <Check size={14} color="#059669" />
+                      <span>Included with your Account</span>
                     </div>
                   ) : (
                     // Action button for available tiers
@@ -747,80 +737,13 @@ export default function PricingPage({ user: propUser }) {
         </div>
 
         {/* Upgrade Notice Dialog for Authenticated Users */}
-        {upgradeNoticeTier && (
-          <div
-            style={{
-              position: 'fixed',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              background: 'rgba(12, 29, 51, 0.72)',
-              backdropFilter: 'blur(6px)',
-              display: 'grid',
-              placeItems: 'center',
-              zIndex: 9999,
-              padding: '20px',
-            }}
-            onClick={() => setUpgradeNoticeTier(null)}
-          >
-            <div
-              style={{
-                background: '#FFFFFF',
-                borderRadius: '16px',
-                padding: '32px',
-                maxWidth: '460px',
-                width: '100%',
-                boxShadow: '0 24px 64px rgba(0, 0, 0, 0.28)',
-                border: '1px solid var(--line-brass)',
-                textAlign: 'center',
-                position: 'relative',
-              }}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div
-                style={{
-                  width: '44px',
-                  height: '44px',
-                  borderRadius: '50%',
-                  background: 'rgba(149, 128, 100, 0.15)',
-                  display: 'grid',
-                  placeItems: 'center',
-                  margin: '0 auto 14px',
-                  color: 'var(--brass)',
-                }}
-              >
-                <Sparkles size={20} />
-              </div>
-              <h3 style={{ fontSize: '19px', fontWeight: '700', color: 'var(--navy)', marginBottom: '8px' }}>
-                {upgradeNoticeTier.title} Upgrade
-              </h3>
-              <p style={{ fontSize: '13.5px', color: '#64748B', lineHeight: '1.55', marginBottom: '22px' }}>
-                You are currently active on the <b>Free Account</b> tier. Payment and subscription management for paid tiers will be enabled in an upcoming release.
-              </p>
-              <button
-                type="button"
-                onClick={() => setUpgradeNoticeTier(null)}
-                style={{
-                  width: '100%',
-                  background: 'var(--brass)',
-                  color: '#FFFFFF',
-                  border: 'none',
-                  borderRadius: '8px',
-                  padding: '11px',
-                  fontSize: '13.5px',
-                  fontWeight: '700',
-                  cursor: 'pointer',
-                  transition: 'background 0.15s ease',
-                }}
-                onMouseOver={(e) => (e.currentTarget.style.background = 'var(--brass-fill)')}
-                onMouseOut={(e) => (e.currentTarget.style.background = 'var(--brass)')}
-              >
-                Return to Pricing
-              </button>
-            </div>
-          </div>
-        )}
+        {/* Dedicated Payment Coming Soon Modal */}
+        <PaymentComingSoonModal
+          isOpen={Boolean(upgradeNoticeTier)}
+          onClose={() => setUpgradeNoticeTier(null)}
+          tier={upgradeNoticeTier}
+          user={user}
+        />
       </main>
     </div>
   );

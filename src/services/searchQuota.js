@@ -1,9 +1,51 @@
 // Search quota and search history manager
 import { guestAPI } from './api';
+import { getUserPlanId } from '../utils/planPermissions';
 
 const GUEST_QUOTA_KEY = 'gtc360_guest_search_quota';
+const FREE_MONTHLY_QUOTA_KEY = 'gtc360_free_monthly_quota';
 const HISTORY_STORAGE_KEY = 'gtc360_search_history';
 export const MAX_GUEST_SEARCHES = 5;
+export const MAX_FREE_MONTHLY_SEARCHES = 10;
+
+/**
+ * Get monthly search quota for Free Account (Explorer) users (10 searches/mo)
+ */
+export function getFreeMonthlySearchQuota() {
+  const now = new Date();
+  const currentMonthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+
+  try {
+    const raw = localStorage.getItem(FREE_MONTHLY_QUOTA_KEY);
+    if (raw) {
+      const data = JSON.parse(raw);
+      if (data.monthKey === currentMonthKey) {
+        const used = Number(data.used) || 0;
+        return {
+          used,
+          max: MAX_FREE_MONTHLY_SEARCHES,
+          remaining: Math.max(0, MAX_FREE_MONTHLY_SEARCHES - used),
+          isLimitReached: used >= MAX_FREE_MONTHLY_SEARCHES,
+          monthKey: currentMonthKey,
+        };
+      }
+    }
+  } catch (err) {
+    console.error('Error reading free monthly quota:', err);
+  }
+
+  const fresh = {
+    used: 0,
+    max: MAX_FREE_MONTHLY_SEARCHES,
+    remaining: MAX_FREE_MONTHLY_SEARCHES,
+    isLimitReached: false,
+    monthKey: currentMonthKey,
+  };
+  try {
+    localStorage.setItem(FREE_MONTHLY_QUOTA_KEY, JSON.stringify(fresh));
+  } catch {}
+  return fresh;
+}
 
 /**
  * Get current search quota for guest or authenticated user
@@ -67,35 +109,61 @@ export async function syncGuestQuota() {
 }
 
 /**
- * Check if the user is allowed to perform a search
+ * Check if the user is allowed to perform a search based on their active plan
  */
-export function canPerformSearch(isUserAuthenticated = false) {
-  if (isUserAuthenticated) return true;
+export function canPerformSearch(user = null) {
+  const planId = getUserPlanId(user);
+  if (planId === 'advanced' || planId === 'professional') return true;
+  if (planId === 'explorer') {
+    const quota = getFreeMonthlySearchQuota();
+    return quota.remaining > 0;
+  }
   const quota = getLocalGuestQuota();
   return quota.remaining > 0;
 }
 
 /**
- * Record a search query and consume a credit if guest
+ * Record a search query and consume a credit based on plan
  */
-export async function recordSearch(query, resultCount = 0, isUserAuthenticated = false) {
+export async function recordSearch(query, resultCount = 0, user = null) {
   if (!query || !query.trim()) return;
 
   const cleanQuery = query.trim();
+  const planId = getUserPlanId(user);
 
-  // If user is authenticated, they have unlimited/extended quota; only record history
-  if (isUserAuthenticated) {
+  // Paid plans (Advanced Tier & Professional): Unmetered searches
+  if (planId === 'advanced' || planId === 'professional') {
     recordHistoryItem(cleanQuery, resultCount);
     return {
       allowed: true,
       used: 0,
-      max: 999999,
-      remaining: 999999,
+      max: Infinity,
+      remaining: Infinity,
       isLimitReached: false,
     };
   }
 
-  // Guest user (5 searches tracked by IP + localStorage)
+  // Free Account (Explorer): 10 searches per month
+  if (planId === 'explorer') {
+    const quota = getFreeMonthlySearchQuota();
+    const newUsed = quota.used + 1;
+    const updated = {
+      used: newUsed,
+      max: MAX_FREE_MONTHLY_SEARCHES,
+      remaining: Math.max(0, MAX_FREE_MONTHLY_SEARCHES - newUsed),
+      isLimitReached: newUsed >= MAX_FREE_MONTHLY_SEARCHES,
+      monthKey: quota.monthKey,
+    };
+    try {
+      localStorage.setItem(FREE_MONTHLY_QUOTA_KEY, JSON.stringify(updated));
+    } catch {}
+
+    recordHistoryItem(cleanQuery, resultCount);
+    window.dispatchEvent(new Event('gtc360_quota_change'));
+    return updated;
+  }
+
+  // Guest visitor: 5 searches total tracked by IP + localStorage
   const quota = getLocalGuestQuota();
   const newUsed = quota.used + 1;
   const updatedQuota = {
@@ -121,43 +189,28 @@ export async function recordSearch(query, resultCount = 0, isUserAuthenticated =
   return updatedQuota;
 }
 
-
 /**
  * Record an item to search history
  */
 function recordHistoryItem(query, resultCount) {
   try {
     const raw = localStorage.getItem(HISTORY_STORAGE_KEY);
-    let history = raw ? JSON.parse(raw) : [];
-
-    // Filter out duplicate queries to place latest search at top
-    history = history.filter((item) => item.query.toLowerCase() !== query.toLowerCase());
-
-    const now = new Date();
-    const formattedDate = now.toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-    });
+    const history = raw ? JSON.parse(raw) : [];
 
     const newItem = {
-      id: Date.now().toString(),
+      id: Date.now(),
       query,
-      resultCount: Number(resultCount) || 0,
-      date: formattedDate,
-      timestamp: Date.now(),
+      resultCount,
+      timestamp: new Date().toISOString(),
     };
 
-    history.unshift(newItem);
+    // Filter out identical consecutive searches
+    const filtered = history.filter((h) => h.query.toLowerCase() !== query.toLowerCase());
+    const updated = [newItem, ...filtered].slice(0, 50);
 
-    // Keep up to 30 most recent searches
-    if (history.length > 30) {
-      history = history.slice(0, 30);
-    }
-
-    localStorage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(history));
-    window.dispatchEvent(new Event('gtc360_history_change'));
+    localStorage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(updated));
   } catch (err) {
-    console.error('Error saving search history:', err);
+    console.error('Error recording search history:', err);
   }
 }
 
@@ -168,24 +221,26 @@ export function getSearchHistory() {
   try {
     const raw = localStorage.getItem(HISTORY_STORAGE_KEY);
     return raw ? JSON.parse(raw) : [];
-  } catch (err) {
-    console.error('Error loading search history:', err);
+  } catch {
     return [];
   }
 }
 
 /**
- * Delete a specific history item
+ * Delete a single search history item
  */
 export function deleteSearchHistoryItem(id) {
   try {
     const raw = localStorage.getItem(HISTORY_STORAGE_KEY);
-    if (!raw) return;
-    const history = JSON.parse(raw).filter((item) => item.id !== id);
-    localStorage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(history));
+    if (!raw) return [];
+    const history = JSON.parse(raw);
+    const updated = history.filter((item) => item.id !== id);
+    localStorage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(updated));
     window.dispatchEvent(new Event('gtc360_history_change'));
+    return updated;
   } catch (err) {
     console.error('Error deleting search history item:', err);
+    return [];
   }
 }
 
@@ -200,3 +255,4 @@ export function clearSearchHistory() {
     console.error('Error clearing search history:', err);
   }
 }
+

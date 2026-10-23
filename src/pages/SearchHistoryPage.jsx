@@ -1,29 +1,36 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { History, ArrowLeft, Trash2, Search, Clock, ChevronRight, Zap } from 'lucide-react';
-import { getSearchHistory, deleteSearchHistoryItem, clearSearchHistory, getSearchQuota } from '../services/searchQuota';
+import { History, ArrowLeft, Trash2, Search, Clock, ChevronRight, Zap, Sparkles } from 'lucide-react';
+import { getSearchHistory, deleteSearchHistoryItem, clearSearchHistory, getSearchQuota, getFreeMonthlySearchQuota } from '../services/searchQuota';
+import { authAPI } from '../services/api';
+import { getUserPlanId, getPlanPermissions } from '../utils/planPermissions';
 
 export default function SearchHistoryPage({ onApplySearch }) {
   const navigate = useNavigate();
   const [history, setHistory] = useState([]);
-  const [quota, setQuota] = useState(getSearchQuota());
+  const [guestQuota, setGuestQuota] = useState(getSearchQuota());
+  const [user, setUser] = useState(() => authAPI.getCurrentUser());
 
   const loadData = () => {
     setHistory(getSearchHistory());
-    setQuota(getSearchQuota());
+    setGuestQuota(getSearchQuota());
+    setUser(authAPI.getCurrentUser());
   };
 
   useEffect(() => {
     loadData();
     const handleHistoryChange = () => loadData();
-    const handleQuotaChange = () => setQuota(getSearchQuota());
+    const handleQuotaChange = () => loadData();
+    const handleAuthChange = () => loadData();
 
     window.addEventListener('gtc360_history_change', handleHistoryChange);
     window.addEventListener('gtc360_quota_change', handleQuotaChange);
+    window.addEventListener('gtc360_auth_change', handleAuthChange);
 
     return () => {
       window.removeEventListener('gtc360_history_change', handleHistoryChange);
       window.removeEventListener('gtc360_quota_change', handleQuotaChange);
+      window.removeEventListener('gtc360_auth_change', handleAuthChange);
     };
   }, []);
 
@@ -33,6 +40,10 @@ export default function SearchHistoryPage({ onApplySearch }) {
     }
     navigate('/');
   };
+
+  const planId = getUserPlanId(user);
+  const permissions = getPlanPermissions(planId);
+  const freeQuota = getFreeMonthlySearchQuota();
 
   return (
     <main style={{ flex: 1, background: '#F8FAFC', padding: '32px 0 80px', minHeight: 'calc(100vh - 140px)' }}>
@@ -64,8 +75,22 @@ export default function SearchHistoryPage({ onApplySearch }) {
               boxShadow: '0 1px 3px rgba(20,45,76,0.04)',
             }}
           >
-            <Zap size={14} style={{ color: 'var(--brass)' }} />
-            <span>Free Plan · <strong>{quota.remaining} of {quota.max} searches remaining</strong></span>
+            {planId === 'advanced' || planId === 'professional' ? (
+              <>
+                <Sparkles size={14} style={{ color: 'var(--brass)' }} />
+                <span>{permissions.name} · <strong>Unlimited searches active</strong></span>
+              </>
+            ) : planId === 'explorer' ? (
+              <>
+                <Zap size={14} style={{ color: '#2563EB' }} />
+                <span>Free Account · <strong>{freeQuota.remaining} of {freeQuota.max} monthly searches remaining</strong></span>
+              </>
+            ) : (
+              <>
+                <Zap size={14} style={{ color: 'var(--brass)' }} />
+                <span>Visitor · <strong>{guestQuota.remaining} of {guestQuota.max} searches remaining</strong></span>
+              </>
+            )}
           </div>
         </div>
 
